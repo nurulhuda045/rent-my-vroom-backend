@@ -1,0 +1,267 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  MERCHANT
+  RENTER
+  ADMIN
+}
+
+enum BookingStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  COMPLETED
+  CANCELLED
+}
+
+enum LicenseStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum RegistrationStep {
+  PHONE_VERIFIED
+  PROFILE_COMPLETED
+  KYC_PENDING
+  KYC_APPROVED
+}
+
+enum KYCStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id        Int     @id @default(autoincrement())
+  email     String? @unique
+  firstName String?
+  lastName  String?
+  phone     String  @unique
+  role      Role    @default(RENTER)
+
+  // Phone verification and registration tracking
+  phoneVerified    Boolean           @default(false)
+  registrationStep RegistrationStep?
+
+  // License information for renters
+  licenseUrl        String?
+  licenseStatus     LicenseStatus @default(PENDING)
+  licenseApprovedAt DateTime?
+
+  // Merchant information
+  businessName String?
+
+  // Structured address for merchants
+  addressLine1 String?
+  addressLine2 String?
+  city         String?
+  state        String?
+  postalCode   String?
+  country      String?
+  latitude     Decimal? @db.Decimal(10, 8)
+  longitude    Decimal? @db.Decimal(11, 8)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  vehicles           Vehicle[]
+  bookingsAsRenter   Booking[]      @relation("RenterBookings")
+  bookingsAsMerchant Booking[]      @relation("MerchantBookings")
+  sentMessages       Message[]      @relation("SentMessages")
+  receivedMessages   Message[]      @relation("ReceivedMessages")
+  reviews            Review[]
+  refreshTokens      RefreshToken[]
+  kyc                KYC?
+
+  @@index([email])
+  @@index([phone])
+  @@index([role])
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([token])
+}
+
+model Vehicle {
+  id         Int  @id @default(autoincrement())
+  merchantId Int
+  merchant   User @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+
+  // Vehicle details
+  make         String
+  model        String
+  year         Int
+  color        String
+  licensePlate String @unique
+
+  // Rental information
+  pricePerHour Decimal @db.Decimal(10, 2)
+  pricePerDay  Decimal @db.Decimal(10, 2)
+
+  // Vehicle specifications
+  seats        Int
+  fuelType     String
+  transmission String
+  mileage      Int?
+
+  // Description and features
+  description String?
+  features    String[] // Array of features like "AC", "GPS", etc.
+
+  // Images
+  images String[] // Array of image URLs
+
+  // Availability
+  isAvailable Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  bookings Booking[]
+
+  @@index([merchantId])
+  @@index([isAvailable])
+}
+
+model Booking {
+  id Int @id @default(autoincrement())
+
+  // Relations
+  renterId Int
+  renter   User @relation("RenterBookings", fields: [renterId], references: [id], onDelete: Cascade)
+
+  merchantId Int
+  merchant   User @relation("MerchantBookings", fields: [merchantId], references: [id], onDelete: Cascade)
+
+  vehicleId Int
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  // Booking details
+  startDate  DateTime
+  endDate    DateTime
+  totalPrice Decimal  @db.Decimal(10, 2)
+
+  // Status
+  status BookingStatus @default(PENDING)
+
+  // Notes
+  renterNotes   String?
+  merchantNotes String?
+
+  // Timestamps
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  acceptedAt  DateTime?
+  rejectedAt  DateTime?
+  completedAt DateTime?
+
+  // Relations
+  messages Message[]
+  review   Review?
+
+  @@index([renterId])
+  @@index([merchantId])
+  @@index([vehicleId])
+  @@index([status])
+  @@index([startDate, endDate])
+}
+
+model Message {
+  id Int @id @default(autoincrement())
+
+  // Relations
+  bookingId Int
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  senderId Int
+  sender   User @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+
+  receiverId Int
+  receiver   User @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  // Message content
+  content String
+
+  // Status
+  isRead Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@index([bookingId])
+  @@index([senderId])
+  @@index([receiverId])
+  @@index([createdAt])
+}
+
+model Review {
+  id Int @id @default(autoincrement())
+
+  // Relations
+  bookingId Int     @unique
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  reviewerId Int
+  reviewer   User @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+
+  // Review details
+  rating  Int // 1-5 stars
+  comment String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([reviewerId])
+  @@index([rating])
+}
+
+model OTP {
+  id         Int      @id @default(autoincrement())
+  phone      String
+  otp        String // Hashed OTP
+  expiresAt  DateTime
+  verified   Boolean  @default(false)
+  attempts   Int      @default(0)
+  lastSentAt DateTime @default(now()) // Track last send time for resend cooldown
+  createdAt  DateTime @default(now())
+
+  @@index([phone])
+  @@index([expiresAt])
+  @@index([phone, lastSentAt]) // Composite index for resend cooldown checks
+}
+
+model KYC {
+  id                Int       @id @default(autoincrement())
+  userId            Int       @unique
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  licenseNumber     String
+  licenseImageUrl   String
+  licenseExpiryDate DateTime
+  status            KYCStatus @default(PENDING)
+  rejectionReason   String?
+  verifiedAt        DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}

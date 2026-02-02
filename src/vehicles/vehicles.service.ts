@@ -1,0 +1,175 @@
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+  ConflictException,
+} from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import { CreateVehicleDto, UpdateVehicleDto } from './dto/vehicles.dto';
+import { Role } from '../generated/prisma/client';
+import { ERROR_MESSAGES, SUCCESS_MESSAGES, MERCHANT_FIELDS } from '../common';
+
+@Injectable()
+export class VehiclesService {
+  constructor(private prisma: PrismaService) {}
+
+  async create(merchantId: number, dto: CreateVehicleDto) {
+    // Verify user is a merchant
+    await this.verifyMerchant(merchantId);
+
+    // Check if license plate already exists
+    await this.checkLicensePlateUnique(dto.licensePlate);
+
+    const vehicle = await this.prisma.vehicle.create({
+      data: {
+        ...dto,
+        merchantId,
+      },
+      include: {
+        merchant: {
+          select: MERCHANT_FIELDS,
+        },
+      },
+    });
+
+    return vehicle;
+  }
+
+  async findAll(filters?: { isAvailable?: boolean }) {
+    const vehicles = await this.prisma.vehicle.findMany({
+      where: filters,
+      include: {
+        merchant: {
+          select: MERCHANT_FIELDS,
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    return vehicles;
+  }
+
+  async findMyVehicles(merchantId: number) {
+    const vehicles = await this.prisma.vehicle.findMany({
+      where: { merchantId },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    return vehicles;
+  }
+
+  async findOne(id: number) {
+    const vehicle = await this.prisma.vehicle.findUnique({
+      where: { id },
+      include: {
+        merchant: {
+          select: MERCHANT_FIELDS,
+        },
+        bookings: {
+          where: {
+            status: {
+              in: ['ACCEPTED', 'PENDING'],
+            },
+          },
+          select: {
+            id: true,
+            startDate: true,
+            endDate: true,
+            status: true,
+          },
+        },
+      },
+    });
+
+    if (!vehicle) {
+      throw new NotFoundException(ERROR_MESSAGES.VEHICLE_NOT_FOUND);
+    }
+
+    return vehicle;
+  }
+
+  async update(id: number, merchantId: number, dto: UpdateVehicleDto) {
+    const vehicle = await this.findVehicleById(id);
+    this.verifyOwnership(vehicle.merchantId, merchantId);
+
+    const updated = await this.prisma.vehicle.update({
+      where: { id },
+      data: dto,
+    });
+
+    return updated;
+  }
+
+  async remove(id: number, merchantId: number) {
+    const vehicle = await this.findVehicleById(id);
+    this.verifyOwnership(vehicle.merchantId, merchantId);
+
+    await this.prisma.vehicle.delete({
+      where: { id },
+    });
+
+    return { message: SUCCESS_MESSAGES.VEHICLE_DELETED };
+  }
+
+  // Private helper methods
+
+  /**
+   * Verify user is a merchant
+   */
+  private async verifyMerchant(userId: number) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException(ERROR_MESSAGES.USER_NOT_FOUND);
+    }
+
+    if (user.role !== Role.MERCHANT) {
+      throw new ForbiddenException(ERROR_MESSAGES.MERCHANT_ONLY);
+    }
+
+    return user;
+  }
+
+  /**
+   * Check if license plate is unique
+   */
+  private async checkLicensePlateUnique(licensePlate: string) {
+    const existing = await this.prisma.vehicle.findUnique({
+      where: { licensePlate },
+    });
+
+    if (existing) {
+      throw new ConflictException(ERROR_MESSAGES.VEHICLE_LICENSE_EXISTS);
+    }
+  }
+
+  /**
+   * Find vehicle by ID or throw error
+   */
+  private async findVehicleById(id: number) {
+    const vehicle = await this.prisma.vehicle.findUnique({
+      where: { id },
+    });
+
+    if (!vehicle) {
+      throw new NotFoundException(ERROR_MESSAGES.VEHICLE_NOT_FOUND);
+    }
+
+    return vehicle;
+  }
+
+  /**
+   * Verify vehicle ownership
+   */
+  private verifyOwnership(vehicleMerchantId: number, requestMerchantId: number) {
+    if (vehicleMerchantId !== requestMerchantId) {
+      throw new ForbiddenException(ERROR_MESSAGES.VEHICLE_UNAUTHORIZED);
+    }
+  }
+}
