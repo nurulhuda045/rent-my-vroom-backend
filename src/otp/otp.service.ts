@@ -11,6 +11,7 @@ export class OTPService {
   private readonly otpExpiryMinutes: number;
   private readonly maxAttempts: number;
   private readonly resendCooldownSeconds: number;
+  private readonly testOTP: string | null;
 
   constructor(
     private prisma: PrismaService,
@@ -26,6 +27,13 @@ export class OTPService {
       'OTP_RESEND_COOLDOWN_SECONDS',
       OTP_CONFIG.RESEND_COOLDOWN_SECONDS,
     );
+    this.testOTP = this.configService.get<string>('TEST_OTP', null);
+
+    if (this.testOTP) {
+      this.logger.warn(
+        '⚠️  TEST_OTP is enabled! Using hardcoded OTP for testing. DO NOT use in production!',
+      );
+    }
   }
 
   /**
@@ -33,11 +41,13 @@ export class OTPService {
    * Implements resend cooldown and prevents enumeration attacks
    */
   async sendOTP(phone: string): Promise<void> {
-    // Check resend cooldown
-    await this.checkResendCooldown(phone);
+    // Check resend cooldown (skip in TEST MODE for faster iteration)
+    if (!this.testOTP) {
+      await this.checkResendCooldown(phone);
+    }
 
-    // Generate and hash OTP using cryptographically secure generator
-    const otp = OTPUtils.generate();
+    // Use TEST_OTP if available, otherwise generate random OTP
+    const otp = this.testOTP || OTPUtils.generate();
     const hashedOTP = OTPUtils.hash(otp);
     const expiresAt = OTPUtils.calculateExpiry(this.otpExpiryMinutes);
 
@@ -53,14 +63,18 @@ export class OTPService {
       },
     });
 
-    // Send OTP via WhatsApp
-    try {
-      await this.whatsappService.sendOTPMessage(phone, otp);
-      this.logger.log(`OTP sent to ${phone}`);
-    } catch (error) {
-      this.logger.error(`Failed to send OTP to ${phone}:`, error);
-      // Don't throw error to prevent enumeration attacks
-      // The user will see success message regardless
+    // Send OTP via WhatsApp (skip if using TEST_OTP)
+    if (this.testOTP) {
+      this.logger.log(`🧪 TEST MODE: Using hardcoded OTP ${this.testOTP} for ${phone}`);
+    } else {
+      try {
+        await this.whatsappService.sendOTPMessage(phone, otp);
+        this.logger.log(`OTP sent to ${phone}`);
+      } catch (error) {
+        this.logger.error(`Failed to send OTP to ${phone}:`, error);
+        // Don't throw error to prevent enumeration attacks
+        // The user will see success message regardless
+      }
     }
   }
 
@@ -69,7 +83,21 @@ export class OTPService {
    * Implements max attempts and prevents timing attacks
    */
   async verifyOTP(phone: string, otp: string): Promise<boolean> {
-    // Find the most recent unverified OTP for this phone
+    // If TEST_OTP is enabled and matches the provided OTP, verify successfully
+    if (this.testOTP && otp === this.testOTP) {
+      this.logger.log(`🧪 TEST MODE: Verified using hardcoded OTP for ${phone}`);
+
+      // Still try to find and clean up any existing OTP record for this phone to stay clean
+      const otpRecord = await this.findValidOTP(phone);
+      if (otpRecord) {
+        await this.markAsVerified(otpRecord.id);
+        await this.deleteOTP(otpRecord.id);
+      }
+
+      return true;
+    }
+
+    // Standard verification logic
     const otpRecord = await this.findValidOTP(phone);
 
     if (!otpRecord) {
