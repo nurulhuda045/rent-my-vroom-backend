@@ -16,6 +16,7 @@ import {
   SubmitKYCDto,
 } from './dto/auth.dto';
 import { OTPService } from '../otp/otp.service';
+import { UploadsService } from '../uploads/uploads.service';
 import { Role, RegistrationStep, KYCStatus } from '../generated/prisma/client';
 
 @Injectable()
@@ -25,6 +26,7 @@ export class AuthService {
     private jwtService: JwtService,
     private config: ConfigService,
     private otpService: OTPService,
+    private uploadsService: UploadsService,
   ) {}
 
   /**
@@ -236,7 +238,7 @@ export class AuthService {
       data: {
         userId,
         licenseNumber: dto.licenseNumber,
-        licenseImageUrl: dto.licenseImageUrl,
+        licenseImageUrl: this.uploadsService.buildPublicUrl(dto.licenseImageKey),
         licenseExpiryDate: new Date(dto.licenseExpiryDate),
         status: KYCStatus.PENDING,
       },

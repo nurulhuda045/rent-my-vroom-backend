@@ -3,9 +3,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { LicenseStatus } from '../../generated/prisma/client';
 
 export class UploadLicenseDto {
-  @ApiProperty({ example: 'https://r2.example.com/license.jpg' })
+  @ApiProperty({ example: 'license/12/1706980301-abcd123.jpg' })
   @IsString()
-  licenseUrl: string;
+  licenseKey: string;
 }
 
 export class ApproveLicenseDto {
