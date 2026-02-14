@@ -22,6 +22,10 @@ export class BookingsService {
       where: { id: renterId },
     });
 
+    if (!renter) {
+      throw new NotFoundException('Renter not found');
+    }
+
     if (renter.role !== Role.RENTER) {
       throw new ForbiddenException('Only renters can create bookings');
     }
@@ -47,6 +51,10 @@ export class BookingsService {
     // Calculate total price
     const startDate = new Date(dto.startDate);
     const endDate = new Date(dto.endDate);
+    if (endDate <= startDate) {
+      throw new BadRequestException('End date must be after start date');
+    }
+
     const days = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
     const totalPrice = Number(vehicle.pricePerDay) * days;
 
