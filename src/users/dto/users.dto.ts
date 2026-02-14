@@ -1,4 +1,4 @@
-import { IsString, IsEnum, IsOptional } from 'class-validator';
+import { IsString, IsEnum, IsOptional, IsIn } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { LicenseStatus } from '../../generated/prisma/client';
 
@@ -9,9 +9,10 @@ export class UploadLicenseDto {
 }
 
 export class ApproveLicenseDto {
-  @ApiProperty({ enum: LicenseStatus, example: LicenseStatus.APPROVED })
+  @ApiProperty({ enum: [LicenseStatus.APPROVED, LicenseStatus.REJECTED], example: LicenseStatus.APPROVED })
   @IsEnum(LicenseStatus)
-  status: LicenseStatus;
+  @IsIn([LicenseStatus.APPROVED, LicenseStatus.REJECTED])
+  status: LicenseStatus.APPROVED | LicenseStatus.REJECTED;
 }
 
 export class UpdateProfileDto {

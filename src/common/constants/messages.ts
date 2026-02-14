@@ -38,6 +38,7 @@ export const ERROR_MESSAGES = {
   // License errors
   LICENSE_ONLY_RENTERS: 'Only renters can upload licenses',
   LICENSE_APPROVAL_ADMIN_ONLY: 'Only admins can approve licenses',
+  LICENSE_APPROVAL_RENTER_ONLY: 'License approval only applies to renter accounts',
 
   // Role errors
   MERCHANT_ONLY: 'Only merchants can perform this action',

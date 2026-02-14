@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UploadLicenseDto, ApproveLicenseDto, UpdateProfileDto } from './dto/users.dto';
 import { LicenseStatus, Role } from '../generated/prisma/client';
 import { NotificationsService } from '../notifications/notifications.service';
 import { UploadsService } from '../uploads/uploads.service';
-import { ERROR_MESSAGES, USER_PROFILE_FIELDS, RENTER_FIELDS, MERCHANT_FIELDS } from '../common';
+import { ERROR_MESSAGES, USER_PROFILE_FIELDS, RENTER_FIELDS } from '../common';
 
 @Injectable()
 export class UsersService {
@@ -36,6 +36,10 @@ export class UsersService {
   async approveLicense(adminId: number, userId: number, dto: ApproveLicenseDto) {
     await this.verifyAdmin(adminId);
     const user = await this.findUserById(userId);
+
+    if (user.role !== Role.RENTER) {
+      throw new BadRequestException(ERROR_MESSAGES.LICENSE_APPROVAL_RENTER_ONLY);
+    }
 
     const updatedUser = await this.prisma.user.update({
       where: { id: userId },
@@ -71,7 +75,7 @@ export class UsersService {
     const user = await this.prisma.user.update({
       where: { id: userId },
       data: dto,
-      select: MERCHANT_FIELDS,
+      select: USER_PROFILE_FIELDS,
     });
 
     return user;
