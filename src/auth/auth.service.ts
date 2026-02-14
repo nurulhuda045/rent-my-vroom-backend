@@ -4,6 +4,8 @@ import {
   ConflictException,
   HttpException,
   HttpStatus,
+  Logger,
+  OnModuleInit,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -20,7 +22,9 @@ import { UploadsService } from '../uploads/uploads.service';
 import { Role, RegistrationStep, KYCStatus } from '../generated/prisma/client';
 
 @Injectable()
-export class AuthService {
+export class AuthService implements OnModuleInit {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
@@ -28,6 +32,32 @@ export class AuthService {
     private otpService: OTPService,
     private uploadsService: UploadsService,
   ) {}
+
+  /**
+   * Validate JWT configuration on module initialization
+   */
+  onModuleInit() {
+    const jwtSecret = this.config.get<string>('JWT_SECRET');
+    const jwtRefreshSecret = this.config.get<string>('JWT_REFRESH_SECRET');
+
+    if (!jwtSecret) {
+      this.logger.error('JWT_SECRET is not configured');
+      throw new Error('JWT_SECRET is required. Please set it in your environment variables.');
+    }
+
+    if (!jwtRefreshSecret) {
+      this.logger.error('JWT_REFRESH_SECRET is not configured');
+      throw new Error(
+        'JWT_REFRESH_SECRET is required. Please set it in your environment variables.',
+      );
+    }
+
+    if (jwtSecret === jwtRefreshSecret) {
+      this.logger.warn('JWT_SECRET and JWT_REFRESH_SECRET should be different for security');
+    }
+
+    this.logger.log('JWT configuration validated successfully');
+  }
 
   /**
    * Send OTP to phone number
@@ -303,6 +333,10 @@ export class AuthService {
    * Refresh access token
    */
   async refresh(refreshToken: string) {
+    if (!refreshToken) {
+      throw new UnauthorizedException('Refresh token is required');
+    }
+
     try {
       // Check if refresh token exists in database
       const storedToken = await this.prisma.refreshToken.findUnique({
@@ -311,15 +345,38 @@ export class AuthService {
       });
 
       if (!storedToken) {
+        this.logger.warn('Invalid refresh token attempted');
         throw new UnauthorizedException('Invalid refresh token');
       }
 
       // Check if token is expired
       if (storedToken.expiresAt < new Date()) {
-        await this.prisma.refreshToken.delete({
-          where: { token: refreshToken },
+        // Clean up expired token
+        await this.prisma.refreshToken
+          .delete({
+            where: { token: refreshToken },
+          })
+          .catch(() => {
+            // Ignore errors during cleanup
+          });
+
+        this.logger.warn('Expired refresh token attempted', {
+          userId: storedToken.userId,
         });
         throw new UnauthorizedException('Refresh token expired');
+      }
+
+      // Verify user still exists and is active
+      if (!storedToken.user) {
+        await this.prisma.refreshToken
+          .delete({
+            where: { token: refreshToken },
+          })
+          .catch(() => {
+            // Ignore errors during cleanup
+          });
+
+        throw new UnauthorizedException('User associated with token not found');
       }
 
       // Generate new tokens
@@ -331,45 +388,98 @@ export class AuthService {
         storedToken.user.registrationStep,
       );
 
-      // Delete old refresh token
-      await this.prisma.refreshToken.delete({
-        where: { token: refreshToken },
-      });
+      // Delete old refresh token (one-time use)
+      await this.prisma.refreshToken
+        .delete({
+          where: { token: refreshToken },
+        })
+        .catch((error) => {
+          this.logger.warn('Error deleting old refresh token', {
+            error: error instanceof Error ? error.message : 'Unknown error',
+          });
+          // Don't throw - token generation was successful
+        });
 
       return this.formatTokenResponse(tokens);
-    } catch {
-      throw new UnauthorizedException('Invalid refresh token');
+    } catch (error) {
+      // If it's already an UnauthorizedException, rethrow it
+      if (error instanceof UnauthorizedException) {
+        throw error;
+      }
+
+      this.logger.error('Error refreshing token', {
+        error: error instanceof Error ? error.message : 'Unknown error',
+      });
+
+      throw new UnauthorizedException('Failed to refresh token');
     }
   }
 
   /**
-   * Logout user
+   * Logout user - invalidate refresh token
    */
   async logout(refreshToken: string) {
-    await this.prisma.refreshToken.deleteMany({
-      where: { token: refreshToken },
-    });
+    if (!refreshToken) {
+      this.logger.warn('Logout attempted without refresh token');
+      return;
+    }
+
+    try {
+      const result = await this.prisma.refreshToken.deleteMany({
+        where: { token: refreshToken },
+      });
+
+      if (result.count === 0) {
+        this.logger.warn('Attempted to logout with invalid refresh token');
+      } else {
+        this.logger.log('User logged out successfully');
+      }
+    } catch (error) {
+      this.logger.error('Error during logout', {
+        error: error instanceof Error ? error.message : 'Unknown error',
+      });
+      // Don't throw - logout should be idempotent
+    }
   }
 
   /**
    * Validate user (used by JWT strategy)
+   * Returns user object if found, null otherwise
    */
   async validateUser(userId: number) {
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        id: true,
-        phone: true,
-        email: true,
-        firstName: true,
-        lastName: true,
-        role: true,
-        phoneVerified: true,
-        registrationStep: true,
-      },
-    });
+    if (!userId || typeof userId !== 'number') {
+      this.logger.warn('Invalid userId provided to validateUser', { userId });
+      return null;
+    }
 
-    return user;
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: { id: userId },
+        select: {
+          id: true,
+          phone: true,
+          email: true,
+          firstName: true,
+          lastName: true,
+          role: true,
+          phoneVerified: true,
+          registrationStep: true,
+        },
+      });
+
+      if (!user) {
+        this.logger.warn(`User not found for userId: ${userId}`);
+        return null;
+      }
+
+      return user;
+    } catch (error) {
+      this.logger.error('Error validating user', {
+        userId,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      });
+      return null;
+    }
   }
 
   // Private helper methods
@@ -384,6 +494,24 @@ export class AuthService {
     isVerified: boolean,
     registrationStep: RegistrationStep | null,
   ) {
+    // Validate inputs
+    if (!userId || !phone || !role) {
+      this.logger.error('Invalid parameters for token generation', {
+        userId,
+        phone,
+        role,
+      });
+      throw new Error('Invalid parameters for token generation');
+    }
+
+    const jwtSecret = this.config.get<string>('JWT_SECRET');
+    const jwtRefreshSecret = this.config.get<string>('JWT_REFRESH_SECRET');
+
+    if (!jwtSecret || !jwtRefreshSecret) {
+      this.logger.error('JWT secrets not configured');
+      throw new Error('JWT configuration error');
+    }
+
     const payload = {
       sub: userId,
       phone,
@@ -392,33 +520,47 @@ export class AuthService {
       registrationStep,
     };
 
-    const [accessToken, refreshToken] = await Promise.all([
-      this.jwtService.signAsync(payload, {
-        secret: this.config.get('JWT_SECRET'),
-        expiresIn: this.config.get('JWT_EXPIRATION') || '15m',
-      }),
-      this.jwtService.signAsync(payload, {
-        secret: this.config.get('JWT_REFRESH_SECRET'),
-        expiresIn: this.config.get('JWT_REFRESH_EXPIRATION') || '7d',
-      }),
-    ]);
+    try {
+      const [accessToken, refreshToken] = await Promise.all([
+        this.jwtService.signAsync(payload, {
+          secret: jwtSecret,
+          expiresIn: this.config.get('JWT_EXPIRATION') || '15m',
+        }),
+        this.jwtService.signAsync(payload, {
+          secret: jwtRefreshSecret,
+          expiresIn: this.config.get('JWT_REFRESH_EXPIRATION') || '7d',
+        }),
+      ]);
 
-    // Store refresh token
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 7); // 7 days
+      // Calculate expiration date for refresh token
+      const expiresAt = new Date();
+      const refreshExpiration = this.config.get('JWT_REFRESH_EXPIRATION') || '7d';
+      const refreshExpirationDays = this.parseExpirationToDays(refreshExpiration);
+      expiresAt.setDate(expiresAt.getDate() + refreshExpirationDays);
 
-    await this.prisma.refreshToken.create({
-      data: {
-        token: refreshToken,
+      // Store refresh token in database
+      await this.prisma.refreshToken.create({
+        data: {
+          token: refreshToken,
+          userId,
+          expiresAt,
+        },
+      });
+
+      return {
+        accessToken,
+        refreshToken,
+      };
+    } catch (error) {
+      this.logger.error('Error generating tokens', {
         userId,
-        expiresAt,
-      },
-    });
-
-    return {
-      accessToken,
-      refreshToken,
-    };
+        error: error instanceof Error ? error.message : 'Unknown error',
+      });
+      throw new HttpException(
+        'Failed to generate authentication tokens',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   /**
@@ -427,9 +569,34 @@ export class AuthService {
   private formatTokenResponse(tokens: { accessToken: string; refreshToken: string }) {
     return {
       ...tokens,
-      access_token: tokens.accessToken,
-      refresh_token: tokens.refreshToken,
     };
+  }
+
+  /**
+   * Parse expiration string (e.g., "7d", "30d", "1h") to days
+   */
+  private parseExpirationToDays(expiration: string): number {
+    const match = expiration.match(/^(\d+)([dhms])$/);
+    if (!match) {
+      // Default to 7 days if format is invalid
+      return 7;
+    }
+
+    const value = parseInt(match[1], 10);
+    const unit = match[2];
+
+    switch (unit) {
+      case 'd':
+        return value;
+      case 'h':
+        return Math.ceil(value / 24);
+      case 'm':
+        return Math.ceil(value / (24 * 60));
+      case 's':
+        return Math.ceil(value / (24 * 60 * 60));
+      default:
+        return 7;
+    }
   }
 
   /**
