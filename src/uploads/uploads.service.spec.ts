@@ -43,4 +43,10 @@ describe('UploadsService', () => {
 
     expect(() => service.buildPublicUrl('   ')).toThrow(BadRequestException);
   });
+
+  it('throws when full URL is provided instead of object key', () => {
+    const service = makeService();
+
+    expect(() => service.buildPublicUrl('https://example.com/file.jpg')).toThrow(BadRequestException);
+  });
 });
