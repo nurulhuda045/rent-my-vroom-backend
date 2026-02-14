@@ -102,7 +102,7 @@ export class AuthService {
         phoneVerified: user.phoneVerified,
         registrationStep: user.registrationStep,
       },
-      ...tokens,
+      ...this.formatTokenResponse(tokens),
     };
   }
 
@@ -336,7 +336,7 @@ export class AuthService {
         where: { token: refreshToken },
       });
 
-      return tokens;
+      return this.formatTokenResponse(tokens);
     } catch {
       throw new UnauthorizedException('Invalid refresh token');
     }
@@ -418,6 +418,17 @@ export class AuthService {
     return {
       accessToken,
       refreshToken,
+    };
+  }
+
+  /**
+   * Backward-compatible token payload shape for clients using snake_case.
+   */
+  private formatTokenResponse(tokens: { accessToken: string; refreshToken: string }) {
+    return {
+      ...tokens,
+      access_token: tokens.accessToken,
+      refresh_token: tokens.refreshToken,
     };
   }
 
