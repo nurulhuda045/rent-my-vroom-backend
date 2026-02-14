@@ -76,11 +76,11 @@ export class CreateVehicleDto {
   @IsString({ each: true })
   features?: string[];
 
-  @ApiProperty({ example: ["https://example.com/image1.jpg"], required: false })
+  @ApiProperty({ example: ["vehicle-image/12/1706980301-abcd123.jpg"], required: false })
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  images?: string[];
+  imageKeys?: string[];
 
   @ApiProperty({ example: true, required: false })
   @IsOptional()
@@ -160,7 +160,7 @@ export class UpdateVehicleDto {
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  images?: string[];
+  imageKeys?: string[];
 
   @ApiProperty({ required: false })
   @IsOptional()

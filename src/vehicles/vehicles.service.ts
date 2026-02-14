@@ -8,10 +8,14 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateVehicleDto, UpdateVehicleDto } from './dto/vehicles.dto';
 import { Role } from '../generated/prisma/client';
 import { ERROR_MESSAGES, SUCCESS_MESSAGES, MERCHANT_FIELDS } from '../common';
+import { UploadsService } from '../uploads/uploads.service';
 
 @Injectable()
 export class VehiclesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private uploadsService: UploadsService,
+  ) {}
 
   async create(merchantId: number, dto: CreateVehicleDto) {
     // Verify user is a merchant
@@ -22,7 +26,7 @@ export class VehiclesService {
 
     const vehicle = await this.prisma.vehicle.create({
       data: {
-        ...dto,
+        ...this.mapCreateVehicleAssetKeys(dto),
         merchantId,
       },
       include: {
@@ -98,7 +102,7 @@ export class VehiclesService {
 
     const updated = await this.prisma.vehicle.update({
       where: { id },
-      data: dto,
+      data: this.mapUpdateVehicleAssetKeys(dto),
     });
 
     return updated;
@@ -164,6 +168,28 @@ export class VehiclesService {
     return vehicle;
   }
 
+
+  private mapCreateVehicleAssetKeys(dto: CreateVehicleDto) {
+    const { imageKeys, ...rest } = dto;
+
+    return {
+      ...rest,
+      images: imageKeys ? this.uploadsService.buildPublicUrls(imageKeys) : undefined,
+    };
+  }
+
+  private mapUpdateVehicleAssetKeys(dto: UpdateVehicleDto) {
+    const { imageKeys, ...rest } = dto;
+
+    if (!imageKeys) {
+      return rest;
+    }
+
+    return {
+      ...rest,
+      images: this.uploadsService.buildPublicUrls(imageKeys),
+    };
+  }
   /**
    * Verify vehicle ownership
    */

@@ -113,9 +113,9 @@ export class SubmitKYCDto {
   @IsString()
   licenseNumber: string;
 
-  @ApiProperty({ example: 'https://example.com/license.jpg' })
+  @ApiProperty({ example: 'license/12/1706980301-abcd123.jpg' })
   @IsString()
-  licenseImageUrl: string;
+  licenseImageKey: string;
 
   @ApiProperty({ example: '2025-12-31', description: 'License expiry date in YYYY-MM-DD format' })
   @IsString()

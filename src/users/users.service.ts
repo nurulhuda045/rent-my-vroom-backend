@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { UploadLicenseDto, ApproveLicenseDto, UpdateProfileDto } from './dto/users.dto';
 import { LicenseStatus, Role } from '../generated/prisma/client';
 import { NotificationsService } from '../notifications/notifications.service';
+import { UploadsService } from '../uploads/uploads.service';
 import { ERROR_MESSAGES, USER_PROFILE_FIELDS, RENTER_FIELDS, MERCHANT_FIELDS } from '../common';
 
 @Injectable()
@@ -10,6 +11,7 @@ export class UsersService {
   constructor(
     private prisma: PrismaService,
     private notificationsService: NotificationsService,
+    private uploadsService: UploadsService,
   ) {}
 
   async uploadLicense(userId: number, dto: UploadLicenseDto) {
@@ -22,7 +24,7 @@ export class UsersService {
     const updatedUser = await this.prisma.user.update({
       where: { id: userId },
       data: {
-        licenseUrl: dto.licenseUrl,
+        licenseUrl: this.uploadsService.buildPublicUrl(dto.licenseKey),
         licenseStatus: LicenseStatus.PENDING,
       },
       select: RENTER_FIELDS,

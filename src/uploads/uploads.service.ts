@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from "@nestjs/config";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
@@ -43,12 +43,30 @@ export class UploadsService {
     });
 
     // Generate public URL
-    const publicUrl = `${this.publicUrl}/${key}`;
+    const publicUrl = this.buildPublicUrl(key);
 
     return {
       uploadUrl,
       publicUrl,
       key,
     };
+  }
+
+  buildPublicUrl(key: string): string {
+    const normalizedKey = this.normalizeKey(key);
+    return `${this.publicUrl}/${normalizedKey}`;
+  }
+
+  buildPublicUrls(keys: string[] = []): string[] {
+    return keys.map((key) => this.buildPublicUrl(key));
+  }
+
+  private normalizeKey(key: string): string {
+    const trimmedKey = key?.trim();
+    if (!trimmedKey) {
+      throw new BadRequestException('File key is required');
+    }
+
+    return trimmedKey.replace(/^\/+/, '');
   }
 }
