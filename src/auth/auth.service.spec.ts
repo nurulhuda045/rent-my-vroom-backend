@@ -44,3 +44,60 @@ describe('AuthService.submitKYC', () => {
     );
   });
 });
+
+describe('AuthService.refresh', () => {
+  it('returns both camelCase and snake_case token keys for compatibility', async () => {
+    const oldRefreshToken = 'old-refresh-token';
+    const accessToken = 'new-access-token';
+    const newRefreshToken = 'new-refresh-token';
+
+    const prisma = {
+      refreshToken: {
+        findUnique: jest.fn().mockResolvedValue({
+          token: oldRefreshToken,
+          expiresAt: new Date(Date.now() + 1000 * 60 * 60),
+          user: {
+            id: 12,
+            phone: '+919876543210',
+            role: Role.RENTER,
+            phoneVerified: true,
+            registrationStep: RegistrationStep.PHONE_VERIFIED,
+          },
+        }),
+        create: jest.fn().mockResolvedValue({ id: 1 }),
+        delete: jest.fn().mockResolvedValue({ id: 1 }),
+      },
+    } as any;
+
+    const jwtService = {
+      signAsync: jest
+        .fn()
+        .mockResolvedValueOnce(accessToken)
+        .mockResolvedValueOnce(newRefreshToken),
+    } as any;
+
+    const configService = {
+      get: jest.fn((key: string) => {
+        if (key === 'JWT_SECRET') return 'access-secret';
+        if (key === 'JWT_REFRESH_SECRET') return 'refresh-secret';
+        if (key === 'JWT_EXPIRATION') return '15m';
+        if (key === 'JWT_REFRESH_EXPIRATION') return '7d';
+        return undefined;
+      }),
+    } as any;
+
+    const otpService = {} as any;
+    const uploadsService = {} as any;
+
+    const service = new AuthService(prisma, jwtService, configService, otpService, uploadsService);
+
+    const result = await service.refresh(oldRefreshToken);
+
+    expect(result).toEqual({
+      accessToken,
+      refreshToken: newRefreshToken,
+      access_token: accessToken,
+      refresh_token: newRefreshToken,
+    });
+  });
+});
