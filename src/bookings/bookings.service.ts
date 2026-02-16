@@ -250,4 +250,46 @@ export class BookingsService {
 
     return updated;
   }
+
+  async getMerchantStats(merchantId: number) {
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    const [currentMonthEarnings, totalEarnings, activeBookingsCount, totalBookingsCount] =
+      await Promise.all([
+        this.prisma.booking.aggregate({
+          where: {
+            merchantId,
+            status: { in: [BookingStatus.ACCEPTED, BookingStatus.COMPLETED] },
+            startDate: { gte: startOfMonth },
+          },
+          _sum: { totalPrice: true },
+        }),
+        this.prisma.booking.aggregate({
+          where: {
+            merchantId,
+            status: BookingStatus.COMPLETED,
+          },
+          _sum: { totalPrice: true },
+        }),
+        this.prisma.booking.count({
+          where: {
+            merchantId,
+            status: { in: [BookingStatus.PENDING, BookingStatus.ACCEPTED] },
+          },
+        }),
+        this.prisma.booking.count({
+          where: {
+            merchantId,
+          },
+        }),
+      ]);
+
+    return {
+      currentMonthEarnings: Number(currentMonthEarnings._sum.totalPrice || 0),
+      totalEarnings: Number(totalEarnings._sum.totalPrice || 0),
+      activeBookingsCount,
+      totalBookingsCount,
+    };
+  }
 }

@@ -9,10 +9,13 @@ export class UploadLicenseDto {
 }
 
 export class ApproveLicenseDto {
-  @ApiProperty({ enum: [LicenseStatus.APPROVED, LicenseStatus.REJECTED], example: LicenseStatus.APPROVED })
+  @ApiProperty({
+    enum: [LicenseStatus.APPROVED, LicenseStatus.REJECTED],
+    example: LicenseStatus.APPROVED,
+  })
   @IsEnum(LicenseStatus)
   @IsIn([LicenseStatus.APPROVED, LicenseStatus.REJECTED])
-  status: LicenseStatus.APPROVED | LicenseStatus.REJECTED;
+  status: LicenseStatus;
 }
 
 export class UpdateProfileDto {

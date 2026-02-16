@@ -89,4 +89,13 @@ export class BookingsController {
   async completeBooking(@Param('id', ParseIntPipe) id: number, @GetUser('id') merchantId: number) {
     return this.bookingsService.completeBooking(id, merchantId);
   }
+
+  @Get('merchant/stats')
+  @UseGuards(RolesGuard)
+  @Roles(Role.MERCHANT)
+  @ApiOperation({ summary: 'Get merchant earnings and booking statistics' })
+  @ApiResponse({ status: 200, description: 'Statistics retrieved successfully' })
+  async getMerchantStats(@GetUser('id') merchantId: number) {
+    return this.bookingsService.getMerchantStats(merchantId);
+  }
 }
