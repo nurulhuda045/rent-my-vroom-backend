@@ -42,11 +42,6 @@ export class VehiclesService {
   async findAll(filters?: { isAvailable?: boolean }) {
     const vehicles = await this.prisma.vehicle.findMany({
       where: filters,
-      include: {
-        merchant: {
-          select: MERCHANT_FIELDS,
-        },
-      },
       orderBy: {
         createdAt: 'desc',
       },
@@ -167,7 +162,6 @@ export class VehiclesService {
 
     return vehicle;
   }
-
 
   private mapCreateVehicleAssetKeys(dto: CreateVehicleDto) {
     const { imageKeys, ...rest } = dto;
