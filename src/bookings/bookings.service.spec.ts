@@ -1,4 +1,3 @@
-/* global describe, it, expect, jest */
 import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { BookingsService } from './bookings.service';
 import { LicenseStatus, Role } from '../generated/prisma/client';

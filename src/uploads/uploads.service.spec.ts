@@ -1,4 +1,3 @@
-/* global describe, it, expect */
 import { BadRequestException } from '@nestjs/common';
 import { UploadsService } from './uploads.service';
 

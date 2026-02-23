@@ -1,4 +1,10 @@
-import { Injectable, NotFoundException, ForbiddenException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+  BadRequestException,
+  ConflictException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UploadLicenseDto, ApproveLicenseDto, UpdateProfileDto } from './dto/users.dto';
 import { LicenseStatus, Role } from '../generated/prisma/client';
@@ -72,13 +78,21 @@ export class UsersService {
   }
 
   async updateProfile(userId: number, dto: UpdateProfileDto) {
-    const user = await this.prisma.user.update({
-      where: { id: userId },
-      data: dto,
-      select: USER_PROFILE_FIELDS,
-    });
+    try {
+      const user = await this.prisma.user.update({
+        where: { id: userId },
+        data: dto,
+        select: USER_PROFILE_FIELDS,
+      });
 
-    return user;
+      return user;
+    } catch (error: any) {
+      // Prisma P2002: unique constraint — email is the only unique field updated here
+      if (error?.code === 'P2002') {
+        throw new ConflictException('Email is already in use');
+      }
+      throw error;
+    }
   }
 
   async getPendingLicenses() {

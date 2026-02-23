@@ -18,6 +18,10 @@ export class UploadsService {
         accessKeyId: this.config.get<string>('R2_ACCESS_KEY'),
         secretAccessKey: this.config.get<string>('R2_SECRET_KEY'),
       },
+      // Disable SDK-level checksum to prevent x-amz-checksum-* headers
+      // being added to presigned URLs (browsers can't send them via fetch PUT).
+      requestChecksumCalculation: 'WHEN_REQUIRED',
+      responseChecksumValidation: 'WHEN_REQUIRED',
     });
 
     this.bucketName = this.config.get<string>('R2_BUCKET_NAME') || '';

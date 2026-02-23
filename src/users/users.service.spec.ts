@@ -1,4 +1,3 @@
-/* global describe, it, expect, jest */
 import { BadRequestException } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { LicenseStatus, Role } from '../generated/prisma/client';

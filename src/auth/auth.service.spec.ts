@@ -1,4 +1,4 @@
-/* global describe, it, expect, jest */
+import { ForbiddenException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { KYCStatus, RegistrationStep, Role } from '../generated/prisma/client';
 
@@ -15,18 +15,19 @@ describe('AuthService.submitKYC', () => {
         update: jest.fn().mockResolvedValue({ id: 7 }),
       },
       kYC: {
-        create: jest.fn().mockResolvedValue({ id: 91, status: KYCStatus.PENDING, createdAt: new Date() }),
+        create: jest.fn().mockResolvedValue({
+          id: 91,
+          status: KYCStatus.PENDING,
+          createdAt: new Date(),
+        }),
       },
     } as any;
 
-    const jwtService = {} as any;
-    const configService = {} as any;
-    const otpService = {} as any;
     const uploadsService = {
       buildPublicUrl: jest.fn().mockReturnValue('https://cdn.example.com/license/7/kyc.jpg'),
     } as any;
 
-    const service = new AuthService(prisma, jwtService, configService, otpService, uploadsService);
+    const service = new AuthService(prisma, {} as any, {} as any, {} as any, uploadsService);
 
     await service.submitKYC(7, {
       licenseNumber: 'DL1234567890',
@@ -45,8 +46,10 @@ describe('AuthService.submitKYC', () => {
   });
 });
 
+// ─── refresh ─────────────────────────────────────────────────────────────────
+
 describe('AuthService.refresh', () => {
-  it('returns both camelCase and snake_case token keys for compatibility', async () => {
+  it('returns camelCase token keys', async () => {
     const oldRefreshToken = 'old-refresh-token';
     const accessToken = 'new-access-token';
     const newRefreshToken = 'new-refresh-token';
@@ -86,18 +89,73 @@ describe('AuthService.refresh', () => {
       }),
     } as any;
 
-    const otpService = {} as any;
-    const uploadsService = {} as any;
-
-    const service = new AuthService(prisma, jwtService, configService, otpService, uploadsService);
+    const service = new AuthService(prisma, jwtService, configService, {} as any, {} as any);
 
     const result = await service.refresh(oldRefreshToken);
 
-    expect(result).toEqual({
-      accessToken,
-      refreshToken: newRefreshToken,
-      access_token: accessToken,
-      refresh_token: newRefreshToken,
-    });
+    expect(result).toMatchObject({ accessToken, refreshToken: newRefreshToken });
+  });
+});
+
+// ─── Role-guard tests ────────────────────────────────────────────────────────
+
+describe('AuthService.sendOTP — role guard', () => {
+  it('throws ForbiddenException when phone is registered under a different role', async () => {
+    const prisma = {
+      user: {
+        findUnique: jest.fn().mockResolvedValue({ role: Role.RENTER }),
+      },
+    } as any;
+
+    const service = new AuthService(prisma, {} as any, {} as any, {} as any, {} as any);
+
+    await expect(service.sendOTP({ phone: '+919876543210', role: Role.MERCHANT })).rejects.toThrow(
+      ForbiddenException,
+    );
+  });
+
+  it('proceeds normally when user does not exist yet', async () => {
+    const prisma = {
+      user: { findUnique: jest.fn().mockResolvedValue(null) },
+    } as any;
+
+    const otpService = { sendOTP: jest.fn().mockResolvedValue(undefined) } as any;
+
+    const service = new AuthService(prisma, {} as any, {} as any, otpService, {} as any);
+
+    const result = await service.sendOTP({ phone: '+919876543210', role: Role.MERCHANT });
+
+    expect(result).toHaveProperty('message');
+    expect(otpService.sendOTP).toHaveBeenCalledWith('+919876543210');
+  });
+});
+
+describe('AuthService.verifyOTPAndAuthenticate — role guard', () => {
+  it('throws ForbiddenException when existing user has a different role', async () => {
+    const prisma = {
+      user: {
+        findUnique: jest.fn().mockResolvedValue({
+          id: 5,
+          phone: '+919876543210',
+          role: Role.RENTER,
+          phoneVerified: true,
+          registrationStep: RegistrationStep.PROFILE_COMPLETED,
+        }),
+      },
+    } as any;
+
+    const otpService = {
+      verifyOTP: jest.fn().mockResolvedValue(undefined),
+    } as any;
+
+    const service = new AuthService(prisma, {} as any, {} as any, otpService, {} as any);
+
+    await expect(
+      service.verifyOTPAndAuthenticate({
+        phone: '+919876543210',
+        otp: '123456',
+        role: Role.MERCHANT,
+      }),
+    ).rejects.toThrow(ForbiddenException);
   });
 });

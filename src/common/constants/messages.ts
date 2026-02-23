@@ -53,6 +53,9 @@ export const ERROR_MESSAGES = {
   // Token errors
   INVALID_REFRESH_TOKEN: 'Invalid refresh token',
   REFRESH_TOKEN_EXPIRED: 'Refresh token expired',
+
+  // Generic
+  UNEXPECTED_ERROR: 'An unexpected error occurred. Please try again later.',
 } as const;
 
 export const SUCCESS_MESSAGES = {

@@ -2,6 +2,7 @@ import {
   Injectable,
   UnauthorizedException,
   ConflictException,
+  ForbiddenException,
   HttpException,
   HttpStatus,
   Logger,
@@ -60,10 +61,24 @@ export class AuthService implements OnModuleInit {
   }
 
   /**
-   * Send OTP to phone number
-   * Always responds with success message to prevent enumeration attacks
+   * Send OTP to phone number.
+   * Rejects immediately if the phone is already registered under a different role.
+   * Otherwise always responds with a generic success message to prevent enumeration.
    */
   async sendOTP(dto: SendOTPDto) {
+    // Role-mismatch guard: check before sending the OTP
+    const existing = await this.prisma.user.findUnique({
+      where: { phone: dto.phone },
+      select: { role: true },
+    });
+
+    if (existing && existing.role !== dto.role) {
+      const registeredAs = existing.role.charAt(0) + existing.role.slice(1).toLowerCase();
+      throw new ForbiddenException(
+        `This number is already registered as a ${registeredAs}. Please use the correct app.`,
+      );
+    }
+
     try {
       // Send OTP via WhatsApp
       await this.otpService.sendOTP(dto.phone);
@@ -105,6 +120,14 @@ export class AuthService implements OnModuleInit {
         },
       });
     } else {
+      // Role-mismatch guard: never authenticate a user into the wrong portal
+      if (user.role !== dto.role) {
+        const registeredAs = user.role.charAt(0) + user.role.slice(1).toLowerCase();
+        throw new ForbiddenException(
+          `This number is already registered as a ${registeredAs}. Please use the correct app.`,
+        );
+      }
+
       // Update existing user to mark phone as verified
       user = await this.prisma.user.update({
         where: { phone: dto.phone },

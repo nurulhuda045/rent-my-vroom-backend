@@ -1,4 +1,3 @@
-/* global describe, it, expect, jest */
 import { VehiclesService } from './vehicles.service';
 import { Role } from '../generated/prisma/client';
 
