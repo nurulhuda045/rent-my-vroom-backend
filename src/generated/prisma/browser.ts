@@ -53,6 +53,11 @@ export type Review = Prisma.ReviewModel
  */
 export type OTP = Prisma.OTPModel
 /**
+ * Model SystemConfig
+ * 
+ */
+export type SystemConfig = Prisma.SystemConfigModel
+/**
  * Model KYC
  * 
  */

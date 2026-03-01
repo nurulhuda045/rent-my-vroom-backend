@@ -58,6 +58,7 @@ export const ModelName = {
   Message: 'Message',
   Review: 'Review',
   OTP: 'OTP',
+  SystemConfig: 'SystemConfig',
   KYC: 'KYC'
 } as const
 
@@ -156,7 +157,8 @@ export const BookingScalarFieldEnum = {
   updatedAt: 'updatedAt',
   acceptedAt: 'acceptedAt',
   rejectedAt: 'rejectedAt',
-  completedAt: 'completedAt'
+  completedAt: 'completedAt',
+  cancelledAt: 'cancelledAt'
 } as const
 
 export type BookingScalarFieldEnum = (typeof BookingScalarFieldEnum)[keyof typeof BookingScalarFieldEnum]
@@ -200,6 +202,17 @@ export const OTPScalarFieldEnum = {
 } as const
 
 export type OTPScalarFieldEnum = (typeof OTPScalarFieldEnum)[keyof typeof OTPScalarFieldEnum]
+
+
+export const SystemConfigScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  value: 'value',
+  updatedAt: 'updatedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type SystemConfigScalarFieldEnum = (typeof SystemConfigScalarFieldEnum)[keyof typeof SystemConfigScalarFieldEnum]
 
 
 export const KYCScalarFieldEnum = {

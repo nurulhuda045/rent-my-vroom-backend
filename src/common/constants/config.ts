@@ -62,6 +62,14 @@ export const UPLOAD_LIMITS = {
 } as const;
 
 /**
+ * Booking configuration
+ */
+export const BOOKING_CONFIG = {
+  CANCELLATION_WINDOW_KEY: 'BOOKING_CANCELLATION_WINDOW_HOURS',
+  DEFAULT_CANCELLATION_WINDOW_HOURS: 4,
+} as const;
+
+/**
  * Rate limiting
  */
 export const RATE_LIMITS = {

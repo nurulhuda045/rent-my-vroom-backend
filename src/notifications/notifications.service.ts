@@ -101,6 +101,24 @@ export class NotificationsService {
     await this.sendEmail(email, subject, html);
   }
 
+  async sendBookingCancelledEmail(email: string, firstName: string, booking: any) {
+    const subject = 'Booking Cancelled';
+    const html = `
+      <h1>Hello ${firstName},</h1>
+      <p>A booking has been cancelled by the renter:</p>
+      <ul>
+        <li><strong>Vehicle:</strong> ${booking.vehicle.make} ${booking.vehicle.model}</li>
+        <li><strong>Start Date:</strong> ${new Date(booking.startDate).toLocaleDateString()}</li>
+        <li><strong>End Date:</strong> ${new Date(booking.endDate).toLocaleDateString()}</li>
+        <li><strong>Total Price:</strong> $${booking.totalPrice}</li>
+      </ul>
+      <p>The vehicle is now available for other bookings.</p>
+      <p>Best regards,<br>The RentMyVroom Team</p>
+    `;
+
+    await this.sendEmail(email, subject, html);
+  }
+
   async sendBookingCompletedEmail(email: string, firstName: string, booking: any) {
     const subject = 'Booking Completed - Please Leave a Review';
     const html = `

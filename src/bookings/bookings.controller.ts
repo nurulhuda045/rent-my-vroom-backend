@@ -90,6 +90,20 @@ export class BookingsController {
     return this.bookingsService.completeBooking(id, merchantId);
   }
 
+  @Patch(':id/cancel')
+  @UseGuards(RolesGuard)
+  @Roles(Role.RENTER)
+  @ApiOperation({ summary: 'Cancel a booking (Renter only)' })
+  @ApiResponse({ status: 200, description: 'Booking cancelled' })
+  @ApiResponse({ status: 400, description: 'Cancellation window expired or invalid status' })
+  @ApiResponse({ status: 403, description: 'Can only cancel your own bookings' })
+  async cancelBooking(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser('id') renterId: number,
+  ) {
+    return this.bookingsService.cancelBooking(id, renterId);
+  }
+
   @Get('merchant/stats')
   @UseGuards(RolesGuard)
   @Roles(Role.MERCHANT)

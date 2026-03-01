@@ -3,6 +3,7 @@ import {
   NotFoundException,
   ForbiddenException,
   ConflictException,
+  BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateVehicleDto, UpdateVehicleDto } from './dto/vehicles.dto';
@@ -39,9 +40,32 @@ export class VehiclesService {
     return vehicle;
   }
 
-  async findAll(filters?: { isAvailable?: boolean }) {
+  async findAll(
+    filters?: { isAvailable?: boolean },
+    dateRange?: { startDate: string; endDate: string },
+  ) {
+    const startDate = dateRange ? new Date(dateRange.startDate) : undefined;
+    const endDate = dateRange ? new Date(dateRange.endDate) : undefined;
+
+    if (startDate && endDate && endDate <= startDate) {
+      throw new BadRequestException('endDate must be after startDate');
+    }
+
     const vehicles = await this.prisma.vehicle.findMany({
-      where: filters,
+      where: {
+        ...filters,
+        ...(startDate && endDate
+          ? {
+              bookings: {
+                none: {
+                  status: { in: ['PENDING', 'ACCEPTED'] },
+                  startDate: { lt: endDate },
+                  endDate: { gt: startDate },
+                },
+              },
+            }
+          : {}),
+      },
       orderBy: {
         createdAt: 'desc',
       },

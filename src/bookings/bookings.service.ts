@@ -8,12 +8,15 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateBookingDto, UpdateBookingStatusDto } from './dto/bookings.dto';
 import { BookingStatus, Role, LicenseStatus } from '../generated/prisma/client';
 import { NotificationsService } from '../notifications/notifications.service';
+import { SystemConfigService } from '../system-config/system-config.service';
+import { ERROR_MESSAGES } from '../common';
 
 @Injectable()
 export class BookingsService {
   constructor(
     private prisma: PrismaService,
     private notificationsService: NotificationsService,
+    private systemConfigService: SystemConfigService,
   ) {}
 
   async create(renterId: number, dto: CreateBookingDto) {
@@ -51,8 +54,27 @@ export class BookingsService {
     // Calculate total price
     const startDate = new Date(dto.startDate);
     const endDate = new Date(dto.endDate);
+
+    if (startDate <= new Date()) {
+      throw new BadRequestException(ERROR_MESSAGES.BOOKING_PAST_DATE);
+    }
+
     if (endDate <= startDate) {
       throw new BadRequestException('End date must be after start date');
+    }
+
+    // Check for overlapping bookings on this vehicle
+    const overlapping = await this.prisma.booking.findFirst({
+      where: {
+        vehicleId: dto.vehicleId,
+        status: { in: [BookingStatus.PENDING, BookingStatus.ACCEPTED] },
+        startDate: { lt: endDate },
+        endDate: { gt: startDate },
+      },
+    });
+
+    if (overlapping) {
+      throw new BadRequestException(ERROR_MESSAGES.BOOKING_OVERLAP);
     }
 
     const days = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
@@ -245,6 +267,56 @@ export class BookingsService {
     await this.notificationsService.sendBookingCompletedEmail(
       booking.renter.email,
       booking.renter.firstName,
+      updated,
+    );
+
+    return updated;
+  }
+
+  async cancelBooking(bookingId: number, renterId: number) {
+    const booking = await this.prisma.booking.findUnique({
+      where: { id: bookingId },
+      include: { renter: true, vehicle: true, merchant: true },
+    });
+
+    if (!booking) {
+      throw new NotFoundException(ERROR_MESSAGES.BOOKING_NOT_FOUND);
+    }
+
+    if (booking.renterId !== renterId) {
+      throw new ForbiddenException(ERROR_MESSAGES.BOOKING_CANCEL_UNAUTHORIZED);
+    }
+
+    if (booking.status !== BookingStatus.PENDING && booking.status !== BookingStatus.ACCEPTED) {
+      throw new BadRequestException(ERROR_MESSAGES.BOOKING_CANCEL_NOT_ALLOWED);
+    }
+
+    const cancellationWindowHours = await this.systemConfigService.getCancellationWindowHours();
+    const now = new Date();
+    const hoursUntilStart = (booking.startDate.getTime() - now.getTime()) / (1000 * 60 * 60);
+
+    if (hoursUntilStart < cancellationWindowHours) {
+      throw new BadRequestException(
+        ERROR_MESSAGES.BOOKING_CANCEL_WINDOW_EXPIRED.replace('{hours}', String(cancellationWindowHours)),
+      );
+    }
+
+    const updated = await this.prisma.booking.update({
+      where: { id: bookingId },
+      data: {
+        status: BookingStatus.CANCELLED,
+        cancelledAt: now,
+      },
+      include: {
+        vehicle: true,
+        renter: true,
+        merchant: true,
+      },
+    });
+
+    await this.notificationsService.sendBookingCancelledEmail(
+      booking.merchant.email,
+      booking.merchant.firstName,
       updated,
     );
 

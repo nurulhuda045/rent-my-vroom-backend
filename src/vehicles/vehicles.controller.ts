@@ -36,12 +36,19 @@ export class VehiclesController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all vehicles' })
+  @ApiOperation({ summary: 'Get all vehicles (optionally filter by availability dates)' })
   @ApiQuery({ name: 'isAvailable', required: false, type: Boolean })
+  @ApiQuery({ name: 'startDate', required: false, type: String, description: 'Filter vehicles available from this date (ISO 8601)' })
+  @ApiQuery({ name: 'endDate', required: false, type: String, description: 'Filter vehicles available until this date (ISO 8601)' })
   @ApiResponse({ status: 200, description: 'Vehicles retrieved successfully' })
-  async findAll(@Query('isAvailable') isAvailable?: string) {
+  async findAll(
+    @Query('isAvailable') isAvailable?: string,
+    @Query('startDate') startDate?: string,
+    @Query('endDate') endDate?: string,
+  ) {
     const filters = isAvailable !== undefined ? { isAvailable: isAvailable === 'true' } : undefined;
-    return this.vehiclesService.findAll(filters);
+    const dateRange = startDate && endDate ? { startDate, endDate } : undefined;
+    return this.vehiclesService.findAll(filters, dateRange);
   }
 
   @Get('my')

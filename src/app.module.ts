@@ -14,6 +14,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { WhatsAppModule } from './whatsapp/whatsapp.module';
 import { OTPModule } from './otp/otp.module';
 import { KYCModule } from './kyc/kyc.module';
+import { SystemConfigModule } from './system-config/system-config.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { KYCModule } from './kyc/kyc.module';
     WhatsAppModule,
     OTPModule,
     KYCModule,
+    SystemConfigModule,
   ],
 })
 export class AppModule {}

@@ -40,6 +40,14 @@ export const ERROR_MESSAGES = {
   LICENSE_APPROVAL_ADMIN_ONLY: 'Only admins can approve licenses',
   LICENSE_APPROVAL_RENTER_ONLY: 'License approval only applies to renter accounts',
 
+  // Booking errors
+  BOOKING_PAST_DATE: 'Start date must be in the future',
+  BOOKING_OVERLAP: 'Vehicle is already booked for the selected dates',
+  BOOKING_NOT_FOUND: 'Booking not found',
+  BOOKING_CANCEL_NOT_ALLOWED: 'Only pending or accepted bookings can be cancelled',
+  BOOKING_CANCEL_WINDOW_EXPIRED: 'Cancellation is not allowed within {hours} hours of the start date',
+  BOOKING_CANCEL_UNAUTHORIZED: 'You can only cancel your own bookings',
+
   // Role errors
   MERCHANT_ONLY: 'Only merchants can perform this action',
   RENTER_ONLY: 'Only renters can perform this action',
