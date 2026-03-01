@@ -42,10 +42,19 @@ export class VehiclesService {
 
   async findAll(
     filters?: { isAvailable?: boolean },
-    dateRange?: { startDate: string; endDate: string },
+    dateRange?: { startDate: string; endDate?: string },
   ) {
     const startDate = dateRange ? new Date(dateRange.startDate) : undefined;
-    const endDate = dateRange ? new Date(dateRange.endDate) : undefined;
+    // When only startDate is provided, treat as "available on that day" (use end of same day)
+    const endDate = dateRange
+      ? dateRange.endDate
+        ? new Date(dateRange.endDate)
+        : (() => {
+            const end = new Date(dateRange.startDate);
+            end.setUTCDate(end.getUTCDate() + 1);
+            return end;
+          })()
+      : undefined;
 
     if (startDate && endDate && endDate <= startDate) {
       throw new BadRequestException('endDate must be after startDate');

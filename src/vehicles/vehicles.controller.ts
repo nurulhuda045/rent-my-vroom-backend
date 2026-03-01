@@ -47,7 +47,9 @@ export class VehiclesController {
     @Query('endDate') endDate?: string,
   ) {
     const filters = isAvailable !== undefined ? { isAvailable: isAvailable === 'true' } : undefined;
-    const dateRange = startDate && endDate ? { startDate, endDate } : undefined;
+    const dateRange = startDate
+      ? { startDate, endDate: endDate || undefined }
+      : undefined;
     return this.vehiclesService.findAll(filters, dateRange);
   }
 
