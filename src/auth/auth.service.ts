@@ -283,7 +283,17 @@ export class AuthService implements OnModuleInit {
     }
 
     if (user.kyc) {
-      throw new ConflictException('KYC already submitted');
+      if (user.kyc.status === KYCStatus.REJECTED) {
+        // Allow re-submission after rejection — delete the old record first
+        await this.prisma.kYC.delete({ where: { userId } });
+      } else {
+        // PENDING or APPROVED — block re-submission
+        throw new ConflictException(
+          user.kyc.status === KYCStatus.PENDING
+            ? 'KYC is already under review'
+            : 'KYC has already been approved',
+        );
+      }
     }
 
     // Create KYC record
