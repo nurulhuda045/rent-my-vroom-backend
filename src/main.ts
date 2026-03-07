@@ -38,6 +38,7 @@ async function bootstrap() {
     .addTag('messages', 'Messaging endpoints')
     .addTag('reviews', 'Review endpoints')
     .addTag('uploads', 'File upload endpoints')
+    .addTag('health', 'Health check endpoints')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

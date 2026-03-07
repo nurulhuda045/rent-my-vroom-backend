@@ -15,8 +15,10 @@ import { WhatsAppModule } from './whatsapp/whatsapp.module';
 import { OTPModule } from './otp/otp.module';
 import { KYCModule } from './kyc/kyc.module';
 import { SystemConfigModule } from './system-config/system-config.module';
+import { AppController } from './app.controller';
 
 @Module({
+  controllers: [AppController],
   imports: [
     // Configuration
     ConfigModule.forRoot({
