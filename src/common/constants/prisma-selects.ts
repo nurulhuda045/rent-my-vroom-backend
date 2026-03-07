@@ -71,6 +71,7 @@ export const KYC_FIELDS = {
   id: true,
   licenseNumber: true,
   licenseImageUrl: true,
+  holderPhotoUrl: true,
   licenseExpiryDate: true,
   status: true,
   rejectionReason: true,

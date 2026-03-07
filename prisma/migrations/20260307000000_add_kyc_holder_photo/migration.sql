@@ -1,0 +1,2 @@
+ALTER TABLE "KYC"
+ADD COLUMN "holderPhotoUrl" TEXT;

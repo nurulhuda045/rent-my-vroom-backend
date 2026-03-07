@@ -292,6 +292,7 @@ export class AuthService implements OnModuleInit {
         userId,
         licenseNumber: dto.licenseNumber,
         licenseImageUrl: this.uploadsService.buildPublicUrl(dto.licenseImageKey),
+        holderPhotoUrl: this.uploadsService.buildPublicUrl(dto.holderPhotoKey),
         licenseExpiryDate: new Date(dto.licenseExpiryDate),
         status: KYCStatus.PENDING,
       },

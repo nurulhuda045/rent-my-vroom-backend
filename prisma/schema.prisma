@@ -266,6 +266,7 @@ model KYC {
   user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   licenseNumber     String
   licenseImageUrl   String
+  holderPhotoUrl    String?
   licenseExpiryDate DateTime
   status            KYCStatus @default(PENDING)
   rejectionReason   String?

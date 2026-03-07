@@ -426,7 +426,7 @@
             },
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"licenseNumber\": \"DL1234567890\",\n  \"licenseImageKey\": \"license/12/1706980301-abcd123.jpg\",\n  \"licenseExpiryDate\": \"2025-12-31\"\n}",
+              "raw": "{\n  \"licenseNumber\": \"DL1234567890\",\n  \"licenseImageKey\": \"license/12/1706980301-abcd123.jpg\",\n  \"holderPhotoKey\": \"holder-photo/12/1706980301-selfie.jpg\",\n  \"licenseExpiryDate\": \"2025-12-31\"\n}",
               "options": {
                 "raw": {
                   "language": "json"

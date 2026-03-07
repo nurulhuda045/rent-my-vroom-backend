@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { KYCStatus, RegistrationStep, Role } from '../generated/prisma/client';
 
 describe('AuthService.submitKYC', () => {
-  it('stores license image as Cloudflare R2 public url from key', async () => {
+  it('stores KYC document and holder photo as Cloudflare R2 public urls from keys', async () => {
     const prisma = {
       user: {
         findUnique: jest.fn().mockResolvedValue({
@@ -24,7 +24,10 @@ describe('AuthService.submitKYC', () => {
     } as any;
 
     const uploadsService = {
-      buildPublicUrl: jest.fn().mockReturnValue('https://cdn.example.com/license/7/kyc.jpg'),
+      buildPublicUrl: jest
+        .fn()
+        .mockReturnValueOnce('https://cdn.example.com/license/7/kyc.jpg')
+        .mockReturnValueOnce('https://cdn.example.com/holder-photo/7/selfie.jpg'),
     } as any;
 
     const service = new AuthService(prisma, {} as any, {} as any, {} as any, uploadsService);
@@ -32,14 +35,17 @@ describe('AuthService.submitKYC', () => {
     await service.submitKYC(7, {
       licenseNumber: 'DL1234567890',
       licenseImageKey: 'license/7/kyc.jpg',
+      holderPhotoKey: 'holder-photo/7/selfie.jpg',
       licenseExpiryDate: '2028-01-01',
     });
 
     expect(uploadsService.buildPublicUrl).toHaveBeenCalledWith('license/7/kyc.jpg');
+    expect(uploadsService.buildPublicUrl).toHaveBeenCalledWith('holder-photo/7/selfie.jpg');
     expect(prisma.kYC.create).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({
           licenseImageUrl: 'https://cdn.example.com/license/7/kyc.jpg',
+          holderPhotoUrl: 'https://cdn.example.com/holder-photo/7/selfie.jpg',
         }),
       }),
     );

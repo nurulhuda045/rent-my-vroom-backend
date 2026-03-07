@@ -220,6 +220,7 @@ export const KYCScalarFieldEnum = {
   userId: 'userId',
   licenseNumber: 'licenseNumber',
   licenseImageUrl: 'licenseImageUrl',
+  holderPhotoUrl: 'holderPhotoUrl',
   licenseExpiryDate: 'licenseExpiryDate',
   status: 'status',
   rejectionReason: 'rejectionReason',

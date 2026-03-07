@@ -41,6 +41,7 @@ export type KYCMinAggregateOutputType = {
   userId: number | null
   licenseNumber: string | null
   licenseImageUrl: string | null
+  holderPhotoUrl: string | null
   licenseExpiryDate: Date | null
   status: $Enums.KYCStatus | null
   rejectionReason: string | null
@@ -54,6 +55,7 @@ export type KYCMaxAggregateOutputType = {
   userId: number | null
   licenseNumber: string | null
   licenseImageUrl: string | null
+  holderPhotoUrl: string | null
   licenseExpiryDate: Date | null
   status: $Enums.KYCStatus | null
   rejectionReason: string | null
@@ -67,6 +69,7 @@ export type KYCCountAggregateOutputType = {
   userId: number
   licenseNumber: number
   licenseImageUrl: number
+  holderPhotoUrl: number
   licenseExpiryDate: number
   status: number
   rejectionReason: number
@@ -92,6 +95,7 @@ export type KYCMinAggregateInputType = {
   userId?: true
   licenseNumber?: true
   licenseImageUrl?: true
+  holderPhotoUrl?: true
   licenseExpiryDate?: true
   status?: true
   rejectionReason?: true
@@ -105,6 +109,7 @@ export type KYCMaxAggregateInputType = {
   userId?: true
   licenseNumber?: true
   licenseImageUrl?: true
+  holderPhotoUrl?: true
   licenseExpiryDate?: true
   status?: true
   rejectionReason?: true
@@ -118,6 +123,7 @@ export type KYCCountAggregateInputType = {
   userId?: true
   licenseNumber?: true
   licenseImageUrl?: true
+  holderPhotoUrl?: true
   licenseExpiryDate?: true
   status?: true
   rejectionReason?: true
@@ -218,6 +224,7 @@ export type KYCGroupByOutputType = {
   userId: number
   licenseNumber: string
   licenseImageUrl: string
+  holderPhotoUrl: string | null
   licenseExpiryDate: Date
   status: $Enums.KYCStatus
   rejectionReason: string | null
@@ -254,6 +261,7 @@ export type KYCWhereInput = {
   userId?: Prisma.IntFilter<"KYC"> | number
   licenseNumber?: Prisma.StringFilter<"KYC"> | string
   licenseImageUrl?: Prisma.StringFilter<"KYC"> | string
+  holderPhotoUrl?: Prisma.StringNullableFilter<"KYC"> | string | null
   licenseExpiryDate?: Prisma.DateTimeFilter<"KYC"> | Date | string
   status?: Prisma.EnumKYCStatusFilter<"KYC"> | $Enums.KYCStatus
   rejectionReason?: Prisma.StringNullableFilter<"KYC"> | string | null
@@ -268,6 +276,7 @@ export type KYCOrderByWithRelationInput = {
   userId?: Prisma.SortOrder
   licenseNumber?: Prisma.SortOrder
   licenseImageUrl?: Prisma.SortOrder
+  holderPhotoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   licenseExpiryDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   rejectionReason?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -285,6 +294,7 @@ export type KYCWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.KYCWhereInput | Prisma.KYCWhereInput[]
   licenseNumber?: Prisma.StringFilter<"KYC"> | string
   licenseImageUrl?: Prisma.StringFilter<"KYC"> | string
+  holderPhotoUrl?: Prisma.StringNullableFilter<"KYC"> | string | null
   licenseExpiryDate?: Prisma.DateTimeFilter<"KYC"> | Date | string
   status?: Prisma.EnumKYCStatusFilter<"KYC"> | $Enums.KYCStatus
   rejectionReason?: Prisma.StringNullableFilter<"KYC"> | string | null
@@ -299,6 +309,7 @@ export type KYCOrderByWithAggregationInput = {
   userId?: Prisma.SortOrder
   licenseNumber?: Prisma.SortOrder
   licenseImageUrl?: Prisma.SortOrder
+  holderPhotoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   licenseExpiryDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   rejectionReason?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -320,6 +331,7 @@ export type KYCScalarWhereWithAggregatesInput = {
   userId?: Prisma.IntWithAggregatesFilter<"KYC"> | number
   licenseNumber?: Prisma.StringWithAggregatesFilter<"KYC"> | string
   licenseImageUrl?: Prisma.StringWithAggregatesFilter<"KYC"> | string
+  holderPhotoUrl?: Prisma.StringNullableWithAggregatesFilter<"KYC"> | string | null
   licenseExpiryDate?: Prisma.DateTimeWithAggregatesFilter<"KYC"> | Date | string
   status?: Prisma.EnumKYCStatusWithAggregatesFilter<"KYC"> | $Enums.KYCStatus
   rejectionReason?: Prisma.StringNullableWithAggregatesFilter<"KYC"> | string | null
@@ -331,6 +343,7 @@ export type KYCScalarWhereWithAggregatesInput = {
 export type KYCCreateInput = {
   licenseNumber: string
   licenseImageUrl: string
+  holderPhotoUrl?: string | null
   licenseExpiryDate: Date | string
   status?: $Enums.KYCStatus
   rejectionReason?: string | null
@@ -345,6 +358,7 @@ export type KYCUncheckedCreateInput = {
   userId: number
   licenseNumber: string
   licenseImageUrl: string
+  holderPhotoUrl?: string | null
   licenseExpiryDate: Date | string
   status?: $Enums.KYCStatus
   rejectionReason?: string | null
@@ -356,6 +370,7 @@ export type KYCUncheckedCreateInput = {
 export type KYCUpdateInput = {
   licenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   licenseImageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  holderPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   licenseExpiryDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumKYCStatusFieldUpdateOperationsInput | $Enums.KYCStatus
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -370,6 +385,7 @@ export type KYCUncheckedUpdateInput = {
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   licenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   licenseImageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  holderPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   licenseExpiryDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumKYCStatusFieldUpdateOperationsInput | $Enums.KYCStatus
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -383,6 +399,7 @@ export type KYCCreateManyInput = {
   userId: number
   licenseNumber: string
   licenseImageUrl: string
+  holderPhotoUrl?: string | null
   licenseExpiryDate: Date | string
   status?: $Enums.KYCStatus
   rejectionReason?: string | null
@@ -394,6 +411,7 @@ export type KYCCreateManyInput = {
 export type KYCUpdateManyMutationInput = {
   licenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   licenseImageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  holderPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   licenseExpiryDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumKYCStatusFieldUpdateOperationsInput | $Enums.KYCStatus
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -407,6 +425,7 @@ export type KYCUncheckedUpdateManyInput = {
   userId?: Prisma.IntFieldUpdateOperationsInput | number
   licenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   licenseImageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  holderPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   licenseExpiryDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumKYCStatusFieldUpdateOperationsInput | $Enums.KYCStatus
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -425,6 +444,7 @@ export type KYCCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   licenseNumber?: Prisma.SortOrder
   licenseImageUrl?: Prisma.SortOrder
+  holderPhotoUrl?: Prisma.SortOrder
   licenseExpiryDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   rejectionReason?: Prisma.SortOrder
@@ -443,6 +463,7 @@ export type KYCMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   licenseNumber?: Prisma.SortOrder
   licenseImageUrl?: Prisma.SortOrder
+  holderPhotoUrl?: Prisma.SortOrder
   licenseExpiryDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   rejectionReason?: Prisma.SortOrder
@@ -456,6 +477,7 @@ export type KYCMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   licenseNumber?: Prisma.SortOrder
   licenseImageUrl?: Prisma.SortOrder
+  holderPhotoUrl?: Prisma.SortOrder
   licenseExpiryDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
   rejectionReason?: Prisma.SortOrder
@@ -508,6 +530,7 @@ export type EnumKYCStatusFieldUpdateOperationsInput = {
 export type KYCCreateWithoutUserInput = {
   licenseNumber: string
   licenseImageUrl: string
+  holderPhotoUrl?: string | null
   licenseExpiryDate: Date | string
   status?: $Enums.KYCStatus
   rejectionReason?: string | null
@@ -520,6 +543,7 @@ export type KYCUncheckedCreateWithoutUserInput = {
   id?: number
   licenseNumber: string
   licenseImageUrl: string
+  holderPhotoUrl?: string | null
   licenseExpiryDate: Date | string
   status?: $Enums.KYCStatus
   rejectionReason?: string | null
@@ -547,6 +571,7 @@ export type KYCUpdateToOneWithWhereWithoutUserInput = {
 export type KYCUpdateWithoutUserInput = {
   licenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   licenseImageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  holderPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   licenseExpiryDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumKYCStatusFieldUpdateOperationsInput | $Enums.KYCStatus
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -559,6 +584,7 @@ export type KYCUncheckedUpdateWithoutUserInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   licenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   licenseImageUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  holderPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   licenseExpiryDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   status?: Prisma.EnumKYCStatusFieldUpdateOperationsInput | $Enums.KYCStatus
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -574,6 +600,7 @@ export type KYCSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   userId?: boolean
   licenseNumber?: boolean
   licenseImageUrl?: boolean
+  holderPhotoUrl?: boolean
   licenseExpiryDate?: boolean
   status?: boolean
   rejectionReason?: boolean
@@ -588,6 +615,7 @@ export type KYCSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extension
   userId?: boolean
   licenseNumber?: boolean
   licenseImageUrl?: boolean
+  holderPhotoUrl?: boolean
   licenseExpiryDate?: boolean
   status?: boolean
   rejectionReason?: boolean
@@ -602,6 +630,7 @@ export type KYCSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extension
   userId?: boolean
   licenseNumber?: boolean
   licenseImageUrl?: boolean
+  holderPhotoUrl?: boolean
   licenseExpiryDate?: boolean
   status?: boolean
   rejectionReason?: boolean
@@ -616,6 +645,7 @@ export type KYCSelectScalar = {
   userId?: boolean
   licenseNumber?: boolean
   licenseImageUrl?: boolean
+  holderPhotoUrl?: boolean
   licenseExpiryDate?: boolean
   status?: boolean
   rejectionReason?: boolean
@@ -624,7 +654,7 @@ export type KYCSelectScalar = {
   updatedAt?: boolean
 }
 
-export type KYCOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "licenseNumber" | "licenseImageUrl" | "licenseExpiryDate" | "status" | "rejectionReason" | "verifiedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["kYC"]>
+export type KYCOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "licenseNumber" | "licenseImageUrl" | "holderPhotoUrl" | "licenseExpiryDate" | "status" | "rejectionReason" | "verifiedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["kYC"]>
 export type KYCInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -645,6 +675,7 @@ export type $KYCPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     userId: number
     licenseNumber: string
     licenseImageUrl: string
+    holderPhotoUrl: string | null
     licenseExpiryDate: Date
     status: $Enums.KYCStatus
     rejectionReason: string | null
@@ -1079,6 +1110,7 @@ export interface KYCFieldRefs {
   readonly userId: Prisma.FieldRef<"KYC", 'Int'>
   readonly licenseNumber: Prisma.FieldRef<"KYC", 'String'>
   readonly licenseImageUrl: Prisma.FieldRef<"KYC", 'String'>
+  readonly holderPhotoUrl: Prisma.FieldRef<"KYC", 'String'>
   readonly licenseExpiryDate: Prisma.FieldRef<"KYC", 'DateTime'>
   readonly status: Prisma.FieldRef<"KYC", 'KYCStatus'>
   readonly rejectionReason: Prisma.FieldRef<"KYC", 'String'>
