@@ -15,6 +15,7 @@ import { WhatsAppModule } from './whatsapp/whatsapp.module';
 import { OTPModule } from './otp/otp.module';
 import { KYCModule } from './kyc/kyc.module';
 import { SystemConfigModule } from './system-config/system-config.module';
+import { BookingExpiryModule } from './booking-expiry/booking-expiry.module';
 import { AppController } from './app.controller';
 
 @Module({
@@ -50,6 +51,7 @@ import { AppController } from './app.controller';
     OTPModule,
     KYCModule,
     SystemConfigModule,
+    BookingExpiryModule,
   ],
 })
 export class AppModule {}

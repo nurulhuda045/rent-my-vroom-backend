@@ -1192,6 +1192,8 @@ export const BookingScalarFieldEnum = {
   status: 'status',
   renterNotes: 'renterNotes',
   merchantNotes: 'merchantNotes',
+  responseDeadline: 'responseDeadline',
+  cancellationReason: 'cancellationReason',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   acceptedAt: 'acceptedAt',

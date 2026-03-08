@@ -80,6 +80,13 @@ export class BookingsService {
     const days = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
     const totalPrice = Number(vehicle.pricePerDay) * days;
 
+    // Determine merchant response window:
+    // same-day bookings (start today) → 1 hour; future bookings → 24 hours
+    const now = new Date();
+    const isSameDay = startDate.toDateString() === now.toDateString();
+    const responseWindowHours = isSameDay ? 1 : 24;
+    const responseDeadline = new Date(now.getTime() + responseWindowHours * 60 * 60 * 1000);
+
     // Create booking
     const booking = await this.prisma.booking.create({
       data: {
@@ -91,6 +98,7 @@ export class BookingsService {
         totalPrice,
         renterNotes: dto.renterNotes,
         status: BookingStatus.PENDING,
+        responseDeadline,
       },
       include: {
         vehicle: true,
@@ -113,6 +121,7 @@ export class BookingsService {
     const bookings = await this.prisma.booking.findMany({
       where: { renterId },
       include: {
+        review: true,
         vehicle: true,
         merchant: {
           select: {

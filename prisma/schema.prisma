@@ -168,6 +168,12 @@ model Booking {
   renterNotes   String?
   merchantNotes String?
 
+  // Response window — deadline by which the merchant must accept/reject
+  responseDeadline DateTime?
+
+  // Reason stored when booking is cancelled (e.g. auto-expiry vs manual)
+  cancellationReason String?
+
   // Timestamps
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -185,6 +191,7 @@ model Booking {
   @@index([vehicleId])
   @@index([status])
   @@index([startDate, endDate])
+  @@index([responseDeadline])
 }
 
 model Message {

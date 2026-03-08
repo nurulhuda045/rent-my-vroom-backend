@@ -119,6 +119,42 @@ export class NotificationsService {
     await this.sendEmail(email, subject, html);
   }
 
+  async sendBookingAutoCancelledRenterEmail(email: string, firstName: string, booking: any) {
+    const subject = 'Your Booking Was Automatically Cancelled';
+    const html = `
+      <h1>Hello ${firstName},</h1>
+      <p>Unfortunately, your booking was automatically cancelled because the merchant did not respond within the required time window.</p>
+      <ul>
+        <li><strong>Vehicle:</strong> ${booking.vehicle.make} ${booking.vehicle.model}</li>
+        <li><strong>Start Date:</strong> ${new Date(booking.startDate).toLocaleDateString()}</li>
+        <li><strong>End Date:</strong> ${new Date(booking.endDate).toLocaleDateString()}</li>
+        <li><strong>Total Price:</strong> $${booking.totalPrice}</li>
+      </ul>
+      <p>We apologise for the inconvenience. Please browse other available vehicles on our platform.</p>
+      <p>Best regards,<br>The RentMyVroom Team</p>
+    `;
+
+    await this.sendEmail(email, subject, html);
+  }
+
+  async sendBookingAutoCancelledMerchantEmail(email: string, firstName: string, booking: any) {
+    const subject = 'Booking Expired — No Response Recorded';
+    const html = `
+      <h1>Hello ${firstName},</h1>
+      <p>A booking request for your vehicle was automatically cancelled because it was not accepted or rejected within the required response window.</p>
+      <ul>
+        <li><strong>Vehicle:</strong> ${booking.vehicle.make} ${booking.vehicle.model}</li>
+        <li><strong>Start Date:</strong> ${new Date(booking.startDate).toLocaleDateString()}</li>
+        <li><strong>End Date:</strong> ${new Date(booking.endDate).toLocaleDateString()}</li>
+        <li><strong>Total Price:</strong> $${booking.totalPrice}</li>
+      </ul>
+      <p>To avoid missing future bookings, please respond to requests promptly — within <strong>1 hour</strong> for same-day bookings and <strong>24 hours</strong> for future bookings.</p>
+      <p>Best regards,<br>The RentMyVroom Team</p>
+    `;
+
+    await this.sendEmail(email, subject, html);
+  }
+
   async sendBookingCompletedEmail(email: string, firstName: string, booking: any) {
     const subject = 'Booking Completed - Please Leave a Review';
     const html = `
