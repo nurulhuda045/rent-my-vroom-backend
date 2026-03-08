@@ -1,5 +1,16 @@
-import { IsEmail, IsString, MinLength, IsEnum, IsOptional, Matches } from 'class-validator';
+import {
+  IsEmail,
+  IsString,
+  MinLength,
+  IsEnum,
+  IsOptional,
+  Matches,
+  IsNumber,
+  Min,
+  Max,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import { Role } from '../../generated/prisma/client';
 
 // WhatsApp OTP Authentication DTOs
@@ -101,10 +112,18 @@ export class CompleteMerchantProfileDto {
 
   @ApiProperty({ example: 40.7128, required: false })
   @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(-90)
+  @Max(90)
   latitude?: number;
 
   @ApiProperty({ example: -74.006, required: false })
   @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(-180)
+  @Max(180)
   longitude?: number;
 }
 

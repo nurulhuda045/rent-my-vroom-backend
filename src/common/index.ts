@@ -10,6 +10,7 @@ export * from './constants/prisma-selects';
 
 // Utils
 export * from './utils/helpers';
+export * from './utils/geo';
 
 // Filters
 export * from './filters/prisma-exception.filter';

@@ -6,10 +6,24 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateVehicleDto, UpdateVehicleDto } from './dto/vehicles.dto';
-import { Role } from '../generated/prisma/client';
-import { ERROR_MESSAGES, SUCCESS_MESSAGES, MERCHANT_FIELDS } from '../common';
+import { CreateVehicleDto, FindVehiclesQueryDto, UpdateVehicleDto } from './dto/vehicles.dto';
+import { Prisma, Role } from '../generated/prisma/client';
+import { ERROR_MESSAGES, SUCCESS_MESSAGES, MERCHANT_FIELDS, GeoUtils } from '../common';
 import { UploadsService } from '../uploads/uploads.service';
+
+type VehicleSearchCriteria = {
+  isAvailable?: boolean;
+  startDate?: Date;
+  endDate?: Date;
+  latitude?: number;
+  longitude?: number;
+  radiusKm?: number;
+};
+
+type VehicleDistanceRow = {
+  id: number;
+  distanceKm: number;
+};
 
 @Injectable()
 export class VehiclesService {
@@ -40,47 +54,19 @@ export class VehiclesService {
     return vehicle;
   }
 
-  async findAll(
-    filters?: { isAvailable?: boolean },
-    dateRange?: { startDate: string; endDate?: string },
-  ) {
-    const startDate = dateRange ? new Date(dateRange.startDate) : undefined;
-    // When only startDate is provided, treat as "available on that day" (use end of same day)
-    const endDate = dateRange
-      ? dateRange.endDate
-        ? new Date(dateRange.endDate)
-        : (() => {
-            const end = new Date(dateRange.startDate);
-            end.setUTCDate(end.getUTCDate() + 1);
-            return end;
-          })()
-      : undefined;
+  async findAll(query: FindVehiclesQueryDto = {}) {
+    const criteria = this.normalizeSearchCriteria(query);
 
-    if (startDate && endDate && endDate <= startDate) {
-      throw new BadRequestException('endDate must be after startDate');
+    if (this.hasGeoSearch(criteria)) {
+      return this.findAllWithinRadius(criteria);
     }
 
-    const vehicles = await this.prisma.vehicle.findMany({
-      where: {
-        ...filters,
-        ...(startDate && endDate
-          ? {
-              bookings: {
-                none: {
-                  status: { in: ['PENDING', 'ACCEPTED'] },
-                  startDate: { lt: endDate },
-                  endDate: { gt: startDate },
-                },
-              },
-            }
-          : {}),
-      },
+    return this.prisma.vehicle.findMany({
+      where: this.buildVehicleWhereInput(criteria),
       orderBy: {
         createdAt: 'desc',
       },
     });
-
-    return vehicles;
   }
 
   async findMyVehicles(merchantId: number) {
@@ -217,6 +203,187 @@ export class VehiclesService {
       images: this.uploadsService.buildPublicUrls(imageKeys),
     };
   }
+
+  private normalizeSearchCriteria(query: FindVehiclesQueryDto): VehicleSearchCriteria {
+    this.validateGeoSearch(query);
+
+    const startDate = query.startDate ? new Date(query.startDate) : undefined;
+    const endDate = query.startDate
+      ? query.endDate
+        ? new Date(query.endDate)
+        : this.getDefaultSearchEndDate(query.startDate)
+      : undefined;
+
+    if (startDate && endDate && endDate <= startDate) {
+      throw new BadRequestException('endDate must be after startDate');
+    }
+
+    return {
+      isAvailable: query.isAvailable,
+      startDate,
+      endDate,
+      latitude: query.latitude,
+      longitude: query.longitude,
+      radiusKm: query.radiusKm,
+    };
+  }
+
+  private async findAllWithinRadius(criteria: VehicleSearchCriteria) {
+    const matches = await this.findVehicleIdsWithinRadius(criteria);
+
+    if (matches.length === 0) {
+      return [];
+    }
+
+    const distanceByVehicleId = new Map(
+      matches.map((match, index) => [match.id, { distanceKm: Number(match.distanceKm), index }]),
+    );
+
+    const vehicles = await this.prisma.vehicle.findMany({
+      where: {
+        id: {
+          in: matches.map((match) => match.id),
+        },
+      },
+    });
+
+    return vehicles
+      .sort(
+        (left, right) =>
+          (distanceByVehicleId.get(left.id)?.index ?? 0) -
+          (distanceByVehicleId.get(right.id)?.index ?? 0),
+      )
+      .map((vehicle) => ({
+        ...vehicle,
+        distanceKm: distanceByVehicleId.get(vehicle.id)?.distanceKm ?? null,
+      }));
+  }
+
+  private async findVehicleIdsWithinRadius(criteria: VehicleSearchCriteria) {
+    const { latitude, longitude, radiusKm } = criteria;
+
+    if (latitude === undefined || longitude === undefined || radiusKm === undefined) {
+      throw new BadRequestException('latitude, longitude, and radiusKm are required');
+    }
+
+    const bounds = GeoUtils.getBoundingBox(latitude, longitude, radiusKm);
+    const distanceSql = this.buildDistanceSql(latitude, longitude);
+    const isAvailableSql =
+      criteria.isAvailable === undefined
+        ? Prisma.empty
+        : Prisma.sql`AND v."isAvailable" = ${criteria.isAvailable}`;
+    const bookingsSql =
+      criteria.startDate && criteria.endDate
+        ? Prisma.sql`
+            AND NOT EXISTS (
+              SELECT 1
+              FROM "Booking" b
+              WHERE b."vehicleId" = v.id
+                AND b."status" IN ('PENDING', 'ACCEPTED')
+                AND b."startDate" < ${criteria.endDate}
+                AND b."endDate" > ${criteria.startDate}
+            )
+          `
+        : Prisma.empty;
+
+    return this.prisma.$queryRaw<VehicleDistanceRow[]>(Prisma.sql`
+      WITH candidate_vehicles AS (
+        SELECT
+          v.id,
+          v."createdAt",
+          ${distanceSql} AS "distanceKm"
+        FROM "Vehicle" v
+        INNER JOIN "User" m ON m.id = v."merchantId"
+        WHERE m."latitude" IS NOT NULL
+          AND m."longitude" IS NOT NULL
+          AND CAST(m."latitude" AS double precision) BETWEEN ${bounds.minLatitude} AND ${bounds.maxLatitude}
+          AND ${this.buildLongitudeBoundsSql(bounds)}
+          ${isAvailableSql}
+          ${bookingsSql}
+      )
+      SELECT id, "distanceKm"
+      FROM candidate_vehicles
+      WHERE "distanceKm" <= ${radiusKm}
+      ORDER BY "distanceKm" ASC, "createdAt" DESC
+    `);
+  }
+
+  private buildVehicleWhereInput(criteria: VehicleSearchCriteria): Prisma.VehicleWhereInput {
+    return {
+      ...(criteria.isAvailable !== undefined ? { isAvailable: criteria.isAvailable } : {}),
+      ...this.buildAvailabilityWindowWhere(criteria),
+    };
+  }
+
+  private buildAvailabilityWindowWhere(
+    criteria: Pick<VehicleSearchCriteria, 'startDate' | 'endDate'>,
+  ): Prisma.VehicleWhereInput {
+    if (!criteria.startDate || !criteria.endDate) {
+      return {};
+    }
+
+    return {
+      bookings: {
+        none: {
+          status: { in: ['PENDING', 'ACCEPTED'] },
+          startDate: { lt: criteria.endDate },
+          endDate: { gt: criteria.startDate },
+        },
+      },
+    };
+  }
+
+  private buildDistanceSql(latitude: number, longitude: number) {
+    return Prisma.sql`
+      6371 * 2 * ASIN(
+        SQRT(
+          POWER(SIN(RADIANS((${latitude} - CAST(m."latitude" AS double precision)) / 2)), 2) +
+          COS(RADIANS(${latitude})) *
+          COS(RADIANS(CAST(m."latitude" AS double precision))) *
+          POWER(SIN(RADIANS((${longitude} - CAST(m."longitude" AS double precision)) / 2)), 2)
+        )
+      )
+    `;
+  }
+
+  private buildLongitudeBoundsSql(bounds: ReturnType<typeof GeoUtils.getBoundingBox>) {
+    if (!bounds.crossesAntimeridian) {
+      return Prisma.sql`
+        CAST(m."longitude" AS double precision) BETWEEN ${bounds.minLongitude} AND ${bounds.maxLongitude}
+      `;
+    }
+
+    return Prisma.sql`
+      (
+        CAST(m."longitude" AS double precision) >= ${bounds.minLongitude}
+        OR CAST(m."longitude" AS double precision) <= ${bounds.maxLongitude}
+      )
+    `;
+  }
+
+  private getDefaultSearchEndDate(startDate: string) {
+    const endDate = new Date(startDate);
+    endDate.setUTCDate(endDate.getUTCDate() + 1);
+    return endDate;
+  }
+
+  private hasGeoSearch(criteria: VehicleSearchCriteria) {
+    return (
+      criteria.latitude !== undefined &&
+      criteria.longitude !== undefined &&
+      criteria.radiusKm !== undefined
+    );
+  }
+
+  private validateGeoSearch(query: FindVehiclesQueryDto) {
+    const geoFields = [query.latitude, query.longitude, query.radiusKm];
+    const providedFieldCount = geoFields.filter((value) => value !== undefined).length;
+
+    if (providedFieldCount > 0 && providedFieldCount < geoFields.length) {
+      throw new BadRequestException('latitude, longitude, and radiusKm must be provided together');
+    }
+  }
+
   /**
    * Verify vehicle ownership
    */

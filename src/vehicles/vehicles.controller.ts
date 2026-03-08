@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { VehiclesService } from './vehicles.service';
-import { CreateVehicleDto, UpdateVehicleDto } from './dto/vehicles.dto';
+import { CreateVehicleDto, FindVehiclesQueryDto, UpdateVehicleDto } from './dto/vehicles.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
@@ -36,21 +36,41 @@ export class VehiclesController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Get all vehicles (optionally filter by availability dates)' })
+  @ApiOperation({ summary: 'Get all vehicles with optional availability and radius filters' })
   @ApiQuery({ name: 'isAvailable', required: false, type: Boolean })
-  @ApiQuery({ name: 'startDate', required: false, type: String, description: 'Filter vehicles available from this date (ISO 8601)' })
-  @ApiQuery({ name: 'endDate', required: false, type: String, description: 'Filter vehicles available until this date (ISO 8601)' })
+  @ApiQuery({
+    name: 'startDate',
+    required: false,
+    type: String,
+    description: 'Filter vehicles available from this date (ISO 8601)',
+  })
+  @ApiQuery({
+    name: 'endDate',
+    required: false,
+    type: String,
+    description: 'Filter vehicles available until this date (ISO 8601)',
+  })
+  @ApiQuery({
+    name: 'latitude',
+    required: false,
+    type: Number,
+    description: 'Search origin latitude',
+  })
+  @ApiQuery({
+    name: 'longitude',
+    required: false,
+    type: Number,
+    description: 'Search origin longitude',
+  })
+  @ApiQuery({
+    name: 'radiusKm',
+    required: false,
+    type: Number,
+    description: 'Search radius in kilometers',
+  })
   @ApiResponse({ status: 200, description: 'Vehicles retrieved successfully' })
-  async findAll(
-    @Query('isAvailable') isAvailable?: string,
-    @Query('startDate') startDate?: string,
-    @Query('endDate') endDate?: string,
-  ) {
-    const filters = isAvailable !== undefined ? { isAvailable: isAvailable === 'true' } : undefined;
-    const dateRange = startDate
-      ? { startDate, endDate: endDate || undefined }
-      : undefined;
-    return this.vehiclesService.findAll(filters, dateRange);
+  async findAll(@Query() query: FindVehiclesQueryDto) {
+    return this.vehiclesService.findAll(query);
   }
 
   @Get('my')

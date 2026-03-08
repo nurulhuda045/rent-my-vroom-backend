@@ -6,16 +6,43 @@ import {
   IsBoolean,
   Min,
   IsInt,
-} from "class-validator";
-import { ApiProperty } from "@nestjs/swagger";
-import { Type } from "class-transformer";
+  Max,
+  IsDateString,
+} from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { Transform, Type } from 'class-transformer';
+
+const transformBooleanQueryValue = ({ value }: { value: unknown }) => {
+  if (value === undefined || typeof value === 'boolean') {
+    return value;
+  }
+
+  if (typeof value === 'string') {
+    const normalizedValue = value.trim().toLowerCase();
+
+    if (normalizedValue === 'true' || normalizedValue === '1') {
+      return true;
+    }
+
+    if (normalizedValue === 'false' || normalizedValue === '0') {
+      return false;
+    }
+  }
+
+  return value;
+};
+
+export const VEHICLE_SEARCH_RADIUS_LIMITS = {
+  MIN_KM: 1,
+  MAX_KM: 500,
+} as const;
 
 export class CreateVehicleDto {
-  @ApiProperty({ example: "Toyota" })
+  @ApiProperty({ example: 'Toyota' })
   @IsString()
   make: string;
 
-  @ApiProperty({ example: "Camry" })
+  @ApiProperty({ example: 'Camry' })
   @IsString()
   model: string;
 
@@ -24,11 +51,11 @@ export class CreateVehicleDto {
   @Min(1900)
   year: number;
 
-  @ApiProperty({ example: "Black" })
+  @ApiProperty({ example: 'Black' })
   @IsString()
   color: string;
 
-  @ApiProperty({ example: "ABC-1234" })
+  @ApiProperty({ example: 'ABC-1234' })
   @IsString()
   licensePlate: string;
 
@@ -49,11 +76,11 @@ export class CreateVehicleDto {
   @Min(1)
   seats: number;
 
-  @ApiProperty({ example: "Petrol" })
+  @ApiProperty({ example: 'Petrol' })
   @IsString()
   fuelType: string;
 
-  @ApiProperty({ example: "Automatic" })
+  @ApiProperty({ example: 'Automatic' })
   @IsString()
   transmission: string;
 
@@ -63,20 +90,20 @@ export class CreateVehicleDto {
   mileage?: number;
 
   @ApiProperty({
-    example: "Comfortable sedan perfect for city driving",
+    example: 'Comfortable sedan perfect for city driving',
     required: false,
   })
   @IsOptional()
   @IsString()
   description?: string;
 
-  @ApiProperty({ example: ["AC", "GPS", "Bluetooth"], required: false })
+  @ApiProperty({ example: ['AC', 'GPS', 'Bluetooth'], required: false })
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
   features?: string[];
 
-  @ApiProperty({ example: ["vehicle-image/12/1706980301-abcd123.jpg"], required: false })
+  @ApiProperty({ example: ['vehicle-image/12/1706980301-abcd123.jpg'], required: false })
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
@@ -166,4 +193,68 @@ export class UpdateVehicleDto {
   @IsOptional()
   @IsBoolean()
   isAvailable?: boolean;
+}
+
+export class FindVehiclesQueryDto {
+  @ApiProperty({ required: false, example: true })
+  @IsOptional()
+  @Transform(transformBooleanQueryValue)
+  @IsBoolean()
+  isAvailable?: boolean;
+
+  @ApiProperty({
+    required: false,
+    example: '2026-03-08T10:00:00.000Z',
+    description: 'Filter vehicles available from this date (ISO 8601)',
+  })
+  @IsOptional()
+  @IsDateString()
+  startDate?: string;
+
+  @ApiProperty({
+    required: false,
+    example: '2026-03-09T10:00:00.000Z',
+    description: 'Filter vehicles available until this date (ISO 8601)',
+  })
+  @IsOptional()
+  @IsDateString()
+  endDate?: string;
+
+  @ApiProperty({
+    required: false,
+    example: 40.7128,
+    description: 'Search origin latitude',
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(-90)
+  @Max(90)
+  latitude?: number;
+
+  @ApiProperty({
+    required: false,
+    example: -74.006,
+    description: 'Search origin longitude',
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(-180)
+  @Max(180)
+  longitude?: number;
+
+  @ApiProperty({
+    required: false,
+    example: 25,
+    description: 'Search radius in kilometers',
+    minimum: VEHICLE_SEARCH_RADIUS_LIMITS.MIN_KM,
+    maximum: VEHICLE_SEARCH_RADIUS_LIMITS.MAX_KM,
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(VEHICLE_SEARCH_RADIUS_LIMITS.MIN_KM)
+  @Max(VEHICLE_SEARCH_RADIUS_LIMITS.MAX_KM)
+  radiusKm?: number;
 }

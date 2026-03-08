@@ -1,5 +1,6 @@
-import { IsString, IsEnum, IsOptional, IsIn } from 'class-validator';
+import { IsString, IsEnum, IsOptional, IsIn, IsNumber, Min, Max } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import { LicenseStatus } from '../../generated/prisma/client';
 
 export class UploadLicenseDto {
@@ -68,4 +69,20 @@ export class UpdateProfileDto {
   @IsOptional()
   @IsString()
   country?: string;
+
+  @ApiProperty({ required: false, example: 40.7128 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(-90)
+  @Max(90)
+  latitude?: number;
+
+  @ApiProperty({ required: false, example: -74.006 })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(-180)
+  @Max(180)
+  longitude?: number;
 }
