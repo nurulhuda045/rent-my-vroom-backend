@@ -32,6 +32,7 @@ export type BookingAvgAggregateOutputType = {
   merchantId: number | null
   vehicleId: number | null
   totalPrice: runtime.Decimal | null
+  amountCollected: runtime.Decimal | null
 }
 
 export type BookingSumAggregateOutputType = {
@@ -40,13 +41,19 @@ export type BookingSumAggregateOutputType = {
   merchantId: number | null
   vehicleId: number | null
   totalPrice: runtime.Decimal | null
+  amountCollected: runtime.Decimal | null
 }
 
 export type BookingMinAggregateOutputType = {
   id: number | null
+  source: $Enums.BookingSource | null
   renterId: number | null
   merchantId: number | null
   vehicleId: number | null
+  offlineCustomerName: string | null
+  offlineCustomerPhone: string | null
+  offlineCustomerEmail: string | null
+  offlineCustomerNotes: string | null
   startDate: Date | null
   endDate: Date | null
   totalPrice: runtime.Decimal | null
@@ -55,6 +62,9 @@ export type BookingMinAggregateOutputType = {
   merchantNotes: string | null
   responseDeadline: Date | null
   cancellationReason: string | null
+  paymentMethod: $Enums.PaymentMethod | null
+  amountCollected: runtime.Decimal | null
+  paymentNote: string | null
   createdAt: Date | null
   updatedAt: Date | null
   acceptedAt: Date | null
@@ -65,9 +75,14 @@ export type BookingMinAggregateOutputType = {
 
 export type BookingMaxAggregateOutputType = {
   id: number | null
+  source: $Enums.BookingSource | null
   renterId: number | null
   merchantId: number | null
   vehicleId: number | null
+  offlineCustomerName: string | null
+  offlineCustomerPhone: string | null
+  offlineCustomerEmail: string | null
+  offlineCustomerNotes: string | null
   startDate: Date | null
   endDate: Date | null
   totalPrice: runtime.Decimal | null
@@ -76,6 +91,9 @@ export type BookingMaxAggregateOutputType = {
   merchantNotes: string | null
   responseDeadline: Date | null
   cancellationReason: string | null
+  paymentMethod: $Enums.PaymentMethod | null
+  amountCollected: runtime.Decimal | null
+  paymentNote: string | null
   createdAt: Date | null
   updatedAt: Date | null
   acceptedAt: Date | null
@@ -86,9 +104,14 @@ export type BookingMaxAggregateOutputType = {
 
 export type BookingCountAggregateOutputType = {
   id: number
+  source: number
   renterId: number
   merchantId: number
   vehicleId: number
+  offlineCustomerName: number
+  offlineCustomerPhone: number
+  offlineCustomerEmail: number
+  offlineCustomerNotes: number
   startDate: number
   endDate: number
   totalPrice: number
@@ -97,6 +120,9 @@ export type BookingCountAggregateOutputType = {
   merchantNotes: number
   responseDeadline: number
   cancellationReason: number
+  paymentMethod: number
+  amountCollected: number
+  paymentNote: number
   createdAt: number
   updatedAt: number
   acceptedAt: number
@@ -113,6 +139,7 @@ export type BookingAvgAggregateInputType = {
   merchantId?: true
   vehicleId?: true
   totalPrice?: true
+  amountCollected?: true
 }
 
 export type BookingSumAggregateInputType = {
@@ -121,13 +148,19 @@ export type BookingSumAggregateInputType = {
   merchantId?: true
   vehicleId?: true
   totalPrice?: true
+  amountCollected?: true
 }
 
 export type BookingMinAggregateInputType = {
   id?: true
+  source?: true
   renterId?: true
   merchantId?: true
   vehicleId?: true
+  offlineCustomerName?: true
+  offlineCustomerPhone?: true
+  offlineCustomerEmail?: true
+  offlineCustomerNotes?: true
   startDate?: true
   endDate?: true
   totalPrice?: true
@@ -136,6 +169,9 @@ export type BookingMinAggregateInputType = {
   merchantNotes?: true
   responseDeadline?: true
   cancellationReason?: true
+  paymentMethod?: true
+  amountCollected?: true
+  paymentNote?: true
   createdAt?: true
   updatedAt?: true
   acceptedAt?: true
@@ -146,9 +182,14 @@ export type BookingMinAggregateInputType = {
 
 export type BookingMaxAggregateInputType = {
   id?: true
+  source?: true
   renterId?: true
   merchantId?: true
   vehicleId?: true
+  offlineCustomerName?: true
+  offlineCustomerPhone?: true
+  offlineCustomerEmail?: true
+  offlineCustomerNotes?: true
   startDate?: true
   endDate?: true
   totalPrice?: true
@@ -157,6 +198,9 @@ export type BookingMaxAggregateInputType = {
   merchantNotes?: true
   responseDeadline?: true
   cancellationReason?: true
+  paymentMethod?: true
+  amountCollected?: true
+  paymentNote?: true
   createdAt?: true
   updatedAt?: true
   acceptedAt?: true
@@ -167,9 +211,14 @@ export type BookingMaxAggregateInputType = {
 
 export type BookingCountAggregateInputType = {
   id?: true
+  source?: true
   renterId?: true
   merchantId?: true
   vehicleId?: true
+  offlineCustomerName?: true
+  offlineCustomerPhone?: true
+  offlineCustomerEmail?: true
+  offlineCustomerNotes?: true
   startDate?: true
   endDate?: true
   totalPrice?: true
@@ -178,6 +227,9 @@ export type BookingCountAggregateInputType = {
   merchantNotes?: true
   responseDeadline?: true
   cancellationReason?: true
+  paymentMethod?: true
+  amountCollected?: true
+  paymentNote?: true
   createdAt?: true
   updatedAt?: true
   acceptedAt?: true
@@ -275,9 +327,14 @@ export type BookingGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 
 export type BookingGroupByOutputType = {
   id: number
-  renterId: number
+  source: $Enums.BookingSource
+  renterId: number | null
   merchantId: number
   vehicleId: number
+  offlineCustomerName: string | null
+  offlineCustomerPhone: string | null
+  offlineCustomerEmail: string | null
+  offlineCustomerNotes: string | null
   startDate: Date
   endDate: Date
   totalPrice: runtime.Decimal
@@ -286,6 +343,9 @@ export type BookingGroupByOutputType = {
   merchantNotes: string | null
   responseDeadline: Date | null
   cancellationReason: string | null
+  paymentMethod: $Enums.PaymentMethod | null
+  amountCollected: runtime.Decimal | null
+  paymentNote: string | null
   createdAt: Date
   updatedAt: Date
   acceptedAt: Date | null
@@ -319,9 +379,14 @@ export type BookingWhereInput = {
   OR?: Prisma.BookingWhereInput[]
   NOT?: Prisma.BookingWhereInput | Prisma.BookingWhereInput[]
   id?: Prisma.IntFilter<"Booking"> | number
-  renterId?: Prisma.IntFilter<"Booking"> | number
+  source?: Prisma.EnumBookingSourceFilter<"Booking"> | $Enums.BookingSource
+  renterId?: Prisma.IntNullableFilter<"Booking"> | number | null
   merchantId?: Prisma.IntFilter<"Booking"> | number
   vehicleId?: Prisma.IntFilter<"Booking"> | number
+  offlineCustomerName?: Prisma.StringNullableFilter<"Booking"> | string | null
+  offlineCustomerPhone?: Prisma.StringNullableFilter<"Booking"> | string | null
+  offlineCustomerEmail?: Prisma.StringNullableFilter<"Booking"> | string | null
+  offlineCustomerNotes?: Prisma.StringNullableFilter<"Booking"> | string | null
   startDate?: Prisma.DateTimeFilter<"Booking"> | Date | string
   endDate?: Prisma.DateTimeFilter<"Booking"> | Date | string
   totalPrice?: Prisma.DecimalFilter<"Booking"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -330,13 +395,16 @@ export type BookingWhereInput = {
   merchantNotes?: Prisma.StringNullableFilter<"Booking"> | string | null
   responseDeadline?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
   cancellationReason?: Prisma.StringNullableFilter<"Booking"> | string | null
+  paymentMethod?: Prisma.EnumPaymentMethodNullableFilter<"Booking"> | $Enums.PaymentMethod | null
+  amountCollected?: Prisma.DecimalNullableFilter<"Booking"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: Prisma.StringNullableFilter<"Booking"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
   acceptedAt?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
   rejectedAt?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
   completedAt?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
   cancelledAt?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
-  renter?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  renter?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   merchant?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   vehicle?: Prisma.XOR<Prisma.VehicleScalarRelationFilter, Prisma.VehicleWhereInput>
   messages?: Prisma.MessageListRelationFilter
@@ -345,9 +413,14 @@ export type BookingWhereInput = {
 
 export type BookingOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  renterId?: Prisma.SortOrder
+  source?: Prisma.SortOrder
+  renterId?: Prisma.SortOrderInput | Prisma.SortOrder
   merchantId?: Prisma.SortOrder
   vehicleId?: Prisma.SortOrder
+  offlineCustomerName?: Prisma.SortOrderInput | Prisma.SortOrder
+  offlineCustomerPhone?: Prisma.SortOrderInput | Prisma.SortOrder
+  offlineCustomerEmail?: Prisma.SortOrderInput | Prisma.SortOrder
+  offlineCustomerNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   totalPrice?: Prisma.SortOrder
@@ -356,6 +429,9 @@ export type BookingOrderByWithRelationInput = {
   merchantNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   responseDeadline?: Prisma.SortOrderInput | Prisma.SortOrder
   cancellationReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  paymentMethod?: Prisma.SortOrderInput | Prisma.SortOrder
+  amountCollected?: Prisma.SortOrderInput | Prisma.SortOrder
+  paymentNote?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   acceptedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -374,9 +450,14 @@ export type BookingWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.BookingWhereInput | Prisma.BookingWhereInput[]
   OR?: Prisma.BookingWhereInput[]
   NOT?: Prisma.BookingWhereInput | Prisma.BookingWhereInput[]
-  renterId?: Prisma.IntFilter<"Booking"> | number
+  source?: Prisma.EnumBookingSourceFilter<"Booking"> | $Enums.BookingSource
+  renterId?: Prisma.IntNullableFilter<"Booking"> | number | null
   merchantId?: Prisma.IntFilter<"Booking"> | number
   vehicleId?: Prisma.IntFilter<"Booking"> | number
+  offlineCustomerName?: Prisma.StringNullableFilter<"Booking"> | string | null
+  offlineCustomerPhone?: Prisma.StringNullableFilter<"Booking"> | string | null
+  offlineCustomerEmail?: Prisma.StringNullableFilter<"Booking"> | string | null
+  offlineCustomerNotes?: Prisma.StringNullableFilter<"Booking"> | string | null
   startDate?: Prisma.DateTimeFilter<"Booking"> | Date | string
   endDate?: Prisma.DateTimeFilter<"Booking"> | Date | string
   totalPrice?: Prisma.DecimalFilter<"Booking"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -385,13 +466,16 @@ export type BookingWhereUniqueInput = Prisma.AtLeast<{
   merchantNotes?: Prisma.StringNullableFilter<"Booking"> | string | null
   responseDeadline?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
   cancellationReason?: Prisma.StringNullableFilter<"Booking"> | string | null
+  paymentMethod?: Prisma.EnumPaymentMethodNullableFilter<"Booking"> | $Enums.PaymentMethod | null
+  amountCollected?: Prisma.DecimalNullableFilter<"Booking"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: Prisma.StringNullableFilter<"Booking"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
   acceptedAt?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
   rejectedAt?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
   completedAt?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
   cancelledAt?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
-  renter?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  renter?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   merchant?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   vehicle?: Prisma.XOR<Prisma.VehicleScalarRelationFilter, Prisma.VehicleWhereInput>
   messages?: Prisma.MessageListRelationFilter
@@ -400,9 +484,14 @@ export type BookingWhereUniqueInput = Prisma.AtLeast<{
 
 export type BookingOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  renterId?: Prisma.SortOrder
+  source?: Prisma.SortOrder
+  renterId?: Prisma.SortOrderInput | Prisma.SortOrder
   merchantId?: Prisma.SortOrder
   vehicleId?: Prisma.SortOrder
+  offlineCustomerName?: Prisma.SortOrderInput | Prisma.SortOrder
+  offlineCustomerPhone?: Prisma.SortOrderInput | Prisma.SortOrder
+  offlineCustomerEmail?: Prisma.SortOrderInput | Prisma.SortOrder
+  offlineCustomerNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   totalPrice?: Prisma.SortOrder
@@ -411,6 +500,9 @@ export type BookingOrderByWithAggregationInput = {
   merchantNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   responseDeadline?: Prisma.SortOrderInput | Prisma.SortOrder
   cancellationReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  paymentMethod?: Prisma.SortOrderInput | Prisma.SortOrder
+  amountCollected?: Prisma.SortOrderInput | Prisma.SortOrder
+  paymentNote?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   acceptedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -429,9 +521,14 @@ export type BookingScalarWhereWithAggregatesInput = {
   OR?: Prisma.BookingScalarWhereWithAggregatesInput[]
   NOT?: Prisma.BookingScalarWhereWithAggregatesInput | Prisma.BookingScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Booking"> | number
-  renterId?: Prisma.IntWithAggregatesFilter<"Booking"> | number
+  source?: Prisma.EnumBookingSourceWithAggregatesFilter<"Booking"> | $Enums.BookingSource
+  renterId?: Prisma.IntNullableWithAggregatesFilter<"Booking"> | number | null
   merchantId?: Prisma.IntWithAggregatesFilter<"Booking"> | number
   vehicleId?: Prisma.IntWithAggregatesFilter<"Booking"> | number
+  offlineCustomerName?: Prisma.StringNullableWithAggregatesFilter<"Booking"> | string | null
+  offlineCustomerPhone?: Prisma.StringNullableWithAggregatesFilter<"Booking"> | string | null
+  offlineCustomerEmail?: Prisma.StringNullableWithAggregatesFilter<"Booking"> | string | null
+  offlineCustomerNotes?: Prisma.StringNullableWithAggregatesFilter<"Booking"> | string | null
   startDate?: Prisma.DateTimeWithAggregatesFilter<"Booking"> | Date | string
   endDate?: Prisma.DateTimeWithAggregatesFilter<"Booking"> | Date | string
   totalPrice?: Prisma.DecimalWithAggregatesFilter<"Booking"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -440,6 +537,9 @@ export type BookingScalarWhereWithAggregatesInput = {
   merchantNotes?: Prisma.StringNullableWithAggregatesFilter<"Booking"> | string | null
   responseDeadline?: Prisma.DateTimeNullableWithAggregatesFilter<"Booking"> | Date | string | null
   cancellationReason?: Prisma.StringNullableWithAggregatesFilter<"Booking"> | string | null
+  paymentMethod?: Prisma.EnumPaymentMethodNullableWithAggregatesFilter<"Booking"> | $Enums.PaymentMethod | null
+  amountCollected?: Prisma.DecimalNullableWithAggregatesFilter<"Booking"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: Prisma.StringNullableWithAggregatesFilter<"Booking"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Booking"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Booking"> | Date | string
   acceptedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Booking"> | Date | string | null
@@ -449,6 +549,11 @@ export type BookingScalarWhereWithAggregatesInput = {
 }
 
 export type BookingCreateInput = {
+  source?: $Enums.BookingSource
+  offlineCustomerName?: string | null
+  offlineCustomerPhone?: string | null
+  offlineCustomerEmail?: string | null
+  offlineCustomerNotes?: string | null
   startDate: Date | string
   endDate: Date | string
   totalPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -457,13 +562,16 @@ export type BookingCreateInput = {
   merchantNotes?: string | null
   responseDeadline?: Date | string | null
   cancellationReason?: string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  amountCollected?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   acceptedAt?: Date | string | null
   rejectedAt?: Date | string | null
   completedAt?: Date | string | null
   cancelledAt?: Date | string | null
-  renter: Prisma.UserCreateNestedOneWithoutBookingsAsRenterInput
+  renter?: Prisma.UserCreateNestedOneWithoutBookingsAsRenterInput
   merchant: Prisma.UserCreateNestedOneWithoutBookingsAsMerchantInput
   vehicle: Prisma.VehicleCreateNestedOneWithoutBookingsInput
   messages?: Prisma.MessageCreateNestedManyWithoutBookingInput
@@ -472,9 +580,14 @@ export type BookingCreateInput = {
 
 export type BookingUncheckedCreateInput = {
   id?: number
-  renterId: number
+  source?: $Enums.BookingSource
+  renterId?: number | null
   merchantId: number
   vehicleId: number
+  offlineCustomerName?: string | null
+  offlineCustomerPhone?: string | null
+  offlineCustomerEmail?: string | null
+  offlineCustomerNotes?: string | null
   startDate: Date | string
   endDate: Date | string
   totalPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -483,6 +596,9 @@ export type BookingUncheckedCreateInput = {
   merchantNotes?: string | null
   responseDeadline?: Date | string | null
   cancellationReason?: string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  amountCollected?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   acceptedAt?: Date | string | null
@@ -494,6 +610,11 @@ export type BookingUncheckedCreateInput = {
 }
 
 export type BookingUpdateInput = {
+  source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
+  offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   totalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -502,13 +623,16 @@ export type BookingUpdateInput = {
   merchantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  amountCollected?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  renter?: Prisma.UserUpdateOneRequiredWithoutBookingsAsRenterNestedInput
+  renter?: Prisma.UserUpdateOneWithoutBookingsAsRenterNestedInput
   merchant?: Prisma.UserUpdateOneRequiredWithoutBookingsAsMerchantNestedInput
   vehicle?: Prisma.VehicleUpdateOneRequiredWithoutBookingsNestedInput
   messages?: Prisma.MessageUpdateManyWithoutBookingNestedInput
@@ -517,9 +641,14 @@ export type BookingUpdateInput = {
 
 export type BookingUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  renterId?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
+  renterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   merchantId?: Prisma.IntFieldUpdateOperationsInput | number
   vehicleId?: Prisma.IntFieldUpdateOperationsInput | number
+  offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   totalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -528,6 +657,9 @@ export type BookingUncheckedUpdateInput = {
   merchantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  amountCollected?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -540,9 +672,14 @@ export type BookingUncheckedUpdateInput = {
 
 export type BookingCreateManyInput = {
   id?: number
-  renterId: number
+  source?: $Enums.BookingSource
+  renterId?: number | null
   merchantId: number
   vehicleId: number
+  offlineCustomerName?: string | null
+  offlineCustomerPhone?: string | null
+  offlineCustomerEmail?: string | null
+  offlineCustomerNotes?: string | null
   startDate: Date | string
   endDate: Date | string
   totalPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -551,6 +688,9 @@ export type BookingCreateManyInput = {
   merchantNotes?: string | null
   responseDeadline?: Date | string | null
   cancellationReason?: string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  amountCollected?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   acceptedAt?: Date | string | null
@@ -560,6 +700,11 @@ export type BookingCreateManyInput = {
 }
 
 export type BookingUpdateManyMutationInput = {
+  source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
+  offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   totalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -568,6 +713,9 @@ export type BookingUpdateManyMutationInput = {
   merchantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  amountCollected?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -578,9 +726,14 @@ export type BookingUpdateManyMutationInput = {
 
 export type BookingUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  renterId?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
+  renterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   merchantId?: Prisma.IntFieldUpdateOperationsInput | number
   vehicleId?: Prisma.IntFieldUpdateOperationsInput | number
+  offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   totalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -589,6 +742,9 @@ export type BookingUncheckedUpdateManyInput = {
   merchantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  amountCollected?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -609,9 +765,14 @@ export type BookingOrderByRelationAggregateInput = {
 
 export type BookingCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  source?: Prisma.SortOrder
   renterId?: Prisma.SortOrder
   merchantId?: Prisma.SortOrder
   vehicleId?: Prisma.SortOrder
+  offlineCustomerName?: Prisma.SortOrder
+  offlineCustomerPhone?: Prisma.SortOrder
+  offlineCustomerEmail?: Prisma.SortOrder
+  offlineCustomerNotes?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   totalPrice?: Prisma.SortOrder
@@ -620,6 +781,9 @@ export type BookingCountOrderByAggregateInput = {
   merchantNotes?: Prisma.SortOrder
   responseDeadline?: Prisma.SortOrder
   cancellationReason?: Prisma.SortOrder
+  paymentMethod?: Prisma.SortOrder
+  amountCollected?: Prisma.SortOrder
+  paymentNote?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   acceptedAt?: Prisma.SortOrder
@@ -634,13 +798,19 @@ export type BookingAvgOrderByAggregateInput = {
   merchantId?: Prisma.SortOrder
   vehicleId?: Prisma.SortOrder
   totalPrice?: Prisma.SortOrder
+  amountCollected?: Prisma.SortOrder
 }
 
 export type BookingMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  source?: Prisma.SortOrder
   renterId?: Prisma.SortOrder
   merchantId?: Prisma.SortOrder
   vehicleId?: Prisma.SortOrder
+  offlineCustomerName?: Prisma.SortOrder
+  offlineCustomerPhone?: Prisma.SortOrder
+  offlineCustomerEmail?: Prisma.SortOrder
+  offlineCustomerNotes?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   totalPrice?: Prisma.SortOrder
@@ -649,6 +819,9 @@ export type BookingMaxOrderByAggregateInput = {
   merchantNotes?: Prisma.SortOrder
   responseDeadline?: Prisma.SortOrder
   cancellationReason?: Prisma.SortOrder
+  paymentMethod?: Prisma.SortOrder
+  amountCollected?: Prisma.SortOrder
+  paymentNote?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   acceptedAt?: Prisma.SortOrder
@@ -659,9 +832,14 @@ export type BookingMaxOrderByAggregateInput = {
 
 export type BookingMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
+  source?: Prisma.SortOrder
   renterId?: Prisma.SortOrder
   merchantId?: Prisma.SortOrder
   vehicleId?: Prisma.SortOrder
+  offlineCustomerName?: Prisma.SortOrder
+  offlineCustomerPhone?: Prisma.SortOrder
+  offlineCustomerEmail?: Prisma.SortOrder
+  offlineCustomerNotes?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   totalPrice?: Prisma.SortOrder
@@ -670,6 +848,9 @@ export type BookingMinOrderByAggregateInput = {
   merchantNotes?: Prisma.SortOrder
   responseDeadline?: Prisma.SortOrder
   cancellationReason?: Prisma.SortOrder
+  paymentMethod?: Prisma.SortOrder
+  amountCollected?: Prisma.SortOrder
+  paymentNote?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   acceptedAt?: Prisma.SortOrder
@@ -684,6 +865,7 @@ export type BookingSumOrderByAggregateInput = {
   merchantId?: Prisma.SortOrder
   vehicleId?: Prisma.SortOrder
   totalPrice?: Prisma.SortOrder
+  amountCollected?: Prisma.SortOrder
 }
 
 export type BookingScalarRelationFilter = {
@@ -817,8 +999,16 @@ export type BookingUncheckedUpdateManyWithoutVehicleNestedInput = {
   deleteMany?: Prisma.BookingScalarWhereInput | Prisma.BookingScalarWhereInput[]
 }
 
+export type EnumBookingSourceFieldUpdateOperationsInput = {
+  set?: $Enums.BookingSource
+}
+
 export type EnumBookingStatusFieldUpdateOperationsInput = {
   set?: $Enums.BookingStatus
+}
+
+export type NullableEnumPaymentMethodFieldUpdateOperationsInput = {
+  set?: $Enums.PaymentMethod | null
 }
 
 export type BookingCreateNestedOneWithoutMessagesInput = {
@@ -850,6 +1040,11 @@ export type BookingUpdateOneRequiredWithoutReviewNestedInput = {
 }
 
 export type BookingCreateWithoutRenterInput = {
+  source?: $Enums.BookingSource
+  offlineCustomerName?: string | null
+  offlineCustomerPhone?: string | null
+  offlineCustomerEmail?: string | null
+  offlineCustomerNotes?: string | null
   startDate: Date | string
   endDate: Date | string
   totalPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -858,6 +1053,9 @@ export type BookingCreateWithoutRenterInput = {
   merchantNotes?: string | null
   responseDeadline?: Date | string | null
   cancellationReason?: string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  amountCollected?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   acceptedAt?: Date | string | null
@@ -872,8 +1070,13 @@ export type BookingCreateWithoutRenterInput = {
 
 export type BookingUncheckedCreateWithoutRenterInput = {
   id?: number
+  source?: $Enums.BookingSource
   merchantId: number
   vehicleId: number
+  offlineCustomerName?: string | null
+  offlineCustomerPhone?: string | null
+  offlineCustomerEmail?: string | null
+  offlineCustomerNotes?: string | null
   startDate: Date | string
   endDate: Date | string
   totalPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -882,6 +1085,9 @@ export type BookingUncheckedCreateWithoutRenterInput = {
   merchantNotes?: string | null
   responseDeadline?: Date | string | null
   cancellationReason?: string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  amountCollected?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   acceptedAt?: Date | string | null
@@ -903,6 +1109,11 @@ export type BookingCreateManyRenterInputEnvelope = {
 }
 
 export type BookingCreateWithoutMerchantInput = {
+  source?: $Enums.BookingSource
+  offlineCustomerName?: string | null
+  offlineCustomerPhone?: string | null
+  offlineCustomerEmail?: string | null
+  offlineCustomerNotes?: string | null
   startDate: Date | string
   endDate: Date | string
   totalPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -911,13 +1122,16 @@ export type BookingCreateWithoutMerchantInput = {
   merchantNotes?: string | null
   responseDeadline?: Date | string | null
   cancellationReason?: string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  amountCollected?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   acceptedAt?: Date | string | null
   rejectedAt?: Date | string | null
   completedAt?: Date | string | null
   cancelledAt?: Date | string | null
-  renter: Prisma.UserCreateNestedOneWithoutBookingsAsRenterInput
+  renter?: Prisma.UserCreateNestedOneWithoutBookingsAsRenterInput
   vehicle: Prisma.VehicleCreateNestedOneWithoutBookingsInput
   messages?: Prisma.MessageCreateNestedManyWithoutBookingInput
   review?: Prisma.ReviewCreateNestedOneWithoutBookingInput
@@ -925,8 +1139,13 @@ export type BookingCreateWithoutMerchantInput = {
 
 export type BookingUncheckedCreateWithoutMerchantInput = {
   id?: number
-  renterId: number
+  source?: $Enums.BookingSource
+  renterId?: number | null
   vehicleId: number
+  offlineCustomerName?: string | null
+  offlineCustomerPhone?: string | null
+  offlineCustomerEmail?: string | null
+  offlineCustomerNotes?: string | null
   startDate: Date | string
   endDate: Date | string
   totalPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -935,6 +1154,9 @@ export type BookingUncheckedCreateWithoutMerchantInput = {
   merchantNotes?: string | null
   responseDeadline?: Date | string | null
   cancellationReason?: string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  amountCollected?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   acceptedAt?: Date | string | null
@@ -976,9 +1198,14 @@ export type BookingScalarWhereInput = {
   OR?: Prisma.BookingScalarWhereInput[]
   NOT?: Prisma.BookingScalarWhereInput | Prisma.BookingScalarWhereInput[]
   id?: Prisma.IntFilter<"Booking"> | number
-  renterId?: Prisma.IntFilter<"Booking"> | number
+  source?: Prisma.EnumBookingSourceFilter<"Booking"> | $Enums.BookingSource
+  renterId?: Prisma.IntNullableFilter<"Booking"> | number | null
   merchantId?: Prisma.IntFilter<"Booking"> | number
   vehicleId?: Prisma.IntFilter<"Booking"> | number
+  offlineCustomerName?: Prisma.StringNullableFilter<"Booking"> | string | null
+  offlineCustomerPhone?: Prisma.StringNullableFilter<"Booking"> | string | null
+  offlineCustomerEmail?: Prisma.StringNullableFilter<"Booking"> | string | null
+  offlineCustomerNotes?: Prisma.StringNullableFilter<"Booking"> | string | null
   startDate?: Prisma.DateTimeFilter<"Booking"> | Date | string
   endDate?: Prisma.DateTimeFilter<"Booking"> | Date | string
   totalPrice?: Prisma.DecimalFilter<"Booking"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -987,6 +1214,9 @@ export type BookingScalarWhereInput = {
   merchantNotes?: Prisma.StringNullableFilter<"Booking"> | string | null
   responseDeadline?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
   cancellationReason?: Prisma.StringNullableFilter<"Booking"> | string | null
+  paymentMethod?: Prisma.EnumPaymentMethodNullableFilter<"Booking"> | $Enums.PaymentMethod | null
+  amountCollected?: Prisma.DecimalNullableFilter<"Booking"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: Prisma.StringNullableFilter<"Booking"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Booking"> | Date | string
   acceptedAt?: Prisma.DateTimeNullableFilter<"Booking"> | Date | string | null
@@ -1012,6 +1242,11 @@ export type BookingUpdateManyWithWhereWithoutMerchantInput = {
 }
 
 export type BookingCreateWithoutVehicleInput = {
+  source?: $Enums.BookingSource
+  offlineCustomerName?: string | null
+  offlineCustomerPhone?: string | null
+  offlineCustomerEmail?: string | null
+  offlineCustomerNotes?: string | null
   startDate: Date | string
   endDate: Date | string
   totalPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1020,13 +1255,16 @@ export type BookingCreateWithoutVehicleInput = {
   merchantNotes?: string | null
   responseDeadline?: Date | string | null
   cancellationReason?: string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  amountCollected?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   acceptedAt?: Date | string | null
   rejectedAt?: Date | string | null
   completedAt?: Date | string | null
   cancelledAt?: Date | string | null
-  renter: Prisma.UserCreateNestedOneWithoutBookingsAsRenterInput
+  renter?: Prisma.UserCreateNestedOneWithoutBookingsAsRenterInput
   merchant: Prisma.UserCreateNestedOneWithoutBookingsAsMerchantInput
   messages?: Prisma.MessageCreateNestedManyWithoutBookingInput
   review?: Prisma.ReviewCreateNestedOneWithoutBookingInput
@@ -1034,8 +1272,13 @@ export type BookingCreateWithoutVehicleInput = {
 
 export type BookingUncheckedCreateWithoutVehicleInput = {
   id?: number
-  renterId: number
+  source?: $Enums.BookingSource
+  renterId?: number | null
   merchantId: number
+  offlineCustomerName?: string | null
+  offlineCustomerPhone?: string | null
+  offlineCustomerEmail?: string | null
+  offlineCustomerNotes?: string | null
   startDate: Date | string
   endDate: Date | string
   totalPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1044,6 +1287,9 @@ export type BookingUncheckedCreateWithoutVehicleInput = {
   merchantNotes?: string | null
   responseDeadline?: Date | string | null
   cancellationReason?: string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  amountCollected?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   acceptedAt?: Date | string | null
@@ -1081,6 +1327,11 @@ export type BookingUpdateManyWithWhereWithoutVehicleInput = {
 }
 
 export type BookingCreateWithoutMessagesInput = {
+  source?: $Enums.BookingSource
+  offlineCustomerName?: string | null
+  offlineCustomerPhone?: string | null
+  offlineCustomerEmail?: string | null
+  offlineCustomerNotes?: string | null
   startDate: Date | string
   endDate: Date | string
   totalPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1089,13 +1340,16 @@ export type BookingCreateWithoutMessagesInput = {
   merchantNotes?: string | null
   responseDeadline?: Date | string | null
   cancellationReason?: string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  amountCollected?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   acceptedAt?: Date | string | null
   rejectedAt?: Date | string | null
   completedAt?: Date | string | null
   cancelledAt?: Date | string | null
-  renter: Prisma.UserCreateNestedOneWithoutBookingsAsRenterInput
+  renter?: Prisma.UserCreateNestedOneWithoutBookingsAsRenterInput
   merchant: Prisma.UserCreateNestedOneWithoutBookingsAsMerchantInput
   vehicle: Prisma.VehicleCreateNestedOneWithoutBookingsInput
   review?: Prisma.ReviewCreateNestedOneWithoutBookingInput
@@ -1103,9 +1357,14 @@ export type BookingCreateWithoutMessagesInput = {
 
 export type BookingUncheckedCreateWithoutMessagesInput = {
   id?: number
-  renterId: number
+  source?: $Enums.BookingSource
+  renterId?: number | null
   merchantId: number
   vehicleId: number
+  offlineCustomerName?: string | null
+  offlineCustomerPhone?: string | null
+  offlineCustomerEmail?: string | null
+  offlineCustomerNotes?: string | null
   startDate: Date | string
   endDate: Date | string
   totalPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1114,6 +1373,9 @@ export type BookingUncheckedCreateWithoutMessagesInput = {
   merchantNotes?: string | null
   responseDeadline?: Date | string | null
   cancellationReason?: string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  amountCollected?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   acceptedAt?: Date | string | null
@@ -1140,6 +1402,11 @@ export type BookingUpdateToOneWithWhereWithoutMessagesInput = {
 }
 
 export type BookingUpdateWithoutMessagesInput = {
+  source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
+  offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   totalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1148,13 +1415,16 @@ export type BookingUpdateWithoutMessagesInput = {
   merchantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  amountCollected?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  renter?: Prisma.UserUpdateOneRequiredWithoutBookingsAsRenterNestedInput
+  renter?: Prisma.UserUpdateOneWithoutBookingsAsRenterNestedInput
   merchant?: Prisma.UserUpdateOneRequiredWithoutBookingsAsMerchantNestedInput
   vehicle?: Prisma.VehicleUpdateOneRequiredWithoutBookingsNestedInput
   review?: Prisma.ReviewUpdateOneWithoutBookingNestedInput
@@ -1162,9 +1432,14 @@ export type BookingUpdateWithoutMessagesInput = {
 
 export type BookingUncheckedUpdateWithoutMessagesInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  renterId?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
+  renterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   merchantId?: Prisma.IntFieldUpdateOperationsInput | number
   vehicleId?: Prisma.IntFieldUpdateOperationsInput | number
+  offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   totalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1173,6 +1448,9 @@ export type BookingUncheckedUpdateWithoutMessagesInput = {
   merchantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  amountCollected?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1183,6 +1461,11 @@ export type BookingUncheckedUpdateWithoutMessagesInput = {
 }
 
 export type BookingCreateWithoutReviewInput = {
+  source?: $Enums.BookingSource
+  offlineCustomerName?: string | null
+  offlineCustomerPhone?: string | null
+  offlineCustomerEmail?: string | null
+  offlineCustomerNotes?: string | null
   startDate: Date | string
   endDate: Date | string
   totalPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1191,13 +1474,16 @@ export type BookingCreateWithoutReviewInput = {
   merchantNotes?: string | null
   responseDeadline?: Date | string | null
   cancellationReason?: string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  amountCollected?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   acceptedAt?: Date | string | null
   rejectedAt?: Date | string | null
   completedAt?: Date | string | null
   cancelledAt?: Date | string | null
-  renter: Prisma.UserCreateNestedOneWithoutBookingsAsRenterInput
+  renter?: Prisma.UserCreateNestedOneWithoutBookingsAsRenterInput
   merchant: Prisma.UserCreateNestedOneWithoutBookingsAsMerchantInput
   vehicle: Prisma.VehicleCreateNestedOneWithoutBookingsInput
   messages?: Prisma.MessageCreateNestedManyWithoutBookingInput
@@ -1205,9 +1491,14 @@ export type BookingCreateWithoutReviewInput = {
 
 export type BookingUncheckedCreateWithoutReviewInput = {
   id?: number
-  renterId: number
+  source?: $Enums.BookingSource
+  renterId?: number | null
   merchantId: number
   vehicleId: number
+  offlineCustomerName?: string | null
+  offlineCustomerPhone?: string | null
+  offlineCustomerEmail?: string | null
+  offlineCustomerNotes?: string | null
   startDate: Date | string
   endDate: Date | string
   totalPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1216,6 +1507,9 @@ export type BookingUncheckedCreateWithoutReviewInput = {
   merchantNotes?: string | null
   responseDeadline?: Date | string | null
   cancellationReason?: string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  amountCollected?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   acceptedAt?: Date | string | null
@@ -1242,6 +1536,11 @@ export type BookingUpdateToOneWithWhereWithoutReviewInput = {
 }
 
 export type BookingUpdateWithoutReviewInput = {
+  source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
+  offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   totalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1250,13 +1549,16 @@ export type BookingUpdateWithoutReviewInput = {
   merchantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  amountCollected?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  renter?: Prisma.UserUpdateOneRequiredWithoutBookingsAsRenterNestedInput
+  renter?: Prisma.UserUpdateOneWithoutBookingsAsRenterNestedInput
   merchant?: Prisma.UserUpdateOneRequiredWithoutBookingsAsMerchantNestedInput
   vehicle?: Prisma.VehicleUpdateOneRequiredWithoutBookingsNestedInput
   messages?: Prisma.MessageUpdateManyWithoutBookingNestedInput
@@ -1264,9 +1566,14 @@ export type BookingUpdateWithoutReviewInput = {
 
 export type BookingUncheckedUpdateWithoutReviewInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  renterId?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
+  renterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   merchantId?: Prisma.IntFieldUpdateOperationsInput | number
   vehicleId?: Prisma.IntFieldUpdateOperationsInput | number
+  offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   totalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1275,6 +1582,9 @@ export type BookingUncheckedUpdateWithoutReviewInput = {
   merchantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  amountCollected?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1286,8 +1596,13 @@ export type BookingUncheckedUpdateWithoutReviewInput = {
 
 export type BookingCreateManyRenterInput = {
   id?: number
+  source?: $Enums.BookingSource
   merchantId: number
   vehicleId: number
+  offlineCustomerName?: string | null
+  offlineCustomerPhone?: string | null
+  offlineCustomerEmail?: string | null
+  offlineCustomerNotes?: string | null
   startDate: Date | string
   endDate: Date | string
   totalPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1296,6 +1611,9 @@ export type BookingCreateManyRenterInput = {
   merchantNotes?: string | null
   responseDeadline?: Date | string | null
   cancellationReason?: string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  amountCollected?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   acceptedAt?: Date | string | null
@@ -1306,8 +1624,13 @@ export type BookingCreateManyRenterInput = {
 
 export type BookingCreateManyMerchantInput = {
   id?: number
-  renterId: number
+  source?: $Enums.BookingSource
+  renterId?: number | null
   vehicleId: number
+  offlineCustomerName?: string | null
+  offlineCustomerPhone?: string | null
+  offlineCustomerEmail?: string | null
+  offlineCustomerNotes?: string | null
   startDate: Date | string
   endDate: Date | string
   totalPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1316,6 +1639,9 @@ export type BookingCreateManyMerchantInput = {
   merchantNotes?: string | null
   responseDeadline?: Date | string | null
   cancellationReason?: string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  amountCollected?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   acceptedAt?: Date | string | null
@@ -1325,6 +1651,11 @@ export type BookingCreateManyMerchantInput = {
 }
 
 export type BookingUpdateWithoutRenterInput = {
+  source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
+  offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   totalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1333,6 +1664,9 @@ export type BookingUpdateWithoutRenterInput = {
   merchantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  amountCollected?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1347,8 +1681,13 @@ export type BookingUpdateWithoutRenterInput = {
 
 export type BookingUncheckedUpdateWithoutRenterInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
   merchantId?: Prisma.IntFieldUpdateOperationsInput | number
   vehicleId?: Prisma.IntFieldUpdateOperationsInput | number
+  offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   totalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1357,6 +1696,9 @@ export type BookingUncheckedUpdateWithoutRenterInput = {
   merchantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  amountCollected?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1369,8 +1711,13 @@ export type BookingUncheckedUpdateWithoutRenterInput = {
 
 export type BookingUncheckedUpdateManyWithoutRenterInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
   merchantId?: Prisma.IntFieldUpdateOperationsInput | number
   vehicleId?: Prisma.IntFieldUpdateOperationsInput | number
+  offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   totalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1379,6 +1726,9 @@ export type BookingUncheckedUpdateManyWithoutRenterInput = {
   merchantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  amountCollected?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1388,6 +1738,11 @@ export type BookingUncheckedUpdateManyWithoutRenterInput = {
 }
 
 export type BookingUpdateWithoutMerchantInput = {
+  source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
+  offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   totalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1396,13 +1751,16 @@ export type BookingUpdateWithoutMerchantInput = {
   merchantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  amountCollected?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  renter?: Prisma.UserUpdateOneRequiredWithoutBookingsAsRenterNestedInput
+  renter?: Prisma.UserUpdateOneWithoutBookingsAsRenterNestedInput
   vehicle?: Prisma.VehicleUpdateOneRequiredWithoutBookingsNestedInput
   messages?: Prisma.MessageUpdateManyWithoutBookingNestedInput
   review?: Prisma.ReviewUpdateOneWithoutBookingNestedInput
@@ -1410,8 +1768,13 @@ export type BookingUpdateWithoutMerchantInput = {
 
 export type BookingUncheckedUpdateWithoutMerchantInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  renterId?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
+  renterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   vehicleId?: Prisma.IntFieldUpdateOperationsInput | number
+  offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   totalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1420,6 +1783,9 @@ export type BookingUncheckedUpdateWithoutMerchantInput = {
   merchantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  amountCollected?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1432,8 +1798,13 @@ export type BookingUncheckedUpdateWithoutMerchantInput = {
 
 export type BookingUncheckedUpdateManyWithoutMerchantInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  renterId?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
+  renterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   vehicleId?: Prisma.IntFieldUpdateOperationsInput | number
+  offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   totalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1442,6 +1813,9 @@ export type BookingUncheckedUpdateManyWithoutMerchantInput = {
   merchantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  amountCollected?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1452,8 +1826,13 @@ export type BookingUncheckedUpdateManyWithoutMerchantInput = {
 
 export type BookingCreateManyVehicleInput = {
   id?: number
-  renterId: number
+  source?: $Enums.BookingSource
+  renterId?: number | null
   merchantId: number
+  offlineCustomerName?: string | null
+  offlineCustomerPhone?: string | null
+  offlineCustomerEmail?: string | null
+  offlineCustomerNotes?: string | null
   startDate: Date | string
   endDate: Date | string
   totalPrice: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1462,6 +1841,9 @@ export type BookingCreateManyVehicleInput = {
   merchantNotes?: string | null
   responseDeadline?: Date | string | null
   cancellationReason?: string | null
+  paymentMethod?: $Enums.PaymentMethod | null
+  amountCollected?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   acceptedAt?: Date | string | null
@@ -1471,6 +1853,11 @@ export type BookingCreateManyVehicleInput = {
 }
 
 export type BookingUpdateWithoutVehicleInput = {
+  source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
+  offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   totalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1479,13 +1866,16 @@ export type BookingUpdateWithoutVehicleInput = {
   merchantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  amountCollected?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   rejectedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancelledAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  renter?: Prisma.UserUpdateOneRequiredWithoutBookingsAsRenterNestedInput
+  renter?: Prisma.UserUpdateOneWithoutBookingsAsRenterNestedInput
   merchant?: Prisma.UserUpdateOneRequiredWithoutBookingsAsMerchantNestedInput
   messages?: Prisma.MessageUpdateManyWithoutBookingNestedInput
   review?: Prisma.ReviewUpdateOneWithoutBookingNestedInput
@@ -1493,8 +1883,13 @@ export type BookingUpdateWithoutVehicleInput = {
 
 export type BookingUncheckedUpdateWithoutVehicleInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  renterId?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
+  renterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   merchantId?: Prisma.IntFieldUpdateOperationsInput | number
+  offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   totalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1503,6 +1898,9 @@ export type BookingUncheckedUpdateWithoutVehicleInput = {
   merchantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  amountCollected?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1515,8 +1913,13 @@ export type BookingUncheckedUpdateWithoutVehicleInput = {
 
 export type BookingUncheckedUpdateManyWithoutVehicleInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
-  renterId?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
+  renterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   merchantId?: Prisma.IntFieldUpdateOperationsInput | number
+  offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  offlineCustomerNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   totalPrice?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1525,6 +1928,9 @@ export type BookingUncheckedUpdateManyWithoutVehicleInput = {
   merchantNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   responseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   cancellationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentMethod?: Prisma.NullableEnumPaymentMethodFieldUpdateOperationsInput | $Enums.PaymentMethod | null
+  amountCollected?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  paymentNote?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1566,9 +1972,14 @@ export type BookingCountOutputTypeCountMessagesArgs<ExtArgs extends runtime.Type
 
 export type BookingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  source?: boolean
   renterId?: boolean
   merchantId?: boolean
   vehicleId?: boolean
+  offlineCustomerName?: boolean
+  offlineCustomerPhone?: boolean
+  offlineCustomerEmail?: boolean
+  offlineCustomerNotes?: boolean
   startDate?: boolean
   endDate?: boolean
   totalPrice?: boolean
@@ -1577,13 +1988,16 @@ export type BookingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   merchantNotes?: boolean
   responseDeadline?: boolean
   cancellationReason?: boolean
+  paymentMethod?: boolean
+  amountCollected?: boolean
+  paymentNote?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   acceptedAt?: boolean
   rejectedAt?: boolean
   completedAt?: boolean
   cancelledAt?: boolean
-  renter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  renter?: boolean | Prisma.Booking$renterArgs<ExtArgs>
   merchant?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   vehicle?: boolean | Prisma.VehicleDefaultArgs<ExtArgs>
   messages?: boolean | Prisma.Booking$messagesArgs<ExtArgs>
@@ -1593,9 +2007,14 @@ export type BookingSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
 
 export type BookingSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  source?: boolean
   renterId?: boolean
   merchantId?: boolean
   vehicleId?: boolean
+  offlineCustomerName?: boolean
+  offlineCustomerPhone?: boolean
+  offlineCustomerEmail?: boolean
+  offlineCustomerNotes?: boolean
   startDate?: boolean
   endDate?: boolean
   totalPrice?: boolean
@@ -1604,22 +2023,30 @@ export type BookingSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   merchantNotes?: boolean
   responseDeadline?: boolean
   cancellationReason?: boolean
+  paymentMethod?: boolean
+  amountCollected?: boolean
+  paymentNote?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   acceptedAt?: boolean
   rejectedAt?: boolean
   completedAt?: boolean
   cancelledAt?: boolean
-  renter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  renter?: boolean | Prisma.Booking$renterArgs<ExtArgs>
   merchant?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   vehicle?: boolean | Prisma.VehicleDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["booking"]>
 
 export type BookingSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
+  source?: boolean
   renterId?: boolean
   merchantId?: boolean
   vehicleId?: boolean
+  offlineCustomerName?: boolean
+  offlineCustomerPhone?: boolean
+  offlineCustomerEmail?: boolean
+  offlineCustomerNotes?: boolean
   startDate?: boolean
   endDate?: boolean
   totalPrice?: boolean
@@ -1628,22 +2055,30 @@ export type BookingSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   merchantNotes?: boolean
   responseDeadline?: boolean
   cancellationReason?: boolean
+  paymentMethod?: boolean
+  amountCollected?: boolean
+  paymentNote?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   acceptedAt?: boolean
   rejectedAt?: boolean
   completedAt?: boolean
   cancelledAt?: boolean
-  renter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  renter?: boolean | Prisma.Booking$renterArgs<ExtArgs>
   merchant?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   vehicle?: boolean | Prisma.VehicleDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["booking"]>
 
 export type BookingSelectScalar = {
   id?: boolean
+  source?: boolean
   renterId?: boolean
   merchantId?: boolean
   vehicleId?: boolean
+  offlineCustomerName?: boolean
+  offlineCustomerPhone?: boolean
+  offlineCustomerEmail?: boolean
+  offlineCustomerNotes?: boolean
   startDate?: boolean
   endDate?: boolean
   totalPrice?: boolean
@@ -1652,6 +2087,9 @@ export type BookingSelectScalar = {
   merchantNotes?: boolean
   responseDeadline?: boolean
   cancellationReason?: boolean
+  paymentMethod?: boolean
+  amountCollected?: boolean
+  paymentNote?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   acceptedAt?: boolean
@@ -1660,9 +2098,9 @@ export type BookingSelectScalar = {
   cancelledAt?: boolean
 }
 
-export type BookingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "renterId" | "merchantId" | "vehicleId" | "startDate" | "endDate" | "totalPrice" | "status" | "renterNotes" | "merchantNotes" | "responseDeadline" | "cancellationReason" | "createdAt" | "updatedAt" | "acceptedAt" | "rejectedAt" | "completedAt" | "cancelledAt", ExtArgs["result"]["booking"]>
+export type BookingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "source" | "renterId" | "merchantId" | "vehicleId" | "offlineCustomerName" | "offlineCustomerPhone" | "offlineCustomerEmail" | "offlineCustomerNotes" | "startDate" | "endDate" | "totalPrice" | "status" | "renterNotes" | "merchantNotes" | "responseDeadline" | "cancellationReason" | "paymentMethod" | "amountCollected" | "paymentNote" | "createdAt" | "updatedAt" | "acceptedAt" | "rejectedAt" | "completedAt" | "cancelledAt", ExtArgs["result"]["booking"]>
 export type BookingInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  renter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  renter?: boolean | Prisma.Booking$renterArgs<ExtArgs>
   merchant?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   vehicle?: boolean | Prisma.VehicleDefaultArgs<ExtArgs>
   messages?: boolean | Prisma.Booking$messagesArgs<ExtArgs>
@@ -1670,12 +2108,12 @@ export type BookingInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs
   _count?: boolean | Prisma.BookingCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type BookingIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  renter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  renter?: boolean | Prisma.Booking$renterArgs<ExtArgs>
   merchant?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   vehicle?: boolean | Prisma.VehicleDefaultArgs<ExtArgs>
 }
 export type BookingIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  renter?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  renter?: boolean | Prisma.Booking$renterArgs<ExtArgs>
   merchant?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   vehicle?: boolean | Prisma.VehicleDefaultArgs<ExtArgs>
 }
@@ -1683,7 +2121,7 @@ export type BookingIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $BookingPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Booking"
   objects: {
-    renter: Prisma.$UserPayload<ExtArgs>
+    renter: Prisma.$UserPayload<ExtArgs> | null
     merchant: Prisma.$UserPayload<ExtArgs>
     vehicle: Prisma.$VehiclePayload<ExtArgs>
     messages: Prisma.$MessagePayload<ExtArgs>[]
@@ -1691,9 +2129,14 @@ export type $BookingPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
-    renterId: number
+    source: $Enums.BookingSource
+    renterId: number | null
     merchantId: number
     vehicleId: number
+    offlineCustomerName: string | null
+    offlineCustomerPhone: string | null
+    offlineCustomerEmail: string | null
+    offlineCustomerNotes: string | null
     startDate: Date
     endDate: Date
     totalPrice: runtime.Decimal
@@ -1702,6 +2145,9 @@ export type $BookingPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     merchantNotes: string | null
     responseDeadline: Date | null
     cancellationReason: string | null
+    paymentMethod: $Enums.PaymentMethod | null
+    amountCollected: runtime.Decimal | null
+    paymentNote: string | null
     createdAt: Date
     updatedAt: Date
     acceptedAt: Date | null
@@ -2102,7 +2548,7 @@ readonly fields: BookingFieldRefs;
  */
 export interface Prisma__BookingClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  renter<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  renter<T extends Prisma.Booking$renterArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Booking$renterArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   merchant<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   vehicle<T extends Prisma.VehicleDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.VehicleDefaultArgs<ExtArgs>>): Prisma.Prisma__VehicleClient<runtime.Types.Result.GetResult<Prisma.$VehiclePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   messages<T extends Prisma.Booking$messagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Booking$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2137,9 +2583,14 @@ export interface Prisma__BookingClient<T, Null = never, ExtArgs extends runtime.
  */
 export interface BookingFieldRefs {
   readonly id: Prisma.FieldRef<"Booking", 'Int'>
+  readonly source: Prisma.FieldRef<"Booking", 'BookingSource'>
   readonly renterId: Prisma.FieldRef<"Booking", 'Int'>
   readonly merchantId: Prisma.FieldRef<"Booking", 'Int'>
   readonly vehicleId: Prisma.FieldRef<"Booking", 'Int'>
+  readonly offlineCustomerName: Prisma.FieldRef<"Booking", 'String'>
+  readonly offlineCustomerPhone: Prisma.FieldRef<"Booking", 'String'>
+  readonly offlineCustomerEmail: Prisma.FieldRef<"Booking", 'String'>
+  readonly offlineCustomerNotes: Prisma.FieldRef<"Booking", 'String'>
   readonly startDate: Prisma.FieldRef<"Booking", 'DateTime'>
   readonly endDate: Prisma.FieldRef<"Booking", 'DateTime'>
   readonly totalPrice: Prisma.FieldRef<"Booking", 'Decimal'>
@@ -2148,6 +2599,9 @@ export interface BookingFieldRefs {
   readonly merchantNotes: Prisma.FieldRef<"Booking", 'String'>
   readonly responseDeadline: Prisma.FieldRef<"Booking", 'DateTime'>
   readonly cancellationReason: Prisma.FieldRef<"Booking", 'String'>
+  readonly paymentMethod: Prisma.FieldRef<"Booking", 'PaymentMethod'>
+  readonly amountCollected: Prisma.FieldRef<"Booking", 'Decimal'>
+  readonly paymentNote: Prisma.FieldRef<"Booking", 'String'>
   readonly createdAt: Prisma.FieldRef<"Booking", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Booking", 'DateTime'>
   readonly acceptedAt: Prisma.FieldRef<"Booking", 'DateTime'>
@@ -2547,6 +3001,25 @@ export type BookingDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Bookings to delete.
    */
   limit?: number
+}
+
+/**
+ * Booking.renter
+ */
+export type Booking$renterArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

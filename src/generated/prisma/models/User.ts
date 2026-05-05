@@ -793,6 +793,11 @@ export type UserScalarRelationFilter = {
   isNot?: Prisma.UserWhereInput
 }
 
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
+}
+
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
@@ -881,10 +886,12 @@ export type UserCreateNestedOneWithoutBookingsAsMerchantInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneRequiredWithoutBookingsAsRenterNestedInput = {
+export type UserUpdateOneWithoutBookingsAsRenterNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutBookingsAsRenterInput, Prisma.UserUncheckedCreateWithoutBookingsAsRenterInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutBookingsAsRenterInput
   upsert?: Prisma.UserUpsertWithoutBookingsAsRenterInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBookingsAsRenterInput, Prisma.UserUpdateWithoutBookingsAsRenterInput>, Prisma.UserUncheckedUpdateWithoutBookingsAsRenterInput>
 }

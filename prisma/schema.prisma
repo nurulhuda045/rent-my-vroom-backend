@@ -22,6 +22,18 @@ enum BookingStatus {
   CANCELLED
 }
 
+enum BookingSource {
+  ONLINE
+  OFFLINE
+}
+
+enum PaymentMethod {
+  CASH
+  UPI
+  CARD
+  OTHER
+}
+
 enum LicenseStatus {
   PENDING
   APPROVED
@@ -146,15 +158,26 @@ model Vehicle {
 model Booking {
   id Int @id @default(autoincrement())
 
-  // Relations
-  renterId Int
-  renter   User @relation("RenterBookings", fields: [renterId], references: [id], onDelete: Cascade)
+  // Booking source — ONLINE (renter-initiated) or OFFLINE (merchant walk-in entry)
+  source BookingSource @default(ONLINE)
+
+  // Relations — renterId is nullable because OFFLINE bookings may not have a
+  // registered renter user. When the offline customer's phone matches an
+  // existing RENTER user we auto-link by setting renterId.
+  renterId Int?
+  renter   User? @relation("RenterBookings", fields: [renterId], references: [id], onDelete: SetNull)
 
   merchantId Int
   merchant   User @relation("MerchantBookings", fields: [merchantId], references: [id], onDelete: Cascade)
 
   vehicleId Int
   vehicle   Vehicle @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+
+  // Offline customer details (only populated when source = OFFLINE)
+  offlineCustomerName  String?
+  offlineCustomerPhone String?
+  offlineCustomerEmail String?
+  offlineCustomerNotes String?
 
   // Booking details
   startDate  DateTime
@@ -174,6 +197,12 @@ model Booking {
   // Reason stored when booking is cancelled (e.g. auto-expiry vs manual)
   cancellationReason String?
 
+  // Payment tracking — primarily used for OFFLINE bookings where the merchant
+  // collects payment directly. The platform does NOT process these payments.
+  paymentMethod   PaymentMethod?
+  amountCollected Decimal?       @db.Decimal(10, 2)
+  paymentNote     String?
+
   // Timestamps
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -192,6 +221,8 @@ model Booking {
   @@index([status])
   @@index([startDate, endDate])
   @@index([responseDeadline])
+  @@index([source, merchantId])
+  @@index([offlineCustomerPhone])
 }
 
 model Message {

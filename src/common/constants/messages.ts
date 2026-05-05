@@ -44,9 +44,15 @@ export const ERROR_MESSAGES = {
   BOOKING_PAST_DATE: 'Start date must be in the future',
   BOOKING_OVERLAP: 'Vehicle is already booked for the selected dates',
   BOOKING_NOT_FOUND: 'Booking not found',
+  BOOKING_DATE_RANGE_INVALID: 'End date must be after start date',
   BOOKING_CANCEL_NOT_ALLOWED: 'Only pending or accepted bookings can be cancelled',
   BOOKING_CANCEL_WINDOW_EXPIRED: 'Cancellation is not allowed within {hours} hours of the start date',
   BOOKING_CANCEL_UNAUTHORIZED: 'You can only cancel your own bookings',
+  BOOKING_MANAGE_UNAUTHORIZED: 'You can only manage your own bookings',
+  BOOKING_VEHICLE_UNAUTHORIZED: 'You can only create bookings for your own vehicles',
+  BOOKING_VEHICLE_UNAVAILABLE: 'Vehicle is not available',
+  BOOKING_OFFLINE_ONLY: 'This action is only available for offline bookings',
+  BOOKING_OFFLINE_CANCEL_NOT_ALLOWED: 'Only accepted offline bookings can be cancelled',
 
   // Role errors
   MERCHANT_ONLY: 'Only merchants can perform this action',
