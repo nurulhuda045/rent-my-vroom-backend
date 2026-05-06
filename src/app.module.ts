@@ -16,6 +16,7 @@ import { OTPModule } from './otp/otp.module';
 import { KYCModule } from './kyc/kyc.module';
 import { SystemConfigModule } from './system-config/system-config.module';
 import { BookingExpiryModule } from './booking-expiry/booking-expiry.module';
+import { AdminModule } from './admin/admin.module';
 import { AppController } from './app.controller';
 
 @Module({
@@ -52,6 +53,7 @@ import { AppController } from './app.controller';
     KYCModule,
     SystemConfigModule,
     BookingExpiryModule,
+    AdminModule,
   ],
 })
 export class AppModule {}

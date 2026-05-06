@@ -72,6 +72,10 @@ export class AuthService implements OnModuleInit {
       select: { role: true },
     });
 
+    if (dto.role === Role.ADMIN && (!existing || existing.role !== Role.ADMIN)) {
+      throw new ForbiddenException('This number is not authorized for the admin portal.');
+    }
+
     if (existing && existing.role !== dto.role) {
       const registeredAs = existing.role.charAt(0) + existing.role.slice(1).toLowerCase();
       throw new ForbiddenException(
@@ -110,6 +114,10 @@ export class AuthService implements OnModuleInit {
     });
 
     if (!user) {
+      if (dto.role === Role.ADMIN) {
+        throw new ForbiddenException('This number is not authorized for the admin portal.');
+      }
+
       // Create new user with phone verified
       user = await this.prisma.user.create({
         data: {

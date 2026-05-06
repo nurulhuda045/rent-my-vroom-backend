@@ -13,6 +13,9 @@ import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagg
 import { KYCService } from './kyc.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { GetUser } from '../common/decorators/get-user.decorator';
+import { RolesGuard } from '../common/guards/roles.guard';
+import { Roles } from '../common/decorators/roles.decorator';
+import { Role } from '../generated/prisma/client';
 import { IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -39,32 +42,35 @@ export class KYCController {
   }
 
   @Get('pending')
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Get all pending KYC requests (Admin only)' })
   @ApiResponse({ status: 200, description: 'Pending KYC requests retrieved' })
   async getPendingRequests() {
-    // TODO: Add admin role guard
     return this.kycService.getPendingKYCRequests();
   }
 
   @Post('approve/:id')
   @HttpCode(HttpStatus.OK)
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Approve KYC request (Admin only)' })
   @ApiResponse({ status: 200, description: 'KYC approved successfully' })
   @ApiResponse({ status: 404, description: 'KYC not found' })
   @ApiResponse({ status: 400, description: 'KYC is not pending' })
   async approveKYC(@Param('id', ParseIntPipe) kycId: number) {
-    // TODO: Add admin role guard
     return this.kycService.approveKYC(kycId);
   }
 
   @Post('reject/:id')
   @HttpCode(HttpStatus.OK)
+  @UseGuards(RolesGuard)
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Reject KYC request (Admin only)' })
   @ApiResponse({ status: 200, description: 'KYC rejected' })
   @ApiResponse({ status: 404, description: 'KYC not found' })
   @ApiResponse({ status: 400, description: 'KYC is not pending' })
   async rejectKYC(@Param('id', ParseIntPipe) kycId: number, @Body() dto: RejectKYCDto) {
-    // TODO: Add admin role guard
     return this.kycService.rejectKYC(kycId, dto.reason);
   }
 }

@@ -7,9 +7,15 @@ import { PrismaExceptionFilter, AllExceptionsFilter } from './common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Enable CORS
+  // CORS: in production, restrict to FRONTEND_URLS; otherwise allow all origins.
+  const isProd = process.env.NODE_ENV === 'production';
+  const allowedOrigins = (process.env.FRONTEND_URLS || '')
+    .split(',')
+    .map((value) => value.trim())
+    .filter(Boolean);
+
   app.enableCors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3001',
+    origin: isProd ? allowedOrigins : true,
     credentials: true,
   });
 
@@ -44,7 +50,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  const port = process.env.PORT || 3000;
+  const port = process.env.PORT || 4000;
   await app.listen(port);
 
   const logger = new Logger('Bootstrap');
