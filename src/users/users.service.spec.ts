@@ -11,15 +11,16 @@ describe('UsersService.uploadLicense', () => {
       },
     } as any;
 
-    const notificationsService = {
-      sendLicenseApprovalEmail: jest.fn(),
+    const messagingService = {
+      notifyLicenseApproved: jest.fn(),
+      notifyLicenseRejected: jest.fn(),
     } as any;
 
     const uploadsService = {
       buildPublicUrl: jest.fn().mockReturnValue('https://cdn.example.com/license/11/doc.jpg'),
     } as any;
 
-    const service = new UsersService(prisma, notificationsService, uploadsService);
+    const service = new UsersService(prisma, messagingService, uploadsService);
 
     await service.uploadLicense(11, { licenseKey: 'license/11/doc.jpg' });
 
@@ -47,15 +48,16 @@ describe('UsersService.approveLicense', () => {
       },
     } as any;
 
-    const notificationsService = {
-      sendLicenseApprovalEmail: jest.fn(),
+    const messagingService = {
+      notifyLicenseApproved: jest.fn(),
+      notifyLicenseRejected: jest.fn(),
     } as any;
 
     const uploadsService = {
       buildPublicUrl: jest.fn(),
     } as any;
 
-    const service = new UsersService(prisma, notificationsService, uploadsService);
+    const service = new UsersService(prisma, messagingService, uploadsService);
 
     await expect(
       service.approveLicense(1, 2, { status: LicenseStatus.APPROVED }),
@@ -72,15 +74,16 @@ describe('UsersService.updateProfile', () => {
       },
     } as any;
 
-    const notificationsService = {
-      sendLicenseApprovalEmail: jest.fn(),
+    const messagingService = {
+      notifyLicenseApproved: jest.fn(),
+      notifyLicenseRejected: jest.fn(),
     } as any;
 
     const uploadsService = {
       buildPublicUrl: jest.fn(),
     } as any;
 
-    const service = new UsersService(prisma, notificationsService, uploadsService);
+    const service = new UsersService(prisma, messagingService, uploadsService);
 
     const result = await service.updateProfile(11, { firstName: 'Jane' });
 

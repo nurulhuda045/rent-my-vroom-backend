@@ -1,6 +1,7 @@
 import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { WhatsAppService } from '../whatsapp/whatsapp.service';
+import { NotificationsService } from '../notifications/notifications.service';
 import { ConfigService } from '@nestjs/config';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { OTPUtils, OTP_CONFIG, ERROR_MESSAGES } from '../common';
@@ -16,6 +17,7 @@ export class OTPService {
   constructor(
     private prisma: PrismaService,
     private whatsappService: WhatsAppService,
+    private notificationsService: NotificationsService,
     private configService: ConfigService,
   ) {
     this.otpExpiryMinutes = this.configService.get<number>(
@@ -37,10 +39,10 @@ export class OTPService {
   }
 
   /**
-   * Send OTP to phone number via WhatsApp
-   * Implements resend cooldown and prevents enumeration attacks
+   * Send OTP via WhatsApp; if WhatsApp fails and `fallbackEmail` is set, sends the code by email.
+   * Implements resend cooldown and prevents enumeration attacks.
    */
-  async sendOTP(phone: string): Promise<void> {
+  async sendOTP(phone: string, fallbackEmail?: string | null): Promise<void> {
     // Check resend cooldown (skip in TEST MODE for faster iteration)
     if (!this.testOTP) {
       await this.checkResendCooldown(phone);
@@ -71,9 +73,11 @@ export class OTPService {
         await this.whatsappService.sendOTPMessage(phone, otp);
         this.logger.log(`OTP sent to ${phone}`);
       } catch (error) {
-        this.logger.error(`Failed to send OTP to ${phone}:`, error);
-        // Don't throw error to prevent enumeration attacks
-        // The user will see success message regardless
+        this.logger.error(`Failed to send OTP via WhatsApp to ${phone}:`, error);
+        if (fallbackEmail?.trim()) {
+          await this.notificationsService.sendOtpEmail(fallbackEmail, otp, this.otpExpiryMinutes);
+          this.logger.log(`OTP sent by email fallback for ${phone}`);
+        }
       }
     }
   }

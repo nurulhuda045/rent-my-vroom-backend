@@ -69,7 +69,7 @@ export class AuthService implements OnModuleInit {
     // Role-mismatch guard: check before sending the OTP
     const existing = await this.prisma.user.findUnique({
       where: { phone: dto.phone },
-      select: { role: true },
+      select: { role: true, email: true },
     });
 
     if (dto.role === Role.ADMIN && (!existing || existing.role !== Role.ADMIN)) {
@@ -85,7 +85,7 @@ export class AuthService implements OnModuleInit {
 
     try {
       // Send OTP via WhatsApp
-      await this.otpService.sendOTP(dto.phone);
+      await this.otpService.sendOTP(dto.phone, existing?.email);
     } catch (error) {
       // If it's a cooldown error, rethrow it
       if (error instanceof HttpException && error.getStatus() === HttpStatus.TOO_MANY_REQUESTS) {

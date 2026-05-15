@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { PrismaService } from '../prisma/prisma.service';
-import { NotificationsService } from '../notifications/notifications.service';
+import { MessagingService } from '../messaging/messaging.service';
 import { BookingStatus } from '../generated/prisma/client';
 
 /**
@@ -27,7 +27,7 @@ export class BookingExpiryService {
 
   constructor(
     private readonly prisma: PrismaService,
-    private readonly notifications: NotificationsService,
+    private readonly messaging: MessagingService,
   ) {}
 
   /**
@@ -74,8 +74,8 @@ export class BookingExpiryService {
 
   private async expireBooking(booking: {
     id: number;
-    renter: { email: string; firstName: string };
-    merchant: { email: string; firstName: string };
+    renter: { email: string; firstName: string; phone: string };
+    merchant: { email: string; firstName: string; phone: string };
     vehicle: { make: string; model: string };
     startDate: Date;
     endDate: Date;
@@ -94,14 +94,16 @@ export class BookingExpiryService {
 
       // Notify both parties in parallel — failures are caught individually
       await Promise.allSettled([
-        this.notifications.sendBookingAutoCancelledRenterEmail(
+        this.messaging.notifyBookingAutoCancelledRenter(
           booking.renter.email,
           booking.renter.firstName,
+          booking.renter.phone,
           booking,
         ),
-        this.notifications.sendBookingAutoCancelledMerchantEmail(
+        this.messaging.notifyBookingAutoCancelledMerchant(
           booking.merchant.email,
           booking.merchant.firstName,
+          booking.merchant.phone,
           booking,
         ),
       ]);

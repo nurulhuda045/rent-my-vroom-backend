@@ -17,7 +17,7 @@ import {
   LicenseStatus,
   Role,
 } from '../generated/prisma/client';
-import { NotificationsService } from '../notifications/notifications.service';
+import { MessagingService } from '../messaging/messaging.service';
 import { SystemConfigService } from '../system-config/system-config.service';
 import { ERROR_MESSAGES } from '../common';
 
@@ -25,7 +25,7 @@ import { ERROR_MESSAGES } from '../common';
 export class BookingsService {
   constructor(
     private prisma: PrismaService,
-    private notificationsService: NotificationsService,
+    private messagingService: MessagingService,
     private systemConfigService: SystemConfigService,
   ) {}
 
@@ -115,10 +115,10 @@ export class BookingsService {
       },
     });
 
-    // Send notification to merchant
-    await this.notificationsService.sendNewBookingEmail(
-      vehicle.merchant.email,
-      vehicle.merchant.firstName,
+    await this.messagingService.notifyNewBookingMerchant(
+      booking.merchant.email,
+      booking.merchant.firstName,
+      booking.merchant.phone,
       booking,
     );
 
@@ -204,9 +204,10 @@ export class BookingsService {
 
     // Send notification to renter (online bookings only — offline never reaches PENDING)
     if (booking.renter) {
-      await this.notificationsService.sendBookingAcceptedEmail(
+      await this.messagingService.notifyBookingAccepted(
         booking.renter.email,
         booking.renter.firstName,
+        booking.renter.phone,
         updated,
       );
     }
@@ -246,9 +247,10 @@ export class BookingsService {
     });
 
     if (booking.renter) {
-      await this.notificationsService.sendBookingRejectedEmail(
+      await this.messagingService.notifyBookingRejected(
         booking.renter.email,
         booking.renter.firstName,
+        booking.renter.phone,
         updated,
       );
     }
@@ -288,9 +290,10 @@ export class BookingsService {
 
     // Skip renter email for offline bookings (merchant handles communication in-person)
     if (booking.source === BookingSource.ONLINE && booking.renter) {
-      await this.notificationsService.sendBookingCompletedEmail(
+      await this.messagingService.notifyBookingCompleted(
         booking.renter.email,
         booking.renter.firstName,
+        booking.renter.phone,
         updated,
       );
     }
@@ -342,9 +345,10 @@ export class BookingsService {
       },
     });
 
-    await this.notificationsService.sendBookingCancelledEmail(
+    await this.messagingService.notifyBookingCancelledMerchant(
       booking.merchant.email,
       booking.merchant.firstName,
+      booking.merchant.phone,
       updated,
     );
 

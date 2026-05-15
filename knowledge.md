@@ -18,7 +18,7 @@ npm run start:dev
 ### Required env vars
 `DATABASE_URL`, `JWT_SECRET`, `JWT_REFRESH_SECRET`, `JWT_EXPIRATION`, `JWT_REFRESH_EXPIRATION`,
 `R2_ACCESS_KEY`, `R2_SECRET_KEY`, `R2_BUCKET_NAME`, `R2_ENDPOINT`, `R2_PUBLIC_URL`,
-`EMAIL_FROM`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`,
+`EMAIL_FROM`, `EMAIL_FROM_NAME` (optional), `BREVO_API_KEY`,
 `PORT`, `FRONTEND_URL`. WhatsApp/OTP modules also require their own credentials — check `src/whatsapp` and `src/otp`.
 
 ## Common Commands
@@ -51,7 +51,8 @@ NestJS modular structure. Each domain is a self-contained module (controller + s
 - `src/messages/` — booking-scoped chat threads.
 - `src/reviews/` — post-rental ratings.
 - `src/uploads/` — Cloudflare R2 presigned URLs (`@aws-sdk/*`).
-- `src/notifications/` — Nodemailer SMTP emails.
+- `src/notifications/` — Brevo transactional email (`BREVO_API_KEY`).
+- `src/messaging/` — orchestrates email + optional WhatsApp templates for booking/KYC/license events.
 - `src/whatsapp/`, `src/otp/` — WhatsApp OTP auth onboarding flow (see `.agent/artifacts/whatsapp-*` docs).
 - `src/kyc/` — KYC submission/approval incl. holder photo + resubmission on rejection.
 - `src/system-config/` — runtime-configurable settings (stored in DB).

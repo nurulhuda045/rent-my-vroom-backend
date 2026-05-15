@@ -8,7 +8,7 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { UploadLicenseDto, ApproveLicenseDto, UpdateProfileDto } from './dto/users.dto';
 import { LicenseStatus, Role } from '../generated/prisma/client';
-import { NotificationsService } from '../notifications/notifications.service';
+import { MessagingService } from '../messaging/messaging.service';
 import { UploadsService } from '../uploads/uploads.service';
 import { ERROR_MESSAGES, USER_PROFILE_FIELDS, RENTER_FIELDS } from '../common';
 
@@ -16,7 +16,7 @@ import { ERROR_MESSAGES, USER_PROFILE_FIELDS, RENTER_FIELDS } from '../common';
 export class UsersService {
   constructor(
     private prisma: PrismaService,
-    private notificationsService: NotificationsService,
+    private messagingService: MessagingService,
     private uploadsService: UploadsService,
   ) {}
 
@@ -56,9 +56,10 @@ export class UsersService {
       select: RENTER_FIELDS,
     });
 
-    // Send notification email
     if (dto.status === LicenseStatus.APPROVED) {
-      await this.notificationsService.sendLicenseApprovalEmail(user.email, user.firstName);
+      await this.messagingService.notifyLicenseApproved(user.email, user.firstName, user.phone);
+    } else if (dto.status === LicenseStatus.REJECTED) {
+      await this.messagingService.notifyLicenseRejected(user.email, user.firstName, user.phone);
     }
 
     return updatedUser;

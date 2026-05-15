@@ -11,6 +11,7 @@ import { MessagesModule } from './messages/messages.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { UploadsModule } from './uploads/uploads.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { MessagingModule } from './messaging/messaging.module';
 import { WhatsAppModule } from './whatsapp/whatsapp.module';
 import { OTPModule } from './otp/otp.module';
 import { KYCModule } from './kyc/kyc.module';
@@ -48,6 +49,7 @@ import { AppController } from './app.controller';
     ReviewsModule,
     UploadsModule,
     NotificationsModule,
+    MessagingModule,
     WhatsAppModule,
     OTPModule,
     KYCModule,

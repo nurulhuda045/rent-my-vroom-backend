@@ -14,9 +14,9 @@ const makeService = () => {
     },
   } as any;
 
-  const notificationsService = {
-    sendNewBookingEmail: jest.fn(),
-    sendBookingCancelledEmail: jest.fn(),
+  const messagingService = {
+    notifyNewBookingMerchant: jest.fn(),
+    notifyBookingCancelledMerchant: jest.fn(),
   } as any;
 
   const systemConfigService = {
@@ -24,9 +24,9 @@ const makeService = () => {
   } as any;
 
   return {
-    service: new BookingsService(prisma, notificationsService, systemConfigService),
+    service: new BookingsService(prisma, messagingService, systemConfigService),
     prisma,
-    notificationsService,
+    messagingService,
     systemConfigService,
   };
 };
@@ -179,7 +179,7 @@ describe('BookingsService.cancelBooking', () => {
       status: BookingStatus.PENDING,
       startDate: tenHoursFromNow,
       renter: { email: 'renter@test.com', firstName: 'John' },
-      merchant: { email: 'merchant@test.com', firstName: 'Jane' },
+      merchant: { email: 'merchant@test.com', firstName: 'Jane', phone: '+10000000001' },
       vehicle: { make: 'Toyota', model: 'Camry' },
     };
 

@@ -132,7 +132,7 @@ describe('AuthService.sendOTP — role guard', () => {
     const result = await service.sendOTP({ phone: '+919876543210', role: Role.MERCHANT });
 
     expect(result).toHaveProperty('message');
-    expect(otpService.sendOTP).toHaveBeenCalledWith('+919876543210');
+    expect(otpService.sendOTP).toHaveBeenCalledWith('+919876543210', undefined);
   });
 });
 

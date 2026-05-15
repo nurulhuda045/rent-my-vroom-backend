@@ -1,174 +1,66 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as nodemailer from 'nodemailer';
-import type { Transporter } from 'nodemailer';
+import { BrevoClient } from '@getbrevo/brevo';
+import { renderOtpEmail } from './templates/email-templates';
 
 @Injectable()
 export class NotificationsService {
   private readonly logger = new Logger(NotificationsService.name);
-  private transporter: Transporter;
+  private readonly brevo: BrevoClient | null;
 
-  constructor(private config: ConfigService) {
-    this.transporter = nodemailer.createTransport({
-      host: this.config.get('SMTP_HOST'),
-      port: parseInt(this.config.get('SMTP_PORT') || '587'),
-      secure: this.config.get('SMTP_SECURE') === 'true',
-      auth: {
-        user: this.config.get('SMTP_USER'),
-        pass: this.config.get('SMTP_PASS'),
-      },
-    });
-  }
-
-  async sendEmail(to: string, subject: string, html: string) {
-    try {
-      await this.transporter.sendMail({
-        from: this.config.get('EMAIL_FROM'),
-        to,
-        subject,
-        html,
-      });
-    } catch (error) {
-      this.logger.error('Failed to send email:', error);
-      // Don't throw error to prevent blocking the main flow
+  constructor(private readonly config: ConfigService) {
+    const apiKey = this.config.get<string>('BREVO_API_KEY');
+    this.brevo = apiKey ? new BrevoClient({ apiKey }) : null;
+    if (!apiKey) {
+      this.logger.warn('BREVO_API_KEY is not set — transactional emails will be skipped');
     }
   }
 
-  async sendLicenseApprovalEmail(email: string, firstName: string) {
-    const subject = 'Your Driving License Has Been Approved!';
-    const html = `
-      <h1>Congratulations, ${firstName}!</h1>
-      <p>Your driving license has been approved. You can now start booking vehicles on RentMyVroom.</p>
-      <p>Happy renting!</p>
-      <p>Best regards,<br>The RentMyVroom Team</p>
-    `;
+  /**
+   * Low-level send used by MessagingService and OTP email fallback.
+   */
+  async sendTransactionalEmail(
+    to: string | null | undefined,
+    subject: string,
+    html: string,
+  ): Promise<void> {
+    const trimmed = to?.trim();
+    if (!trimmed) {
+      this.logger.debug('Skipping transactional email: no recipient address');
+      return;
+    }
 
-    await this.sendEmail(email, subject, html);
+    if (!this.brevo) {
+      this.logger.warn('BREVO_API_KEY not configured; transactional email skipped');
+      return;
+    }
+
+    const from = this.config.get<string>('EMAIL_FROM');
+    if (!from?.trim()) {
+      this.logger.warn('EMAIL_FROM not configured; transactional email skipped');
+      return;
+    }
+
+    const fromName = this.config.get<string>('EMAIL_FROM_NAME') ?? 'RentMyVroom';
+
+    try {
+      await this.brevo.transactionalEmails.sendTransacEmail({
+        subject,
+        htmlContent: html,
+        sender: { email: from.trim(), name: fromName },
+        to: [{ email: trimmed }],
+      });
+    } catch (error) {
+      this.logger.error('Failed to send transactional email:', error);
+    }
   }
 
-  async sendNewBookingEmail(email: string, firstName: string, booking: any) {
-    const subject = 'New Booking Request Received';
-    const html = `
-      <h1>Hello ${firstName},</h1>
-      <p>You have received a new booking request for your vehicle:</p>
-      <ul>
-        <li><strong>Vehicle:</strong> ${booking.vehicle.make} ${booking.vehicle.model}</li>
-        <li><strong>Start Date:</strong> ${new Date(booking.startDate).toLocaleDateString()}</li>
-        <li><strong>End Date:</strong> ${new Date(booking.endDate).toLocaleDateString()}</li>
-        <li><strong>Total Price:</strong> $${booking.totalPrice}</li>
-      </ul>
-      <p>Please log in to your account to accept or reject this booking.</p>
-      <p>Best regards,<br>The RentMyVroom Team</p>
-    `;
-
-    await this.sendEmail(email, subject, html);
-  }
-
-  async sendBookingAcceptedEmail(email: string, firstName: string, booking: any) {
-    const subject = 'Your Booking Has Been Accepted!';
-    const html = `
-      <h1>Great news, ${firstName}!</h1>
-      <p>Your booking request has been accepted:</p>
-      <ul>
-        <li><strong>Vehicle:</strong> ${booking.vehicle.make} ${booking.vehicle.model}</li>
-        <li><strong>Start Date:</strong> ${new Date(booking.startDate).toLocaleDateString()}</li>
-        <li><strong>End Date:</strong> ${new Date(booking.endDate).toLocaleDateString()}</li>
-        <li><strong>Total Price:</strong> $${booking.totalPrice}</li>
-      </ul>
-      ${booking.merchantNotes ? `<p><strong>Merchant Notes:</strong> ${booking.merchantNotes}</p>` : ''}
-      <p>Please contact the merchant to arrange pickup details.</p>
-      <p>Best regards,<br>The RentMyVroom Team</p>
-    `;
-
-    await this.sendEmail(email, subject, html);
-  }
-
-  async sendBookingRejectedEmail(email: string, firstName: string, booking: any) {
-    const subject = 'Booking Request Update';
-    const html = `
-      <h1>Hello ${firstName},</h1>
-      <p>Unfortunately, your booking request has been declined:</p>
-      <ul>
-        <li><strong>Vehicle:</strong> ${booking.vehicle.make} ${booking.vehicle.model}</li>
-        <li><strong>Start Date:</strong> ${new Date(booking.startDate).toLocaleDateString()}</li>
-        <li><strong>End Date:</strong> ${new Date(booking.endDate).toLocaleDateString()}</li>
-      </ul>
-      ${booking.merchantNotes ? `<p><strong>Merchant Notes:</strong> ${booking.merchantNotes}</p>` : ''}
-      <p>Please browse other available vehicles on our platform.</p>
-      <p>Best regards,<br>The RentMyVroom Team</p>
-    `;
-
-    await this.sendEmail(email, subject, html);
-  }
-
-  async sendBookingCancelledEmail(email: string, firstName: string, booking: any) {
-    const subject = 'Booking Cancelled';
-    const html = `
-      <h1>Hello ${firstName},</h1>
-      <p>A booking has been cancelled by the renter:</p>
-      <ul>
-        <li><strong>Vehicle:</strong> ${booking.vehicle.make} ${booking.vehicle.model}</li>
-        <li><strong>Start Date:</strong> ${new Date(booking.startDate).toLocaleDateString()}</li>
-        <li><strong>End Date:</strong> ${new Date(booking.endDate).toLocaleDateString()}</li>
-        <li><strong>Total Price:</strong> $${booking.totalPrice}</li>
-      </ul>
-      <p>The vehicle is now available for other bookings.</p>
-      <p>Best regards,<br>The RentMyVroom Team</p>
-    `;
-
-    await this.sendEmail(email, subject, html);
-  }
-
-  async sendBookingAutoCancelledRenterEmail(email: string, firstName: string, booking: any) {
-    const subject = 'Your Booking Was Automatically Cancelled';
-    const html = `
-      <h1>Hello ${firstName},</h1>
-      <p>Unfortunately, your booking was automatically cancelled because the merchant did not respond within the required time window.</p>
-      <ul>
-        <li><strong>Vehicle:</strong> ${booking.vehicle.make} ${booking.vehicle.model}</li>
-        <li><strong>Start Date:</strong> ${new Date(booking.startDate).toLocaleDateString()}</li>
-        <li><strong>End Date:</strong> ${new Date(booking.endDate).toLocaleDateString()}</li>
-        <li><strong>Total Price:</strong> $${booking.totalPrice}</li>
-      </ul>
-      <p>We apologise for the inconvenience. Please browse other available vehicles on our platform.</p>
-      <p>Best regards,<br>The RentMyVroom Team</p>
-    `;
-
-    await this.sendEmail(email, subject, html);
-  }
-
-  async sendBookingAutoCancelledMerchantEmail(email: string, firstName: string, booking: any) {
-    const subject = 'Booking Expired — No Response Recorded';
-    const html = `
-      <h1>Hello ${firstName},</h1>
-      <p>A booking request for your vehicle was automatically cancelled because it was not accepted or rejected within the required response window.</p>
-      <ul>
-        <li><strong>Vehicle:</strong> ${booking.vehicle.make} ${booking.vehicle.model}</li>
-        <li><strong>Start Date:</strong> ${new Date(booking.startDate).toLocaleDateString()}</li>
-        <li><strong>End Date:</strong> ${new Date(booking.endDate).toLocaleDateString()}</li>
-        <li><strong>Total Price:</strong> $${booking.totalPrice}</li>
-      </ul>
-      <p>To avoid missing future bookings, please respond to requests promptly — within <strong>1 hour</strong> for same-day bookings and <strong>24 hours</strong> for future bookings.</p>
-      <p>Best regards,<br>The RentMyVroom Team</p>
-    `;
-
-    await this.sendEmail(email, subject, html);
-  }
-
-  async sendBookingCompletedEmail(email: string, firstName: string, booking: any) {
-    const subject = 'Booking Completed - Please Leave a Review';
-    const html = `
-      <h1>Hello ${firstName},</h1>
-      <p>Your rental has been marked as completed:</p>
-      <ul>
-        <li><strong>Vehicle:</strong> ${booking.vehicle.make} ${booking.vehicle.model}</li>
-        <li><strong>Start Date:</strong> ${new Date(booking.startDate).toLocaleDateString()}</li>
-        <li><strong>End Date:</strong> ${new Date(booking.endDate).toLocaleDateString()}</li>
-      </ul>
-      <p>We hope you had a great experience! Please consider leaving a review for the merchant.</p>
-      <p>Best regards,<br>The RentMyVroom Team</p>
-    `;
-
-    await this.sendEmail(email, subject, html);
+  async sendOtpEmail(
+    to: string | null | undefined,
+    otp: string,
+    expiryMinutes: number,
+  ): Promise<void> {
+    const { subject, html } = renderOtpEmail(otp, expiryMinutes);
+    await this.sendTransactionalEmail(to, subject, html);
   }
 }

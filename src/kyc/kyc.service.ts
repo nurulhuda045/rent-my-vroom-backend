@@ -2,12 +2,16 @@ import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { KYCStatus, RegistrationStep } from '../generated/prisma/client';
 import { ERROR_MESSAGES, SUCCESS_MESSAGES, KYC_FIELDS, KYC_WITH_USER_FIELDS } from '../common';
+import { MessagingService } from '../messaging/messaging.service';
 
 @Injectable()
 export class KYCService {
   private readonly logger = new Logger(KYCService.name);
 
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private messaging: MessagingService,
+  ) {}
 
   /**
    * Get KYC status for a user
@@ -63,6 +67,12 @@ export class KYCService {
 
     this.logger.log(`KYC approved for user ${kyc.userId}`);
 
+    await this.messaging.notifyKycApproved(
+      kyc.user.email,
+      kyc.user.firstName,
+      kyc.user.phone,
+    );
+
     return {
       message: SUCCESS_MESSAGES.KYC_APPROVED,
       kyc: updatedKYC,
@@ -89,6 +99,13 @@ export class KYCService {
     await this.updateUserKYCStatus(kyc.userId, RegistrationStep.PROFILE_COMPLETED, 'REJECTED');
 
     this.logger.log(`KYC rejected for user ${kyc.userId}: ${reason}`);
+
+    await this.messaging.notifyKycRejected(
+      kyc.user.email,
+      kyc.user.firstName,
+      kyc.user.phone,
+      reason,
+    );
 
     return {
       message: SUCCESS_MESSAGES.KYC_REJECTED,
