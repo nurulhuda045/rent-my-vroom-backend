@@ -32,7 +32,7 @@ export class UploadsService {
     }
   }
 
-  async getPresignedUrl(userId: number, dto: GetPresignedUrlDto) {
+  async getPresignedUrl(userId: string, dto: GetPresignedUrlDto) {
     const timestamp = Date.now();
     const randomString = Math.random().toString(36).substring(7);
     const fileExtension = dto.fileName.split('.').pop();

@@ -7,7 +7,7 @@ import {
   Param,
   Query,
   UseGuards,
-  ParseIntPipe,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { BookingsService } from './bookings.service';
@@ -37,7 +37,7 @@ export class BookingsController {
   @ApiOperation({ summary: 'Create a new booking (Renter only)' })
   @ApiResponse({ status: 201, description: 'Booking created successfully' })
   @ApiResponse({ status: 403, description: 'License must be approved' })
-  async create(@GetUser('id') renterId: number, @Body() dto: CreateBookingDto) {
+  async create(@GetUser('id') renterId: string, @Body() dto: CreateBookingDto) {
     return this.bookingsService.create(renterId, dto);
   }
 
@@ -52,7 +52,7 @@ export class BookingsController {
   @ApiResponse({ status: 400, description: 'Overlap, invalid dates, or vehicle unavailable' })
   @ApiResponse({ status: 403, description: 'Merchant does not own this vehicle' })
   async createOffline(
-    @GetUser('id') merchantId: number,
+    @GetUser('id') merchantId: string,
     @Body() dto: CreateOfflineBookingDto,
   ) {
     return this.bookingsService.createOffline(merchantId, dto);
@@ -63,7 +63,7 @@ export class BookingsController {
   @Roles(Role.RENTER)
   @ApiOperation({ summary: 'Get my bookings as renter' })
   @ApiResponse({ status: 200, description: 'Bookings retrieved successfully' })
-  async getRenterBookings(@GetUser('id') renterId: number) {
+  async getRenterBookings(@GetUser('id') renterId: string) {
     return this.bookingsService.findRenterBookings(renterId);
   }
 
@@ -74,7 +74,7 @@ export class BookingsController {
   @ApiQuery({ name: 'source', enum: ['ONLINE', 'OFFLINE'], required: false })
   @ApiResponse({ status: 200, description: 'Bookings retrieved successfully' })
   async getMerchantBookings(
-    @GetUser('id') merchantId: number,
+    @GetUser('id') merchantId: string,
     @Query() query: MerchantBookingsQueryDto,
   ) {
     return this.bookingsService.findMerchantBookings(merchantId, query.source);
@@ -90,8 +90,8 @@ export class BookingsController {
     description: 'Can only manage your own bookings',
   })
   async acceptBooking(
-    @Param('id', ParseIntPipe) id: number,
-    @GetUser('id') merchantId: number,
+    @Param('id', ParseUUIDPipe) id: string,
+    @GetUser('id') merchantId: string,
     @Body() dto?: UpdateBookingStatusDto,
   ) {
     return this.bookingsService.acceptBooking(id, merchantId, dto);
@@ -107,8 +107,8 @@ export class BookingsController {
     description: 'Can only manage your own bookings',
   })
   async rejectBooking(
-    @Param('id', ParseIntPipe) id: number,
-    @GetUser('id') merchantId: number,
+    @Param('id', ParseUUIDPipe) id: string,
+    @GetUser('id') merchantId: string,
     @Body() dto?: UpdateBookingStatusDto,
   ) {
     return this.bookingsService.rejectBooking(id, merchantId, dto);
@@ -125,7 +125,7 @@ export class BookingsController {
     status: 403,
     description: 'Can only manage your own bookings',
   })
-  async completeBooking(@Param('id', ParseIntPipe) id: number, @GetUser('id') merchantId: number) {
+  async completeBooking(@Param('id', ParseUUIDPipe) id: string, @GetUser('id') merchantId: string) {
     return this.bookingsService.completeBooking(id, merchantId);
   }
 
@@ -137,8 +137,8 @@ export class BookingsController {
   @ApiResponse({ status: 400, description: 'Cancellation window expired or invalid status' })
   @ApiResponse({ status: 403, description: 'Can only cancel your own bookings' })
   async cancelBooking(
-    @Param('id', ParseIntPipe) id: number,
-    @GetUser('id') renterId: number,
+    @Param('id', ParseUUIDPipe) id: string,
+    @GetUser('id') renterId: string,
   ) {
     return this.bookingsService.cancelBooking(id, renterId);
   }
@@ -153,8 +153,8 @@ export class BookingsController {
   @ApiResponse({ status: 400, description: 'Booking is not offline' })
   @ApiResponse({ status: 403, description: 'Can only manage your own bookings' })
   async updateOfflinePayment(
-    @Param('id', ParseIntPipe) id: number,
-    @GetUser('id') merchantId: number,
+    @Param('id', ParseUUIDPipe) id: string,
+    @GetUser('id') merchantId: string,
     @Body() dto: UpdateOfflinePaymentDto,
   ) {
     return this.bookingsService.updateOfflinePayment(id, merchantId, dto);
@@ -168,8 +168,8 @@ export class BookingsController {
   @ApiResponse({ status: 400, description: 'Booking not offline or not in an ACCEPTED state' })
   @ApiResponse({ status: 403, description: 'Can only manage your own bookings' })
   async cancelOfflineBooking(
-    @Param('id', ParseIntPipe) id: number,
-    @GetUser('id') merchantId: number,
+    @Param('id', ParseUUIDPipe) id: string,
+    @GetUser('id') merchantId: string,
   ) {
     return this.bookingsService.cancelOfflineBooking(id, merchantId);
   }
@@ -179,7 +179,7 @@ export class BookingsController {
   @Roles(Role.MERCHANT)
   @ApiOperation({ summary: 'Get merchant earnings and booking statistics' })
   @ApiResponse({ status: 200, description: 'Statistics retrieved successfully' })
-  async getMerchantStats(@GetUser('id') merchantId: number) {
+  async getMerchantStats(@GetUser('id') merchantId: string) {
     return this.bookingsService.getMerchantStats(merchantId);
   }
 }

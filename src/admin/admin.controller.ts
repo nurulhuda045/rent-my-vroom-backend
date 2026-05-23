@@ -3,7 +3,7 @@ import {
   Get,
   Header,
   Param,
-  ParseIntPipe,
+  ParseUUIDPipe,
   Patch,
   Query,
   Body,
@@ -55,7 +55,7 @@ export class AdminController {
   }
 
   @Get('users/:id')
-  getUser(@Param('id', ParseIntPipe) id: number) {
+  getUser(@Param('id', ParseUUIDPipe) id: string) {
     return this.adminService.getUserById(id);
   }
 
@@ -66,8 +66,8 @@ export class AdminController {
 
   @Patch('licenses/:userId')
   decideLicense(
-    @GetUser('id') adminId: number,
-    @Param('userId', ParseIntPipe) userId: number,
+    @GetUser('id') adminId: string,
+    @Param('userId', ParseUUIDPipe) userId: string,
     @Body() dto: AdminLicenseDecisionDto,
   ) {
     return this.adminService.decideLicense(adminId, userId, dto);
@@ -79,17 +79,17 @@ export class AdminController {
   }
 
   @Get('kyc/:id')
-  getKycById(@Param('id', ParseIntPipe) id: number) {
+  getKycById(@Param('id', ParseUUIDPipe) id: string) {
     return this.adminService.getKycById(id);
   }
 
   @Patch('kyc/:id/approve')
-  approveKyc(@Param('id', ParseIntPipe) id: number) {
+  approveKyc(@Param('id', ParseUUIDPipe) id: string) {
     return this.adminService.approveKyc(id);
   }
 
   @Patch('kyc/:id/reject')
-  rejectKyc(@Param('id', ParseIntPipe) id: number, @Body() dto: AdminKycDecisionDto) {
+  rejectKyc(@Param('id', ParseUUIDPipe) id: string, @Body() dto: AdminKycDecisionDto) {
     return this.adminService.rejectKyc(id, dto);
   }
 
@@ -99,7 +99,7 @@ export class AdminController {
   }
 
   @Get('vehicles/:id')
-  getVehicle(@Param('id', ParseIntPipe) id: number) {
+  getVehicle(@Param('id', ParseUUIDPipe) id: string) {
     return this.adminService.getVehicleById(id);
   }
 
@@ -109,7 +109,7 @@ export class AdminController {
   }
 
   @Get('bookings/:id')
-  getBooking(@Param('id', ParseIntPipe) id: number) {
+  getBooking(@Param('id', ParseUUIDPipe) id: string) {
     return this.adminService.getBookingById(id);
   }
 

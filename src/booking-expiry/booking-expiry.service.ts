@@ -73,7 +73,7 @@ export class BookingExpiryService {
   // ---------------------------------------------------------------------------
 
   private async expireBooking(booking: {
-    id: number;
+    id: string;
     renter: { email: string; firstName: string; phone: string };
     merchant: { email: string; firstName: string; phone: string };
     vehicle: { make: string; model: string };

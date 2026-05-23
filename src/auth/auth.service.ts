@@ -170,7 +170,7 @@ export class AuthService implements OnModuleInit {
   /**
    * Complete renter profile
    */
-  async completeRenterProfile(userId: number, dto: CompleteRenterProfileDto) {
+  async completeRenterProfile(userId: string, dto: CompleteRenterProfileDto) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });
@@ -213,7 +213,7 @@ export class AuthService implements OnModuleInit {
   /**
    * Complete merchant profile
    */
-  async completeMerchantProfile(userId: number, dto: CompleteMerchantProfileDto) {
+  async completeMerchantProfile(userId: string, dto: CompleteMerchantProfileDto) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });
@@ -272,7 +272,7 @@ export class AuthService implements OnModuleInit {
   /**
    * Submit KYC for renters
    */
-  async submitKYC(userId: number, dto: SubmitKYCDto) {
+  async submitKYC(userId: string, dto: SubmitKYCDto) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       include: { kyc: true },
@@ -337,7 +337,7 @@ export class AuthService implements OnModuleInit {
   /**
    * Get registration status
    */
-  async getRegistrationStatus(userId: number) {
+  async getRegistrationStatus(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: {
@@ -488,8 +488,8 @@ export class AuthService implements OnModuleInit {
    * Validate user (used by JWT strategy)
    * Returns user object if found, null otherwise
    */
-  async validateUser(userId: number) {
-    if (!userId || typeof userId !== 'number') {
+  async validateUser(userId: string) {
+    if (!userId || typeof userId !== 'string') {
       this.logger.warn('Invalid userId provided to validateUser', { userId });
       return null;
     }
@@ -530,7 +530,7 @@ export class AuthService implements OnModuleInit {
    * Generate JWT tokens with updated payload structure
    */
   private async generateTokens(
-    userId: number,
+    userId: string,
     phone: string,
     role: Role,
     isVerified: boolean,

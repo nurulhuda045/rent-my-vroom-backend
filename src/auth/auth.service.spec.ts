@@ -1,22 +1,26 @@
 import { ForbiddenException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { KYCStatus, RegistrationStep, Role } from '../generated/prisma/client';
+import { randomUUID } from 'crypto';
 
 describe('AuthService.submitKYC', () => {
   it('stores KYC document and holder photo as Cloudflare R2 public urls from keys', async () => {
+    const userId = randomUUID();
+    const kycId = randomUUID();
+
     const prisma = {
       user: {
         findUnique: jest.fn().mockResolvedValue({
-          id: 7,
+          id: userId,
           role: Role.RENTER,
           registrationStep: RegistrationStep.PROFILE_COMPLETED,
           kyc: null,
         }),
-        update: jest.fn().mockResolvedValue({ id: 7 }),
+        update: jest.fn().mockResolvedValue({ id: userId }),
       },
       kYC: {
         create: jest.fn().mockResolvedValue({
-          id: 91,
+          id: kycId,
           status: KYCStatus.PENDING,
           createdAt: new Date(),
         }),
@@ -26,26 +30,26 @@ describe('AuthService.submitKYC', () => {
     const uploadsService = {
       buildPublicUrl: jest
         .fn()
-        .mockReturnValueOnce('https://cdn.example.com/license/7/kyc.jpg')
-        .mockReturnValueOnce('https://cdn.example.com/holder-photo/7/selfie.jpg'),
+        .mockReturnValueOnce(`https://cdn.example.com/license/${userId}/kyc.jpg`)
+        .mockReturnValueOnce(`https://cdn.example.com/holder-photo/${userId}/selfie.jpg`),
     } as any;
 
     const service = new AuthService(prisma, {} as any, {} as any, {} as any, uploadsService);
 
-    await service.submitKYC(7, {
+    await service.submitKYC(userId, {
       licenseNumber: 'DL1234567890',
-      licenseImageKey: 'license/7/kyc.jpg',
-      holderPhotoKey: 'holder-photo/7/selfie.jpg',
+      licenseImageKey: `license/${userId}/kyc.jpg`,
+      holderPhotoKey: `holder-photo/${userId}/selfie.jpg`,
       licenseExpiryDate: '2028-01-01',
     });
 
-    expect(uploadsService.buildPublicUrl).toHaveBeenCalledWith('license/7/kyc.jpg');
-    expect(uploadsService.buildPublicUrl).toHaveBeenCalledWith('holder-photo/7/selfie.jpg');
+    expect(uploadsService.buildPublicUrl).toHaveBeenCalledWith(`license/${userId}/kyc.jpg`);
+    expect(uploadsService.buildPublicUrl).toHaveBeenCalledWith(`holder-photo/${userId}/selfie.jpg`);
     expect(prisma.kYC.create).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({
-          licenseImageUrl: 'https://cdn.example.com/license/7/kyc.jpg',
-          holderPhotoUrl: 'https://cdn.example.com/holder-photo/7/selfie.jpg',
+          licenseImageUrl: `https://cdn.example.com/license/${userId}/kyc.jpg`,
+          holderPhotoUrl: `https://cdn.example.com/holder-photo/${userId}/selfie.jpg`,
         }),
       }),
     );
@@ -56,6 +60,8 @@ describe('AuthService.submitKYC', () => {
 
 describe('AuthService.refresh', () => {
   it('returns camelCase token keys', async () => {
+    const userId = randomUUID();
+    const refreshTokenId = randomUUID();
     const oldRefreshToken = 'old-refresh-token';
     const accessToken = 'new-access-token';
     const newRefreshToken = 'new-refresh-token';
@@ -66,15 +72,15 @@ describe('AuthService.refresh', () => {
           token: oldRefreshToken,
           expiresAt: new Date(Date.now() + 1000 * 60 * 60),
           user: {
-            id: 12,
+            id: userId,
             phone: '+919876543210',
             role: Role.RENTER,
             phoneVerified: true,
             registrationStep: RegistrationStep.PHONE_VERIFIED,
           },
         }),
-        create: jest.fn().mockResolvedValue({ id: 1 }),
-        delete: jest.fn().mockResolvedValue({ id: 1 }),
+        create: jest.fn().mockResolvedValue({ id: refreshTokenId }),
+        delete: jest.fn().mockResolvedValue({ id: refreshTokenId }),
       },
     } as any;
 
@@ -138,10 +144,12 @@ describe('AuthService.sendOTP — role guard', () => {
 
 describe('AuthService.verifyOTPAndAuthenticate — role guard', () => {
   it('throws ForbiddenException when existing user has a different role', async () => {
+    const userId = randomUUID();
+
     const prisma = {
       user: {
         findUnique: jest.fn().mockResolvedValue({
-          id: 5,
+          id: userId,
           phone: '+919876543210',
           role: Role.RENTER,
           phoneVerified: true,

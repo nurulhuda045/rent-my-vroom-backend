@@ -16,7 +16,7 @@ export class KYCService {
   /**
    * Get KYC status for a user
    */
-  async getKYCStatus(userId: number) {
+  async getKYCStatus(userId: string) {
     const kyc = await this.prisma.kYC.findUnique({
       where: { userId },
       select: KYC_FIELDS,
@@ -49,7 +49,7 @@ export class KYCService {
   /**
    * Approve KYC (Admin only)
    */
-  async approveKYC(kycId: number) {
+  async approveKYC(kycId: string) {
     const kyc = await this.findKYCById(kycId);
     this.verifyKYCPending(kyc.status);
 
@@ -82,7 +82,7 @@ export class KYCService {
   /**
    * Reject KYC (Admin only)
    */
-  async rejectKYC(kycId: number, reason: string) {
+  async rejectKYC(kycId: string, reason: string) {
     const kyc = await this.findKYCById(kycId);
     this.verifyKYCPending(kyc.status);
 
@@ -118,7 +118,7 @@ export class KYCService {
   /**
    * Find KYC by ID or throw error
    */
-  private async findKYCById(kycId: number) {
+  private async findKYCById(kycId: string) {
     const kyc = await this.prisma.kYC.findUnique({
       where: { id: kycId },
       include: { user: true },
@@ -144,7 +144,7 @@ export class KYCService {
    * Update user's KYC status and registration step
    */
   private async updateUserKYCStatus(
-    userId: number,
+    userId: string,
     registrationStep: RegistrationStep,
     licenseStatus: string,
   ) {

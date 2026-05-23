@@ -21,7 +21,7 @@ type VehicleSearchCriteria = {
 };
 
 type VehicleDistanceRow = {
-  id: number;
+  id: string;
   distanceKm: number;
 };
 
@@ -32,7 +32,7 @@ export class VehiclesService {
     private uploadsService: UploadsService,
   ) {}
 
-  async create(merchantId: number, dto: CreateVehicleDto) {
+  async create(merchantId: string, dto: CreateVehicleDto) {
     // Verify user is a merchant
     await this.verifyMerchant(merchantId);
 
@@ -69,7 +69,7 @@ export class VehiclesService {
     });
   }
 
-  async findMyVehicles(merchantId: number) {
+  async findMyVehicles(merchantId: string) {
     const vehicles = await this.prisma.vehicle.findMany({
       where: { merchantId },
       orderBy: {
@@ -80,7 +80,7 @@ export class VehiclesService {
     return vehicles;
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const vehicle = await this.prisma.vehicle.findUnique({
       where: { id },
       include: {
@@ -110,7 +110,7 @@ export class VehiclesService {
     return vehicle;
   }
 
-  async update(id: number, merchantId: number, dto: UpdateVehicleDto) {
+  async update(id: string, merchantId: string, dto: UpdateVehicleDto) {
     const vehicle = await this.findVehicleById(id);
     this.verifyOwnership(vehicle.merchantId, merchantId);
 
@@ -122,7 +122,7 @@ export class VehiclesService {
     return updated;
   }
 
-  async remove(id: number, merchantId: number) {
+  async remove(id: string, merchantId: string) {
     const vehicle = await this.findVehicleById(id);
     this.verifyOwnership(vehicle.merchantId, merchantId);
 
@@ -138,7 +138,7 @@ export class VehiclesService {
   /**
    * Verify user is a merchant
    */
-  private async verifyMerchant(userId: number) {
+  private async verifyMerchant(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });
@@ -170,7 +170,7 @@ export class VehiclesService {
   /**
    * Find vehicle by ID or throw error
    */
-  private async findVehicleById(id: number) {
+  private async findVehicleById(id: string) {
     const vehicle = await this.prisma.vehicle.findUnique({
       where: { id },
     });
@@ -387,7 +387,7 @@ export class VehiclesService {
   /**
    * Verify vehicle ownership
    */
-  private verifyOwnership(vehicleMerchantId: number, requestMerchantId: number) {
+  private verifyOwnership(vehicleMerchantId: string, requestMerchantId: string) {
     if (vehicleMerchantId !== requestMerchantId) {
       throw new ForbiddenException(ERROR_MESSAGES.VEHICLE_UNAUTHORIZED);
     }
