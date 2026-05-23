@@ -12,7 +12,7 @@ import { BookingStatus } from '../generated/prisma/client';
 export class ReviewsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(reviewerId: number, dto: CreateReviewDto) {
+  async create(reviewerId: string, dto: CreateReviewDto) {
     // Get booking
     const booking = await this.prisma.booking.findUnique({
       where: { id: dto.bookingId },
@@ -64,7 +64,7 @@ export class ReviewsService {
     return review;
   }
 
-  async findByMerchant(merchantId: number) {
+  async findByMerchant(merchantId: string) {
     const reviews = await this.prisma.review.findMany({
       where: {
         booking: {

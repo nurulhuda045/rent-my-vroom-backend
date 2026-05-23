@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, UseGuards, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, ParseUUIDPipe } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { ReviewsService } from './reviews.service';
 import { CreateReviewDto } from './dto/reviews.dto';
@@ -23,14 +23,14 @@ export class ReviewsController {
     status: 400,
     description: 'Can only review completed bookings',
   })
-  async create(@GetUser('id') reviewerId: number, @Body() dto: CreateReviewDto) {
+  async create(@GetUser('id') reviewerId: string, @Body() dto: CreateReviewDto) {
     return this.reviewsService.create(reviewerId, dto);
   }
 
   @Get('merchant/:merchantId')
   @ApiOperation({ summary: 'Get reviews for a merchant' })
   @ApiResponse({ status: 200, description: 'Reviews retrieved successfully' })
-  async findByMerchant(@Param('merchantId', ParseIntPipe) merchantId: number) {
+  async findByMerchant(@Param('merchantId', ParseUUIDPipe) merchantId: string) {
     return this.reviewsService.findByMerchant(merchantId);
   }
 }

@@ -20,41 +20,25 @@ export type MessageModel = runtime.Types.Result.DefaultSelection<Prisma.$Message
 
 export type AggregateMessage = {
   _count: MessageCountAggregateOutputType | null
-  _avg: MessageAvgAggregateOutputType | null
-  _sum: MessageSumAggregateOutputType | null
   _min: MessageMinAggregateOutputType | null
   _max: MessageMaxAggregateOutputType | null
 }
 
-export type MessageAvgAggregateOutputType = {
-  id: number | null
-  bookingId: number | null
-  senderId: number | null
-  receiverId: number | null
-}
-
-export type MessageSumAggregateOutputType = {
-  id: number | null
-  bookingId: number | null
-  senderId: number | null
-  receiverId: number | null
-}
-
 export type MessageMinAggregateOutputType = {
-  id: number | null
-  bookingId: number | null
-  senderId: number | null
-  receiverId: number | null
+  id: string | null
+  bookingId: string | null
+  senderId: string | null
+  receiverId: string | null
   content: string | null
   isRead: boolean | null
   createdAt: Date | null
 }
 
 export type MessageMaxAggregateOutputType = {
-  id: number | null
-  bookingId: number | null
-  senderId: number | null
-  receiverId: number | null
+  id: string | null
+  bookingId: string | null
+  senderId: string | null
+  receiverId: string | null
   content: string | null
   isRead: boolean | null
   createdAt: Date | null
@@ -71,20 +55,6 @@ export type MessageCountAggregateOutputType = {
   _all: number
 }
 
-
-export type MessageAvgAggregateInputType = {
-  id?: true
-  bookingId?: true
-  senderId?: true
-  receiverId?: true
-}
-
-export type MessageSumAggregateInputType = {
-  id?: true
-  bookingId?: true
-  senderId?: true
-  receiverId?: true
-}
 
 export type MessageMinAggregateInputType = {
   id?: true
@@ -155,18 +125,6 @@ export type MessageAggregateArgs<ExtArgs extends runtime.Types.Extensions.Intern
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: MessageAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: MessageSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: MessageMinAggregateInputType
@@ -197,23 +155,19 @@ export type MessageGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   _count?: MessageCountAggregateInputType | true
-  _avg?: MessageAvgAggregateInputType
-  _sum?: MessageSumAggregateInputType
   _min?: MessageMinAggregateInputType
   _max?: MessageMaxAggregateInputType
 }
 
 export type MessageGroupByOutputType = {
-  id: number
-  bookingId: number
-  senderId: number
-  receiverId: number
+  id: string
+  bookingId: string
+  senderId: string
+  receiverId: string
   content: string
   isRead: boolean
   createdAt: Date
   _count: MessageCountAggregateOutputType | null
-  _avg: MessageAvgAggregateOutputType | null
-  _sum: MessageSumAggregateOutputType | null
   _min: MessageMinAggregateOutputType | null
   _max: MessageMaxAggregateOutputType | null
 }
@@ -237,10 +191,10 @@ export type MessageWhereInput = {
   AND?: Prisma.MessageWhereInput | Prisma.MessageWhereInput[]
   OR?: Prisma.MessageWhereInput[]
   NOT?: Prisma.MessageWhereInput | Prisma.MessageWhereInput[]
-  id?: Prisma.IntFilter<"Message"> | number
-  bookingId?: Prisma.IntFilter<"Message"> | number
-  senderId?: Prisma.IntFilter<"Message"> | number
-  receiverId?: Prisma.IntFilter<"Message"> | number
+  id?: Prisma.UuidFilter<"Message"> | string
+  bookingId?: Prisma.UuidFilter<"Message"> | string
+  senderId?: Prisma.UuidFilter<"Message"> | string
+  receiverId?: Prisma.UuidFilter<"Message"> | string
   content?: Prisma.StringFilter<"Message"> | string
   isRead?: Prisma.BoolFilter<"Message"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Message"> | Date | string
@@ -263,13 +217,13 @@ export type MessageOrderByWithRelationInput = {
 }
 
 export type MessageWhereUniqueInput = Prisma.AtLeast<{
-  id?: number
+  id?: string
   AND?: Prisma.MessageWhereInput | Prisma.MessageWhereInput[]
   OR?: Prisma.MessageWhereInput[]
   NOT?: Prisma.MessageWhereInput | Prisma.MessageWhereInput[]
-  bookingId?: Prisma.IntFilter<"Message"> | number
-  senderId?: Prisma.IntFilter<"Message"> | number
-  receiverId?: Prisma.IntFilter<"Message"> | number
+  bookingId?: Prisma.UuidFilter<"Message"> | string
+  senderId?: Prisma.UuidFilter<"Message"> | string
+  receiverId?: Prisma.UuidFilter<"Message"> | string
   content?: Prisma.StringFilter<"Message"> | string
   isRead?: Prisma.BoolFilter<"Message"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Message"> | Date | string
@@ -287,26 +241,25 @@ export type MessageOrderByWithAggregationInput = {
   isRead?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.MessageCountOrderByAggregateInput
-  _avg?: Prisma.MessageAvgOrderByAggregateInput
   _max?: Prisma.MessageMaxOrderByAggregateInput
   _min?: Prisma.MessageMinOrderByAggregateInput
-  _sum?: Prisma.MessageSumOrderByAggregateInput
 }
 
 export type MessageScalarWhereWithAggregatesInput = {
   AND?: Prisma.MessageScalarWhereWithAggregatesInput | Prisma.MessageScalarWhereWithAggregatesInput[]
   OR?: Prisma.MessageScalarWhereWithAggregatesInput[]
   NOT?: Prisma.MessageScalarWhereWithAggregatesInput | Prisma.MessageScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"Message"> | number
-  bookingId?: Prisma.IntWithAggregatesFilter<"Message"> | number
-  senderId?: Prisma.IntWithAggregatesFilter<"Message"> | number
-  receiverId?: Prisma.IntWithAggregatesFilter<"Message"> | number
+  id?: Prisma.UuidWithAggregatesFilter<"Message"> | string
+  bookingId?: Prisma.UuidWithAggregatesFilter<"Message"> | string
+  senderId?: Prisma.UuidWithAggregatesFilter<"Message"> | string
+  receiverId?: Prisma.UuidWithAggregatesFilter<"Message"> | string
   content?: Prisma.StringWithAggregatesFilter<"Message"> | string
   isRead?: Prisma.BoolWithAggregatesFilter<"Message"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Message"> | Date | string
 }
 
 export type MessageCreateInput = {
+  id?: string
   content: string
   isRead?: boolean
   createdAt?: Date | string
@@ -316,16 +269,17 @@ export type MessageCreateInput = {
 }
 
 export type MessageUncheckedCreateInput = {
-  id?: number
-  bookingId: number
-  senderId: number
-  receiverId: number
+  id?: string
+  bookingId: string
+  senderId: string
+  receiverId: string
   content: string
   isRead?: boolean
   createdAt?: Date | string
 }
 
 export type MessageUpdateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -335,36 +289,37 @@ export type MessageUpdateInput = {
 }
 
 export type MessageUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  bookingId?: Prisma.IntFieldUpdateOperationsInput | number
-  senderId?: Prisma.IntFieldUpdateOperationsInput | number
-  receiverId?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  bookingId?: Prisma.StringFieldUpdateOperationsInput | string
+  senderId?: Prisma.StringFieldUpdateOperationsInput | string
+  receiverId?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MessageCreateManyInput = {
-  id?: number
-  bookingId: number
-  senderId: number
-  receiverId: number
+  id?: string
+  bookingId: string
+  senderId: string
+  receiverId: string
   content: string
   isRead?: boolean
   createdAt?: Date | string
 }
 
 export type MessageUpdateManyMutationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MessageUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  bookingId?: Prisma.IntFieldUpdateOperationsInput | number
-  senderId?: Prisma.IntFieldUpdateOperationsInput | number
-  receiverId?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  bookingId?: Prisma.StringFieldUpdateOperationsInput | string
+  senderId?: Prisma.StringFieldUpdateOperationsInput | string
+  receiverId?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -390,13 +345,6 @@ export type MessageCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
 }
 
-export type MessageAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  bookingId?: Prisma.SortOrder
-  senderId?: Prisma.SortOrder
-  receiverId?: Prisma.SortOrder
-}
-
 export type MessageMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   bookingId?: Prisma.SortOrder
@@ -415,13 +363,6 @@ export type MessageMinOrderByAggregateInput = {
   content?: Prisma.SortOrder
   isRead?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-}
-
-export type MessageSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  bookingId?: Prisma.SortOrder
-  senderId?: Prisma.SortOrder
-  receiverId?: Prisma.SortOrder
 }
 
 export type MessageCreateNestedManyWithoutSenderInput = {
@@ -551,6 +492,7 @@ export type MessageUncheckedUpdateManyWithoutBookingNestedInput = {
 }
 
 export type MessageCreateWithoutSenderInput = {
+  id?: string
   content: string
   isRead?: boolean
   createdAt?: Date | string
@@ -559,9 +501,9 @@ export type MessageCreateWithoutSenderInput = {
 }
 
 export type MessageUncheckedCreateWithoutSenderInput = {
-  id?: number
-  bookingId: number
-  receiverId: number
+  id?: string
+  bookingId: string
+  receiverId: string
   content: string
   isRead?: boolean
   createdAt?: Date | string
@@ -578,6 +520,7 @@ export type MessageCreateManySenderInputEnvelope = {
 }
 
 export type MessageCreateWithoutReceiverInput = {
+  id?: string
   content: string
   isRead?: boolean
   createdAt?: Date | string
@@ -586,9 +529,9 @@ export type MessageCreateWithoutReceiverInput = {
 }
 
 export type MessageUncheckedCreateWithoutReceiverInput = {
-  id?: number
-  bookingId: number
-  senderId: number
+  id?: string
+  bookingId: string
+  senderId: string
   content: string
   isRead?: boolean
   createdAt?: Date | string
@@ -624,10 +567,10 @@ export type MessageScalarWhereInput = {
   AND?: Prisma.MessageScalarWhereInput | Prisma.MessageScalarWhereInput[]
   OR?: Prisma.MessageScalarWhereInput[]
   NOT?: Prisma.MessageScalarWhereInput | Prisma.MessageScalarWhereInput[]
-  id?: Prisma.IntFilter<"Message"> | number
-  bookingId?: Prisma.IntFilter<"Message"> | number
-  senderId?: Prisma.IntFilter<"Message"> | number
-  receiverId?: Prisma.IntFilter<"Message"> | number
+  id?: Prisma.UuidFilter<"Message"> | string
+  bookingId?: Prisma.UuidFilter<"Message"> | string
+  senderId?: Prisma.UuidFilter<"Message"> | string
+  receiverId?: Prisma.UuidFilter<"Message"> | string
   content?: Prisma.StringFilter<"Message"> | string
   isRead?: Prisma.BoolFilter<"Message"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Message"> | Date | string
@@ -650,6 +593,7 @@ export type MessageUpdateManyWithWhereWithoutReceiverInput = {
 }
 
 export type MessageCreateWithoutBookingInput = {
+  id?: string
   content: string
   isRead?: boolean
   createdAt?: Date | string
@@ -658,9 +602,9 @@ export type MessageCreateWithoutBookingInput = {
 }
 
 export type MessageUncheckedCreateWithoutBookingInput = {
-  id?: number
-  senderId: number
-  receiverId: number
+  id?: string
+  senderId: string
+  receiverId: string
   content: string
   isRead?: boolean
   createdAt?: Date | string
@@ -693,24 +637,25 @@ export type MessageUpdateManyWithWhereWithoutBookingInput = {
 }
 
 export type MessageCreateManySenderInput = {
-  id?: number
-  bookingId: number
-  receiverId: number
+  id?: string
+  bookingId: string
+  receiverId: string
   content: string
   isRead?: boolean
   createdAt?: Date | string
 }
 
 export type MessageCreateManyReceiverInput = {
-  id?: number
-  bookingId: number
-  senderId: number
+  id?: string
+  bookingId: string
+  senderId: string
   content: string
   isRead?: boolean
   createdAt?: Date | string
 }
 
 export type MessageUpdateWithoutSenderInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -719,24 +664,25 @@ export type MessageUpdateWithoutSenderInput = {
 }
 
 export type MessageUncheckedUpdateWithoutSenderInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  bookingId?: Prisma.IntFieldUpdateOperationsInput | number
-  receiverId?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  bookingId?: Prisma.StringFieldUpdateOperationsInput | string
+  receiverId?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MessageUncheckedUpdateManyWithoutSenderInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  bookingId?: Prisma.IntFieldUpdateOperationsInput | number
-  receiverId?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  bookingId?: Prisma.StringFieldUpdateOperationsInput | string
+  receiverId?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MessageUpdateWithoutReceiverInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -745,33 +691,34 @@ export type MessageUpdateWithoutReceiverInput = {
 }
 
 export type MessageUncheckedUpdateWithoutReceiverInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  bookingId?: Prisma.IntFieldUpdateOperationsInput | number
-  senderId?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  bookingId?: Prisma.StringFieldUpdateOperationsInput | string
+  senderId?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MessageUncheckedUpdateManyWithoutReceiverInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  bookingId?: Prisma.IntFieldUpdateOperationsInput | number
-  senderId?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  bookingId?: Prisma.StringFieldUpdateOperationsInput | string
+  senderId?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MessageCreateManyBookingInput = {
-  id?: number
-  senderId: number
-  receiverId: number
+  id?: string
+  senderId: string
+  receiverId: string
   content: string
   isRead?: boolean
   createdAt?: Date | string
 }
 
 export type MessageUpdateWithoutBookingInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -780,18 +727,18 @@ export type MessageUpdateWithoutBookingInput = {
 }
 
 export type MessageUncheckedUpdateWithoutBookingInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  senderId?: Prisma.IntFieldUpdateOperationsInput | number
-  receiverId?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  senderId?: Prisma.StringFieldUpdateOperationsInput | string
+  receiverId?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type MessageUncheckedUpdateManyWithoutBookingInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  senderId?: Prisma.IntFieldUpdateOperationsInput | number
-  receiverId?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  senderId?: Prisma.StringFieldUpdateOperationsInput | string
+  receiverId?: Prisma.StringFieldUpdateOperationsInput | string
   content?: Prisma.StringFieldUpdateOperationsInput | string
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -873,10 +820,10 @@ export type $MessagePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     receiver: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
-    bookingId: number
-    senderId: number
-    receiverId: number
+    id: string
+    bookingId: string
+    senderId: string
+    receiverId: string
     content: string
     isRead: boolean
     createdAt: Date
@@ -1306,10 +1253,10 @@ export interface Prisma__MessageClient<T, Null = never, ExtArgs extends runtime.
  * Fields of the Message model
  */
 export interface MessageFieldRefs {
-  readonly id: Prisma.FieldRef<"Message", 'Int'>
-  readonly bookingId: Prisma.FieldRef<"Message", 'Int'>
-  readonly senderId: Prisma.FieldRef<"Message", 'Int'>
-  readonly receiverId: Prisma.FieldRef<"Message", 'Int'>
+  readonly id: Prisma.FieldRef<"Message", 'String'>
+  readonly bookingId: Prisma.FieldRef<"Message", 'String'>
+  readonly senderId: Prisma.FieldRef<"Message", 'String'>
+  readonly receiverId: Prisma.FieldRef<"Message", 'String'>
   readonly content: Prisma.FieldRef<"Message", 'String'>
   readonly isRead: Prisma.FieldRef<"Message", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"Message", 'DateTime'>

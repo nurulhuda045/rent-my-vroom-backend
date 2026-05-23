@@ -7,7 +7,7 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
-  ParseIntPipe,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { KYCService } from './kyc.service';
@@ -37,7 +37,7 @@ export class KYCController {
   @ApiOperation({ summary: 'Get KYC status for current user' })
   @ApiResponse({ status: 200, description: 'KYC status retrieved' })
   @ApiResponse({ status: 404, description: 'KYC not found' })
-  async getStatus(@GetUser('id') userId: number) {
+  async getStatus(@GetUser('id') userId: string) {
     return this.kycService.getKYCStatus(userId);
   }
 
@@ -58,7 +58,7 @@ export class KYCController {
   @ApiResponse({ status: 200, description: 'KYC approved successfully' })
   @ApiResponse({ status: 404, description: 'KYC not found' })
   @ApiResponse({ status: 400, description: 'KYC is not pending' })
-  async approveKYC(@Param('id', ParseIntPipe) kycId: number) {
+  async approveKYC(@Param('id', ParseUUIDPipe) kycId: string) {
     return this.kycService.approveKYC(kycId);
   }
 
@@ -70,7 +70,7 @@ export class KYCController {
   @ApiResponse({ status: 200, description: 'KYC rejected' })
   @ApiResponse({ status: 404, description: 'KYC not found' })
   @ApiResponse({ status: 400, description: 'KYC is not pending' })
-  async rejectKYC(@Param('id', ParseIntPipe) kycId: number, @Body() dto: RejectKYCDto) {
+  async rejectKYC(@Param('id', ParseUUIDPipe) kycId: string, @Body() dto: RejectKYCDto) {
     return this.kycService.rejectKYC(kycId, dto.reason);
   }
 }

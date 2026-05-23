@@ -33,7 +33,7 @@ export class BookingsService {
   // ONLINE booking flow (renter-initiated)
   // ---------------------------------------------------------------------------
 
-  async create(renterId: number, dto: CreateBookingDto) {
+  async create(renterId: string, dto: CreateBookingDto) {
     // Verify renter has approved license
     const renter = await this.prisma.user.findUnique({
       where: { id: renterId },
@@ -125,7 +125,7 @@ export class BookingsService {
     return booking;
   }
 
-  async findRenterBookings(renterId: number) {
+  async findRenterBookings(renterId: string) {
     const bookings = await this.prisma.booking.findMany({
       where: { renterId },
       include: {
@@ -147,7 +147,7 @@ export class BookingsService {
     return bookings;
   }
 
-  async findMerchantBookings(merchantId: number, source?: BookingSource) {
+  async findMerchantBookings(merchantId: string, source?: BookingSource) {
     const bookings = await this.prisma.booking.findMany({
       where: {
         merchantId,
@@ -171,7 +171,7 @@ export class BookingsService {
     return bookings;
   }
 
-  async acceptBooking(bookingId: number, merchantId: number, dto?: UpdateBookingStatusDto) {
+  async acceptBooking(bookingId: string, merchantId: string, dto?: UpdateBookingStatusDto) {
     const booking = await this.prisma.booking.findUnique({
       where: { id: bookingId },
       include: { renter: true, vehicle: true },
@@ -215,7 +215,7 @@ export class BookingsService {
     return updated;
   }
 
-  async rejectBooking(bookingId: number, merchantId: number, dto?: UpdateBookingStatusDto) {
+  async rejectBooking(bookingId: string, merchantId: string, dto?: UpdateBookingStatusDto) {
     const booking = await this.prisma.booking.findUnique({
       where: { id: bookingId },
       include: { renter: true, vehicle: true },
@@ -258,7 +258,7 @@ export class BookingsService {
     return updated;
   }
 
-  async completeBooking(bookingId: number, merchantId: number) {
+  async completeBooking(bookingId: string, merchantId: string) {
     const booking = await this.prisma.booking.findUnique({
       where: { id: bookingId },
       include: { renter: true, vehicle: true },
@@ -301,7 +301,7 @@ export class BookingsService {
     return updated;
   }
 
-  async cancelBooking(bookingId: number, renterId: number) {
+  async cancelBooking(bookingId: string, renterId: string) {
     const booking = await this.prisma.booking.findUnique({
       where: { id: bookingId },
       include: { renter: true, vehicle: true, merchant: true },
@@ -359,7 +359,7 @@ export class BookingsService {
   // OFFLINE booking flow (merchant-initiated walk-in)
   // ---------------------------------------------------------------------------
 
-  async createOffline(merchantId: number, dto: CreateOfflineBookingDto) {
+  async createOffline(merchantId: string, dto: CreateOfflineBookingDto) {
     // Vehicle ownership check
     const vehicle = await this.prisma.vehicle.findUnique({
       where: { id: dto.vehicleId },
@@ -460,8 +460,8 @@ export class BookingsService {
   }
 
   async updateOfflinePayment(
-    bookingId: number,
-    merchantId: number,
+    bookingId: string,
+    merchantId: string,
     dto: UpdateOfflinePaymentDto,
   ) {
     await this.getOfflineBookingForMerchant(bookingId, merchantId);
@@ -481,7 +481,7 @@ export class BookingsService {
     });
   }
 
-  async cancelOfflineBooking(bookingId: number, merchantId: number) {
+  async cancelOfflineBooking(bookingId: string, merchantId: string) {
     const booking = await this.getOfflineBookingForMerchant(bookingId, merchantId);
 
     if (booking.status !== BookingStatus.ACCEPTED) {
@@ -506,7 +506,7 @@ export class BookingsService {
   // Merchant stats (includes both online and offline)
   // ---------------------------------------------------------------------------
 
-  async getMerchantStats(merchantId: number) {
+  async getMerchantStats(merchantId: string) {
     const now = new Date();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
@@ -592,7 +592,7 @@ export class BookingsService {
    * so both channels block each other on overlapping dates. Considers
    * PENDING + ACCEPTED bookings (i.e. anything actively holding the vehicle).
    */
-  private findOverlappingBooking(vehicleId: number, startDate: Date, endDate: Date) {
+  private findOverlappingBooking(vehicleId: string, startDate: Date, endDate: Date) {
     return this.prisma.booking.findFirst({
       where: {
         vehicleId,
@@ -603,7 +603,7 @@ export class BookingsService {
     });
   }
 
-  private async getOfflineBookingForMerchant(bookingId: number, merchantId: number) {
+  private async getOfflineBookingForMerchant(bookingId: string, merchantId: string) {
     const booking = await this.prisma.booking.findUnique({
       where: { id: bookingId },
     });

@@ -7,7 +7,7 @@ import {
   Body,
   Param,
   UseGuards,
-  ParseIntPipe,
+  ParseUUIDPipe,
   Query,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
@@ -31,7 +31,7 @@ export class VehiclesController {
   @ApiOperation({ summary: 'Create a new vehicle (Merchant only)' })
   @ApiResponse({ status: 201, description: 'Vehicle created successfully' })
   @ApiResponse({ status: 403, description: 'Merchant access required' })
-  async create(@GetUser('id') merchantId: number, @Body() dto: CreateVehicleDto) {
+  async create(@GetUser('id') merchantId: string, @Body() dto: CreateVehicleDto) {
     return this.vehiclesService.create(merchantId, dto);
   }
 
@@ -79,7 +79,7 @@ export class VehiclesController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get my vehicles (Merchant only)' })
   @ApiResponse({ status: 200, description: 'Vehicles retrieved successfully' })
-  async findMyVehicles(@GetUser('id') merchantId: number) {
+  async findMyVehicles(@GetUser('id') merchantId: string) {
     return this.vehiclesService.findMyVehicles(merchantId);
   }
 
@@ -87,7 +87,7 @@ export class VehiclesController {
   @ApiOperation({ summary: 'Get vehicle by ID' })
   @ApiResponse({ status: 200, description: 'Vehicle retrieved successfully' })
   @ApiResponse({ status: 404, description: 'Vehicle not found' })
-  async findOne(@Param('id', ParseIntPipe) id: number) {
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.vehiclesService.findOne(id);
   }
 
@@ -103,8 +103,8 @@ export class VehiclesController {
   })
   @ApiResponse({ status: 404, description: 'Vehicle not found' })
   async update(
-    @Param('id', ParseIntPipe) id: number,
-    @GetUser('id') merchantId: number,
+    @Param('id', ParseUUIDPipe) id: string,
+    @GetUser('id') merchantId: string,
     @Body() dto: UpdateVehicleDto,
   ) {
     return this.vehiclesService.update(id, merchantId, dto);
@@ -121,7 +121,7 @@ export class VehiclesController {
     description: 'You can only delete your own vehicles',
   })
   @ApiResponse({ status: 404, description: 'Vehicle not found' })
-  async remove(@Param('id', ParseIntPipe) id: number, @GetUser('id') merchantId: number) {
+  async remove(@Param('id', ParseUUIDPipe) id: string, @GetUser('id') merchantId: string) {
     return this.vehiclesService.remove(id, merchantId);
   }
 }
