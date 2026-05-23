@@ -20,7 +20,7 @@ export class UsersService {
     private uploadsService: UploadsService,
   ) {}
 
-  async uploadLicense(userId: number, dto: UploadLicenseDto) {
+  async uploadLicense(userId: string, dto: UploadLicenseDto) {
     const user = await this.findUserById(userId);
 
     if (user.role !== Role.RENTER) {
@@ -39,7 +39,7 @@ export class UsersService {
     return updatedUser;
   }
 
-  async approveLicense(adminId: number, userId: number, dto: ApproveLicenseDto) {
+  async approveLicense(adminId: string, userId: string, dto: ApproveLicenseDto) {
     await this.verifyAdmin(adminId);
     const user = await this.findUserById(userId);
 
@@ -65,7 +65,7 @@ export class UsersService {
     return updatedUser;
   }
 
-  async getProfile(userId: number) {
+  async getProfile(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: USER_PROFILE_FIELDS,
@@ -78,7 +78,7 @@ export class UsersService {
     return user;
   }
 
-  async updateProfile(userId: number, dto: UpdateProfileDto) {
+  async updateProfile(userId: string, dto: UpdateProfileDto) {
     try {
       const user = await this.prisma.user.update({
         where: { id: userId },
@@ -116,7 +116,7 @@ export class UsersService {
   /**
    * Find user by ID or throw error
    */
-  private async findUserById(userId: number) {
+  private async findUserById(userId: string) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });
@@ -131,7 +131,7 @@ export class UsersService {
   /**
    * Verify user is admin
    */
-  private async verifyAdmin(adminId: number) {
+  private async verifyAdmin(adminId: string) {
     const admin = await this.prisma.user.findUnique({
       where: { id: adminId },
     });

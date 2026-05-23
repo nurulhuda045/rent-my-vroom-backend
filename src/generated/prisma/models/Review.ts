@@ -27,23 +27,17 @@ export type AggregateReview = {
 }
 
 export type ReviewAvgAggregateOutputType = {
-  id: number | null
-  bookingId: number | null
-  reviewerId: number | null
   rating: number | null
 }
 
 export type ReviewSumAggregateOutputType = {
-  id: number | null
-  bookingId: number | null
-  reviewerId: number | null
   rating: number | null
 }
 
 export type ReviewMinAggregateOutputType = {
-  id: number | null
-  bookingId: number | null
-  reviewerId: number | null
+  id: string | null
+  bookingId: string | null
+  reviewerId: string | null
   rating: number | null
   comment: string | null
   createdAt: Date | null
@@ -51,9 +45,9 @@ export type ReviewMinAggregateOutputType = {
 }
 
 export type ReviewMaxAggregateOutputType = {
-  id: number | null
-  bookingId: number | null
-  reviewerId: number | null
+  id: string | null
+  bookingId: string | null
+  reviewerId: string | null
   rating: number | null
   comment: string | null
   createdAt: Date | null
@@ -73,16 +67,10 @@ export type ReviewCountAggregateOutputType = {
 
 
 export type ReviewAvgAggregateInputType = {
-  id?: true
-  bookingId?: true
-  reviewerId?: true
   rating?: true
 }
 
 export type ReviewSumAggregateInputType = {
-  id?: true
-  bookingId?: true
-  reviewerId?: true
   rating?: true
 }
 
@@ -204,9 +192,9 @@ export type ReviewGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalA
 }
 
 export type ReviewGroupByOutputType = {
-  id: number
-  bookingId: number
-  reviewerId: number
+  id: string
+  bookingId: string
+  reviewerId: string
   rating: number
   comment: string | null
   createdAt: Date
@@ -237,9 +225,9 @@ export type ReviewWhereInput = {
   AND?: Prisma.ReviewWhereInput | Prisma.ReviewWhereInput[]
   OR?: Prisma.ReviewWhereInput[]
   NOT?: Prisma.ReviewWhereInput | Prisma.ReviewWhereInput[]
-  id?: Prisma.IntFilter<"Review"> | number
-  bookingId?: Prisma.IntFilter<"Review"> | number
-  reviewerId?: Prisma.IntFilter<"Review"> | number
+  id?: Prisma.UuidFilter<"Review"> | string
+  bookingId?: Prisma.UuidFilter<"Review"> | string
+  reviewerId?: Prisma.UuidFilter<"Review"> | string
   rating?: Prisma.IntFilter<"Review"> | number
   comment?: Prisma.StringNullableFilter<"Review"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Review"> | Date | string
@@ -261,12 +249,12 @@ export type ReviewOrderByWithRelationInput = {
 }
 
 export type ReviewWhereUniqueInput = Prisma.AtLeast<{
-  id?: number
-  bookingId?: number
+  id?: string
+  bookingId?: string
   AND?: Prisma.ReviewWhereInput | Prisma.ReviewWhereInput[]
   OR?: Prisma.ReviewWhereInput[]
   NOT?: Prisma.ReviewWhereInput | Prisma.ReviewWhereInput[]
-  reviewerId?: Prisma.IntFilter<"Review"> | number
+  reviewerId?: Prisma.UuidFilter<"Review"> | string
   rating?: Prisma.IntFilter<"Review"> | number
   comment?: Prisma.StringNullableFilter<"Review"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Review"> | Date | string
@@ -294,9 +282,9 @@ export type ReviewScalarWhereWithAggregatesInput = {
   AND?: Prisma.ReviewScalarWhereWithAggregatesInput | Prisma.ReviewScalarWhereWithAggregatesInput[]
   OR?: Prisma.ReviewScalarWhereWithAggregatesInput[]
   NOT?: Prisma.ReviewScalarWhereWithAggregatesInput | Prisma.ReviewScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"Review"> | number
-  bookingId?: Prisma.IntWithAggregatesFilter<"Review"> | number
-  reviewerId?: Prisma.IntWithAggregatesFilter<"Review"> | number
+  id?: Prisma.UuidWithAggregatesFilter<"Review"> | string
+  bookingId?: Prisma.UuidWithAggregatesFilter<"Review"> | string
+  reviewerId?: Prisma.UuidWithAggregatesFilter<"Review"> | string
   rating?: Prisma.IntWithAggregatesFilter<"Review"> | number
   comment?: Prisma.StringNullableWithAggregatesFilter<"Review"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Review"> | Date | string
@@ -304,6 +292,7 @@ export type ReviewScalarWhereWithAggregatesInput = {
 }
 
 export type ReviewCreateInput = {
+  id?: string
   rating: number
   comment?: string | null
   createdAt?: Date | string
@@ -313,9 +302,9 @@ export type ReviewCreateInput = {
 }
 
 export type ReviewUncheckedCreateInput = {
-  id?: number
-  bookingId: number
-  reviewerId: number
+  id?: string
+  bookingId: string
+  reviewerId: string
   rating: number
   comment?: string | null
   createdAt?: Date | string
@@ -323,6 +312,7 @@ export type ReviewUncheckedCreateInput = {
 }
 
 export type ReviewUpdateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -332,9 +322,9 @@ export type ReviewUpdateInput = {
 }
 
 export type ReviewUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  bookingId?: Prisma.IntFieldUpdateOperationsInput | number
-  reviewerId?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  bookingId?: Prisma.StringFieldUpdateOperationsInput | string
+  reviewerId?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -342,9 +332,9 @@ export type ReviewUncheckedUpdateInput = {
 }
 
 export type ReviewCreateManyInput = {
-  id?: number
-  bookingId: number
-  reviewerId: number
+  id?: string
+  bookingId: string
+  reviewerId: string
   rating: number
   comment?: string | null
   createdAt?: Date | string
@@ -352,6 +342,7 @@ export type ReviewCreateManyInput = {
 }
 
 export type ReviewUpdateManyMutationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -359,9 +350,9 @@ export type ReviewUpdateManyMutationInput = {
 }
 
 export type ReviewUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  bookingId?: Prisma.IntFieldUpdateOperationsInput | number
-  reviewerId?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  bookingId?: Prisma.StringFieldUpdateOperationsInput | string
+  reviewerId?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -394,9 +385,6 @@ export type ReviewCountOrderByAggregateInput = {
 }
 
 export type ReviewAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  bookingId?: Prisma.SortOrder
-  reviewerId?: Prisma.SortOrder
   rating?: Prisma.SortOrder
 }
 
@@ -421,9 +409,6 @@ export type ReviewMinOrderByAggregateInput = {
 }
 
 export type ReviewSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  bookingId?: Prisma.SortOrder
-  reviewerId?: Prisma.SortOrder
   rating?: Prisma.SortOrder
 }
 
@@ -502,6 +487,7 @@ export type ReviewUncheckedUpdateOneWithoutBookingNestedInput = {
 }
 
 export type ReviewCreateWithoutReviewerInput = {
+  id?: string
   rating: number
   comment?: string | null
   createdAt?: Date | string
@@ -510,8 +496,8 @@ export type ReviewCreateWithoutReviewerInput = {
 }
 
 export type ReviewUncheckedCreateWithoutReviewerInput = {
-  id?: number
-  bookingId: number
+  id?: string
+  bookingId: string
   rating: number
   comment?: string | null
   createdAt?: Date | string
@@ -548,9 +534,9 @@ export type ReviewScalarWhereInput = {
   AND?: Prisma.ReviewScalarWhereInput | Prisma.ReviewScalarWhereInput[]
   OR?: Prisma.ReviewScalarWhereInput[]
   NOT?: Prisma.ReviewScalarWhereInput | Prisma.ReviewScalarWhereInput[]
-  id?: Prisma.IntFilter<"Review"> | number
-  bookingId?: Prisma.IntFilter<"Review"> | number
-  reviewerId?: Prisma.IntFilter<"Review"> | number
+  id?: Prisma.UuidFilter<"Review"> | string
+  bookingId?: Prisma.UuidFilter<"Review"> | string
+  reviewerId?: Prisma.UuidFilter<"Review"> | string
   rating?: Prisma.IntFilter<"Review"> | number
   comment?: Prisma.StringNullableFilter<"Review"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Review"> | Date | string
@@ -558,6 +544,7 @@ export type ReviewScalarWhereInput = {
 }
 
 export type ReviewCreateWithoutBookingInput = {
+  id?: string
   rating: number
   comment?: string | null
   createdAt?: Date | string
@@ -566,8 +553,8 @@ export type ReviewCreateWithoutBookingInput = {
 }
 
 export type ReviewUncheckedCreateWithoutBookingInput = {
-  id?: number
-  reviewerId: number
+  id?: string
+  reviewerId: string
   rating: number
   comment?: string | null
   createdAt?: Date | string
@@ -591,6 +578,7 @@ export type ReviewUpdateToOneWithWhereWithoutBookingInput = {
 }
 
 export type ReviewUpdateWithoutBookingInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -599,8 +587,8 @@ export type ReviewUpdateWithoutBookingInput = {
 }
 
 export type ReviewUncheckedUpdateWithoutBookingInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  reviewerId?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  reviewerId?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -608,8 +596,8 @@ export type ReviewUncheckedUpdateWithoutBookingInput = {
 }
 
 export type ReviewCreateManyReviewerInput = {
-  id?: number
-  bookingId: number
+  id?: string
+  bookingId: string
   rating: number
   comment?: string | null
   createdAt?: Date | string
@@ -617,6 +605,7 @@ export type ReviewCreateManyReviewerInput = {
 }
 
 export type ReviewUpdateWithoutReviewerInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -625,8 +614,8 @@ export type ReviewUpdateWithoutReviewerInput = {
 }
 
 export type ReviewUncheckedUpdateWithoutReviewerInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  bookingId?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  bookingId?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -634,8 +623,8 @@ export type ReviewUncheckedUpdateWithoutReviewerInput = {
 }
 
 export type ReviewUncheckedUpdateManyWithoutReviewerInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  bookingId?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  bookingId?: Prisma.StringFieldUpdateOperationsInput | string
   rating?: Prisma.IntFieldUpdateOperationsInput | number
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -711,9 +700,9 @@ export type $ReviewPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     reviewer: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
-    bookingId: number
-    reviewerId: number
+    id: string
+    bookingId: string
+    reviewerId: string
     rating: number
     comment: string | null
     createdAt: Date
@@ -1143,9 +1132,9 @@ export interface Prisma__ReviewClient<T, Null = never, ExtArgs extends runtime.T
  * Fields of the Review model
  */
 export interface ReviewFieldRefs {
-  readonly id: Prisma.FieldRef<"Review", 'Int'>
-  readonly bookingId: Prisma.FieldRef<"Review", 'Int'>
-  readonly reviewerId: Prisma.FieldRef<"Review", 'Int'>
+  readonly id: Prisma.FieldRef<"Review", 'String'>
+  readonly bookingId: Prisma.FieldRef<"Review", 'String'>
+  readonly reviewerId: Prisma.FieldRef<"Review", 'String'>
   readonly rating: Prisma.FieldRef<"Review", 'Int'>
   readonly comment: Prisma.FieldRef<"Review", 'String'>
   readonly createdAt: Prisma.FieldRef<"Review", 'DateTime'>

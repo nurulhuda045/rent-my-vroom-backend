@@ -5,6 +5,7 @@ import {
   IsInt,
   IsOptional,
   IsString,
+  IsUUID,
   Max,
   Min,
 } from 'class-validator';
@@ -72,14 +73,12 @@ export class AdminBookingsQueryDto extends AdminListQueryDto {
   source?: BookingSource;
 
   @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  merchantId?: number;
+  @IsUUID('4')
+  merchantId?: string;
 
   @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  vehicleId?: number;
+  @IsUUID('4')
+  vehicleId?: string;
 
   @IsOptional()
   @IsString()
@@ -96,9 +95,8 @@ export class AdminVehiclesQueryDto extends AdminListQueryDto {
   isAvailable?: boolean;
 
   @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  merchantId?: number;
+  @IsUUID('4')
+  merchantId?: string;
 }
 
 export class AdminKycQueryDto extends AdminListQueryDto {
@@ -115,16 +113,14 @@ export class AdminLicensesQueryDto extends AdminListQueryDto {
 
 export class AdminReviewsQueryDto extends AdminListQueryDto {
   @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  merchantId?: number;
+  @IsUUID('4')
+  merchantId?: string;
 }
 
 export class AdminMessagesQueryDto extends AdminListQueryDto {
   @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  bookingId?: number;
+  @IsUUID('4')
+  bookingId?: string;
 }
 
 export class AdminLicenseDecisionDto {

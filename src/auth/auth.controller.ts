@@ -44,7 +44,7 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Profile completed successfully' })
   @ApiResponse({ status: 409, description: 'Invalid registration step' })
   async completeRenterProfile(
-    @GetUser('id') userId: number,
+    @GetUser('id') userId: string,
     @Body() dto: CompleteRenterProfileDto,
   ) {
     return this.authService.completeRenterProfile(userId, dto);
@@ -57,7 +57,7 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Profile completed successfully' })
   @ApiResponse({ status: 409, description: 'Invalid registration step' })
   async completeMerchantProfile(
-    @GetUser('id') userId: number,
+    @GetUser('id') userId: string,
     @Body() dto: CompleteMerchantProfileDto,
   ) {
     return this.authService.completeMerchantProfile(userId, dto);
@@ -69,7 +69,7 @@ export class AuthController {
   @ApiOperation({ summary: 'Submit KYC documents for renters' })
   @ApiResponse({ status: 200, description: 'KYC submitted successfully' })
   @ApiResponse({ status: 409, description: 'KYC already submitted or invalid step' })
-  async submitKYC(@GetUser('id') userId: number, @Body() dto: SubmitKYCDto) {
+  async submitKYC(@GetUser('id') userId: string, @Body() dto: SubmitKYCDto) {
     return this.authService.submitKYC(userId, dto);
   }
 
@@ -78,7 +78,7 @@ export class AuthController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get current registration status and next step' })
   @ApiResponse({ status: 200, description: 'Registration status retrieved' })
-  async getRegistrationStatus(@GetUser('id') userId: number) {
+  async getRegistrationStatus(@GetUser('id') userId: string) {
     return this.authService.getRegistrationStatus(userId);
   }
 

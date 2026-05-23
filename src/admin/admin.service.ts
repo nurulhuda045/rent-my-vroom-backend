@@ -206,7 +206,7 @@ export class AdminService {
     return this.paginatedResponse(items, total, query);
   }
 
-  async getUserById(id: number) {
+  async getUserById(id: string) {
     return this.prisma.user.findUnique({
       where: { id },
       include: {
@@ -263,7 +263,7 @@ export class AdminService {
     return this.paginatedResponse(items, total, query);
   }
 
-  async decideLicense(adminId: number, userId: number, dto: AdminLicenseDecisionDto) {
+  async decideLicense(adminId: string, userId: string, dto: AdminLicenseDecisionDto) {
     return this.usersService.approveLicense(adminId, userId, dto);
   }
 
@@ -300,7 +300,7 @@ export class AdminService {
     return this.paginatedResponse(items, total, query);
   }
 
-  async getKycById(id: number) {
+  async getKycById(id: string) {
     return this.prisma.kYC.findUnique({
       where: { id },
       include: {
@@ -309,11 +309,11 @@ export class AdminService {
     });
   }
 
-  async approveKyc(id: number) {
+  async approveKyc(id: string) {
     return this.kycService.approveKYC(id);
   }
 
-  async rejectKyc(id: number, dto: AdminKycDecisionDto) {
+  async rejectKyc(id: string, dto: AdminKycDecisionDto) {
     return this.kycService.rejectKYC(id, dto.reason);
   }
 
@@ -354,7 +354,7 @@ export class AdminService {
     return this.paginatedResponse(items, total, query);
   }
 
-  async getVehicleById(id: number) {
+  async getVehicleById(id: string) {
     return this.prisma.vehicle.findUnique({
       where: { id },
       include: {
@@ -408,7 +408,7 @@ export class AdminService {
     return this.paginatedResponse(items, total, query);
   }
 
-  async getBookingById(id: number) {
+  async getBookingById(id: string) {
     return this.prisma.booking.findUnique({
       where: { id },
       include: {
@@ -553,7 +553,7 @@ export class AdminService {
     });
 
     const users = result.items as Array<{
-      id: number;
+      id: string;
       firstName: string | null;
       lastName: string | null;
       phone: string;
@@ -588,7 +588,7 @@ export class AdminService {
     });
 
     const bookings = result.items as Array<{
-      id: number;
+      id: string;
       status: BookingStatus;
       source: BookingSource;
       startDate: Date;

@@ -10,7 +10,7 @@ import { CreateMessageDto } from "./dto/messages.dto";
 export class MessagesService {
   constructor(private prisma: PrismaService) {}
 
-  async create(bookingId: number, senderId: number, dto: CreateMessageDto) {
+  async create(bookingId: string, senderId: string, dto: CreateMessageDto) {
     // Get booking to verify participants
     const booking = await this.prisma.booking.findUnique({
       where: { id: bookingId },
@@ -59,7 +59,7 @@ export class MessagesService {
     return message;
   }
 
-  async findByBooking(bookingId: number, userId: number) {
+  async findByBooking(bookingId: string, userId: string) {
     // Verify user is part of the booking
     const booking = await this.prisma.booking.findUnique({
       where: { id: bookingId },

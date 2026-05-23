@@ -27,29 +27,21 @@ export type AggregateBooking = {
 }
 
 export type BookingAvgAggregateOutputType = {
-  id: number | null
-  renterId: number | null
-  merchantId: number | null
-  vehicleId: number | null
   totalPrice: runtime.Decimal | null
   amountCollected: runtime.Decimal | null
 }
 
 export type BookingSumAggregateOutputType = {
-  id: number | null
-  renterId: number | null
-  merchantId: number | null
-  vehicleId: number | null
   totalPrice: runtime.Decimal | null
   amountCollected: runtime.Decimal | null
 }
 
 export type BookingMinAggregateOutputType = {
-  id: number | null
+  id: string | null
   source: $Enums.BookingSource | null
-  renterId: number | null
-  merchantId: number | null
-  vehicleId: number | null
+  renterId: string | null
+  merchantId: string | null
+  vehicleId: string | null
   offlineCustomerName: string | null
   offlineCustomerPhone: string | null
   offlineCustomerEmail: string | null
@@ -74,11 +66,11 @@ export type BookingMinAggregateOutputType = {
 }
 
 export type BookingMaxAggregateOutputType = {
-  id: number | null
+  id: string | null
   source: $Enums.BookingSource | null
-  renterId: number | null
-  merchantId: number | null
-  vehicleId: number | null
+  renterId: string | null
+  merchantId: string | null
+  vehicleId: string | null
   offlineCustomerName: string | null
   offlineCustomerPhone: string | null
   offlineCustomerEmail: string | null
@@ -134,19 +126,11 @@ export type BookingCountAggregateOutputType = {
 
 
 export type BookingAvgAggregateInputType = {
-  id?: true
-  renterId?: true
-  merchantId?: true
-  vehicleId?: true
   totalPrice?: true
   amountCollected?: true
 }
 
 export type BookingSumAggregateInputType = {
-  id?: true
-  renterId?: true
-  merchantId?: true
-  vehicleId?: true
   totalPrice?: true
   amountCollected?: true
 }
@@ -326,11 +310,11 @@ export type BookingGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 export type BookingGroupByOutputType = {
-  id: number
+  id: string
   source: $Enums.BookingSource
-  renterId: number | null
-  merchantId: number
-  vehicleId: number
+  renterId: string | null
+  merchantId: string
+  vehicleId: string
   offlineCustomerName: string | null
   offlineCustomerPhone: string | null
   offlineCustomerEmail: string | null
@@ -378,11 +362,11 @@ export type BookingWhereInput = {
   AND?: Prisma.BookingWhereInput | Prisma.BookingWhereInput[]
   OR?: Prisma.BookingWhereInput[]
   NOT?: Prisma.BookingWhereInput | Prisma.BookingWhereInput[]
-  id?: Prisma.IntFilter<"Booking"> | number
+  id?: Prisma.UuidFilter<"Booking"> | string
   source?: Prisma.EnumBookingSourceFilter<"Booking"> | $Enums.BookingSource
-  renterId?: Prisma.IntNullableFilter<"Booking"> | number | null
-  merchantId?: Prisma.IntFilter<"Booking"> | number
-  vehicleId?: Prisma.IntFilter<"Booking"> | number
+  renterId?: Prisma.UuidNullableFilter<"Booking"> | string | null
+  merchantId?: Prisma.UuidFilter<"Booking"> | string
+  vehicleId?: Prisma.UuidFilter<"Booking"> | string
   offlineCustomerName?: Prisma.StringNullableFilter<"Booking"> | string | null
   offlineCustomerPhone?: Prisma.StringNullableFilter<"Booking"> | string | null
   offlineCustomerEmail?: Prisma.StringNullableFilter<"Booking"> | string | null
@@ -446,14 +430,14 @@ export type BookingOrderByWithRelationInput = {
 }
 
 export type BookingWhereUniqueInput = Prisma.AtLeast<{
-  id?: number
+  id?: string
   AND?: Prisma.BookingWhereInput | Prisma.BookingWhereInput[]
   OR?: Prisma.BookingWhereInput[]
   NOT?: Prisma.BookingWhereInput | Prisma.BookingWhereInput[]
   source?: Prisma.EnumBookingSourceFilter<"Booking"> | $Enums.BookingSource
-  renterId?: Prisma.IntNullableFilter<"Booking"> | number | null
-  merchantId?: Prisma.IntFilter<"Booking"> | number
-  vehicleId?: Prisma.IntFilter<"Booking"> | number
+  renterId?: Prisma.UuidNullableFilter<"Booking"> | string | null
+  merchantId?: Prisma.UuidFilter<"Booking"> | string
+  vehicleId?: Prisma.UuidFilter<"Booking"> | string
   offlineCustomerName?: Prisma.StringNullableFilter<"Booking"> | string | null
   offlineCustomerPhone?: Prisma.StringNullableFilter<"Booking"> | string | null
   offlineCustomerEmail?: Prisma.StringNullableFilter<"Booking"> | string | null
@@ -520,11 +504,11 @@ export type BookingScalarWhereWithAggregatesInput = {
   AND?: Prisma.BookingScalarWhereWithAggregatesInput | Prisma.BookingScalarWhereWithAggregatesInput[]
   OR?: Prisma.BookingScalarWhereWithAggregatesInput[]
   NOT?: Prisma.BookingScalarWhereWithAggregatesInput | Prisma.BookingScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"Booking"> | number
+  id?: Prisma.UuidWithAggregatesFilter<"Booking"> | string
   source?: Prisma.EnumBookingSourceWithAggregatesFilter<"Booking"> | $Enums.BookingSource
-  renterId?: Prisma.IntNullableWithAggregatesFilter<"Booking"> | number | null
-  merchantId?: Prisma.IntWithAggregatesFilter<"Booking"> | number
-  vehicleId?: Prisma.IntWithAggregatesFilter<"Booking"> | number
+  renterId?: Prisma.UuidNullableWithAggregatesFilter<"Booking"> | string | null
+  merchantId?: Prisma.UuidWithAggregatesFilter<"Booking"> | string
+  vehicleId?: Prisma.UuidWithAggregatesFilter<"Booking"> | string
   offlineCustomerName?: Prisma.StringNullableWithAggregatesFilter<"Booking"> | string | null
   offlineCustomerPhone?: Prisma.StringNullableWithAggregatesFilter<"Booking"> | string | null
   offlineCustomerEmail?: Prisma.StringNullableWithAggregatesFilter<"Booking"> | string | null
@@ -549,6 +533,7 @@ export type BookingScalarWhereWithAggregatesInput = {
 }
 
 export type BookingCreateInput = {
+  id?: string
   source?: $Enums.BookingSource
   offlineCustomerName?: string | null
   offlineCustomerPhone?: string | null
@@ -579,11 +564,11 @@ export type BookingCreateInput = {
 }
 
 export type BookingUncheckedCreateInput = {
-  id?: number
+  id?: string
   source?: $Enums.BookingSource
-  renterId?: number | null
-  merchantId: number
-  vehicleId: number
+  renterId?: string | null
+  merchantId: string
+  vehicleId: string
   offlineCustomerName?: string | null
   offlineCustomerPhone?: string | null
   offlineCustomerEmail?: string | null
@@ -610,6 +595,7 @@ export type BookingUncheckedCreateInput = {
 }
 
 export type BookingUpdateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
   offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -640,11 +626,11 @@ export type BookingUpdateInput = {
 }
 
 export type BookingUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
-  renterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  merchantId?: Prisma.IntFieldUpdateOperationsInput | number
-  vehicleId?: Prisma.IntFieldUpdateOperationsInput | number
+  renterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  merchantId?: Prisma.StringFieldUpdateOperationsInput | string
+  vehicleId?: Prisma.StringFieldUpdateOperationsInput | string
   offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -671,11 +657,11 @@ export type BookingUncheckedUpdateInput = {
 }
 
 export type BookingCreateManyInput = {
-  id?: number
+  id?: string
   source?: $Enums.BookingSource
-  renterId?: number | null
-  merchantId: number
-  vehicleId: number
+  renterId?: string | null
+  merchantId: string
+  vehicleId: string
   offlineCustomerName?: string | null
   offlineCustomerPhone?: string | null
   offlineCustomerEmail?: string | null
@@ -700,6 +686,7 @@ export type BookingCreateManyInput = {
 }
 
 export type BookingUpdateManyMutationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
   offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -725,11 +712,11 @@ export type BookingUpdateManyMutationInput = {
 }
 
 export type BookingUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
-  renterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  merchantId?: Prisma.IntFieldUpdateOperationsInput | number
-  vehicleId?: Prisma.IntFieldUpdateOperationsInput | number
+  renterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  merchantId?: Prisma.StringFieldUpdateOperationsInput | string
+  vehicleId?: Prisma.StringFieldUpdateOperationsInput | string
   offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -793,10 +780,6 @@ export type BookingCountOrderByAggregateInput = {
 }
 
 export type BookingAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  renterId?: Prisma.SortOrder
-  merchantId?: Prisma.SortOrder
-  vehicleId?: Prisma.SortOrder
   totalPrice?: Prisma.SortOrder
   amountCollected?: Prisma.SortOrder
 }
@@ -860,10 +843,6 @@ export type BookingMinOrderByAggregateInput = {
 }
 
 export type BookingSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  renterId?: Prisma.SortOrder
-  merchantId?: Prisma.SortOrder
-  vehicleId?: Prisma.SortOrder
   totalPrice?: Prisma.SortOrder
   amountCollected?: Prisma.SortOrder
 }
@@ -1040,6 +1019,7 @@ export type BookingUpdateOneRequiredWithoutReviewNestedInput = {
 }
 
 export type BookingCreateWithoutRenterInput = {
+  id?: string
   source?: $Enums.BookingSource
   offlineCustomerName?: string | null
   offlineCustomerPhone?: string | null
@@ -1069,10 +1049,10 @@ export type BookingCreateWithoutRenterInput = {
 }
 
 export type BookingUncheckedCreateWithoutRenterInput = {
-  id?: number
+  id?: string
   source?: $Enums.BookingSource
-  merchantId: number
-  vehicleId: number
+  merchantId: string
+  vehicleId: string
   offlineCustomerName?: string | null
   offlineCustomerPhone?: string | null
   offlineCustomerEmail?: string | null
@@ -1109,6 +1089,7 @@ export type BookingCreateManyRenterInputEnvelope = {
 }
 
 export type BookingCreateWithoutMerchantInput = {
+  id?: string
   source?: $Enums.BookingSource
   offlineCustomerName?: string | null
   offlineCustomerPhone?: string | null
@@ -1138,10 +1119,10 @@ export type BookingCreateWithoutMerchantInput = {
 }
 
 export type BookingUncheckedCreateWithoutMerchantInput = {
-  id?: number
+  id?: string
   source?: $Enums.BookingSource
-  renterId?: number | null
-  vehicleId: number
+  renterId?: string | null
+  vehicleId: string
   offlineCustomerName?: string | null
   offlineCustomerPhone?: string | null
   offlineCustomerEmail?: string | null
@@ -1197,11 +1178,11 @@ export type BookingScalarWhereInput = {
   AND?: Prisma.BookingScalarWhereInput | Prisma.BookingScalarWhereInput[]
   OR?: Prisma.BookingScalarWhereInput[]
   NOT?: Prisma.BookingScalarWhereInput | Prisma.BookingScalarWhereInput[]
-  id?: Prisma.IntFilter<"Booking"> | number
+  id?: Prisma.UuidFilter<"Booking"> | string
   source?: Prisma.EnumBookingSourceFilter<"Booking"> | $Enums.BookingSource
-  renterId?: Prisma.IntNullableFilter<"Booking"> | number | null
-  merchantId?: Prisma.IntFilter<"Booking"> | number
-  vehicleId?: Prisma.IntFilter<"Booking"> | number
+  renterId?: Prisma.UuidNullableFilter<"Booking"> | string | null
+  merchantId?: Prisma.UuidFilter<"Booking"> | string
+  vehicleId?: Prisma.UuidFilter<"Booking"> | string
   offlineCustomerName?: Prisma.StringNullableFilter<"Booking"> | string | null
   offlineCustomerPhone?: Prisma.StringNullableFilter<"Booking"> | string | null
   offlineCustomerEmail?: Prisma.StringNullableFilter<"Booking"> | string | null
@@ -1242,6 +1223,7 @@ export type BookingUpdateManyWithWhereWithoutMerchantInput = {
 }
 
 export type BookingCreateWithoutVehicleInput = {
+  id?: string
   source?: $Enums.BookingSource
   offlineCustomerName?: string | null
   offlineCustomerPhone?: string | null
@@ -1271,10 +1253,10 @@ export type BookingCreateWithoutVehicleInput = {
 }
 
 export type BookingUncheckedCreateWithoutVehicleInput = {
-  id?: number
+  id?: string
   source?: $Enums.BookingSource
-  renterId?: number | null
-  merchantId: number
+  renterId?: string | null
+  merchantId: string
   offlineCustomerName?: string | null
   offlineCustomerPhone?: string | null
   offlineCustomerEmail?: string | null
@@ -1327,6 +1309,7 @@ export type BookingUpdateManyWithWhereWithoutVehicleInput = {
 }
 
 export type BookingCreateWithoutMessagesInput = {
+  id?: string
   source?: $Enums.BookingSource
   offlineCustomerName?: string | null
   offlineCustomerPhone?: string | null
@@ -1356,11 +1339,11 @@ export type BookingCreateWithoutMessagesInput = {
 }
 
 export type BookingUncheckedCreateWithoutMessagesInput = {
-  id?: number
+  id?: string
   source?: $Enums.BookingSource
-  renterId?: number | null
-  merchantId: number
-  vehicleId: number
+  renterId?: string | null
+  merchantId: string
+  vehicleId: string
   offlineCustomerName?: string | null
   offlineCustomerPhone?: string | null
   offlineCustomerEmail?: string | null
@@ -1402,6 +1385,7 @@ export type BookingUpdateToOneWithWhereWithoutMessagesInput = {
 }
 
 export type BookingUpdateWithoutMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
   offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1431,11 +1415,11 @@ export type BookingUpdateWithoutMessagesInput = {
 }
 
 export type BookingUncheckedUpdateWithoutMessagesInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
-  renterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  merchantId?: Prisma.IntFieldUpdateOperationsInput | number
-  vehicleId?: Prisma.IntFieldUpdateOperationsInput | number
+  renterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  merchantId?: Prisma.StringFieldUpdateOperationsInput | string
+  vehicleId?: Prisma.StringFieldUpdateOperationsInput | string
   offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1461,6 +1445,7 @@ export type BookingUncheckedUpdateWithoutMessagesInput = {
 }
 
 export type BookingCreateWithoutReviewInput = {
+  id?: string
   source?: $Enums.BookingSource
   offlineCustomerName?: string | null
   offlineCustomerPhone?: string | null
@@ -1490,11 +1475,11 @@ export type BookingCreateWithoutReviewInput = {
 }
 
 export type BookingUncheckedCreateWithoutReviewInput = {
-  id?: number
+  id?: string
   source?: $Enums.BookingSource
-  renterId?: number | null
-  merchantId: number
-  vehicleId: number
+  renterId?: string | null
+  merchantId: string
+  vehicleId: string
   offlineCustomerName?: string | null
   offlineCustomerPhone?: string | null
   offlineCustomerEmail?: string | null
@@ -1536,6 +1521,7 @@ export type BookingUpdateToOneWithWhereWithoutReviewInput = {
 }
 
 export type BookingUpdateWithoutReviewInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
   offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1565,11 +1551,11 @@ export type BookingUpdateWithoutReviewInput = {
 }
 
 export type BookingUncheckedUpdateWithoutReviewInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
-  renterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  merchantId?: Prisma.IntFieldUpdateOperationsInput | number
-  vehicleId?: Prisma.IntFieldUpdateOperationsInput | number
+  renterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  merchantId?: Prisma.StringFieldUpdateOperationsInput | string
+  vehicleId?: Prisma.StringFieldUpdateOperationsInput | string
   offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1595,10 +1581,10 @@ export type BookingUncheckedUpdateWithoutReviewInput = {
 }
 
 export type BookingCreateManyRenterInput = {
-  id?: number
+  id?: string
   source?: $Enums.BookingSource
-  merchantId: number
-  vehicleId: number
+  merchantId: string
+  vehicleId: string
   offlineCustomerName?: string | null
   offlineCustomerPhone?: string | null
   offlineCustomerEmail?: string | null
@@ -1623,10 +1609,10 @@ export type BookingCreateManyRenterInput = {
 }
 
 export type BookingCreateManyMerchantInput = {
-  id?: number
+  id?: string
   source?: $Enums.BookingSource
-  renterId?: number | null
-  vehicleId: number
+  renterId?: string | null
+  vehicleId: string
   offlineCustomerName?: string | null
   offlineCustomerPhone?: string | null
   offlineCustomerEmail?: string | null
@@ -1651,6 +1637,7 @@ export type BookingCreateManyMerchantInput = {
 }
 
 export type BookingUpdateWithoutRenterInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
   offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1680,10 +1667,10 @@ export type BookingUpdateWithoutRenterInput = {
 }
 
 export type BookingUncheckedUpdateWithoutRenterInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
-  merchantId?: Prisma.IntFieldUpdateOperationsInput | number
-  vehicleId?: Prisma.IntFieldUpdateOperationsInput | number
+  merchantId?: Prisma.StringFieldUpdateOperationsInput | string
+  vehicleId?: Prisma.StringFieldUpdateOperationsInput | string
   offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1710,10 +1697,10 @@ export type BookingUncheckedUpdateWithoutRenterInput = {
 }
 
 export type BookingUncheckedUpdateManyWithoutRenterInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
-  merchantId?: Prisma.IntFieldUpdateOperationsInput | number
-  vehicleId?: Prisma.IntFieldUpdateOperationsInput | number
+  merchantId?: Prisma.StringFieldUpdateOperationsInput | string
+  vehicleId?: Prisma.StringFieldUpdateOperationsInput | string
   offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1738,6 +1725,7 @@ export type BookingUncheckedUpdateManyWithoutRenterInput = {
 }
 
 export type BookingUpdateWithoutMerchantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
   offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1767,10 +1755,10 @@ export type BookingUpdateWithoutMerchantInput = {
 }
 
 export type BookingUncheckedUpdateWithoutMerchantInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
-  renterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  vehicleId?: Prisma.IntFieldUpdateOperationsInput | number
+  renterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vehicleId?: Prisma.StringFieldUpdateOperationsInput | string
   offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1797,10 +1785,10 @@ export type BookingUncheckedUpdateWithoutMerchantInput = {
 }
 
 export type BookingUncheckedUpdateManyWithoutMerchantInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
-  renterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  vehicleId?: Prisma.IntFieldUpdateOperationsInput | number
+  renterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  vehicleId?: Prisma.StringFieldUpdateOperationsInput | string
   offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1825,10 +1813,10 @@ export type BookingUncheckedUpdateManyWithoutMerchantInput = {
 }
 
 export type BookingCreateManyVehicleInput = {
-  id?: number
+  id?: string
   source?: $Enums.BookingSource
-  renterId?: number | null
-  merchantId: number
+  renterId?: string | null
+  merchantId: string
   offlineCustomerName?: string | null
   offlineCustomerPhone?: string | null
   offlineCustomerEmail?: string | null
@@ -1853,6 +1841,7 @@ export type BookingCreateManyVehicleInput = {
 }
 
 export type BookingUpdateWithoutVehicleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
   offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1882,10 +1871,10 @@ export type BookingUpdateWithoutVehicleInput = {
 }
 
 export type BookingUncheckedUpdateWithoutVehicleInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
-  renterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  merchantId?: Prisma.IntFieldUpdateOperationsInput | number
+  renterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  merchantId?: Prisma.StringFieldUpdateOperationsInput | string
   offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1912,10 +1901,10 @@ export type BookingUncheckedUpdateWithoutVehicleInput = {
 }
 
 export type BookingUncheckedUpdateManyWithoutVehicleInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   source?: Prisma.EnumBookingSourceFieldUpdateOperationsInput | $Enums.BookingSource
-  renterId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  merchantId?: Prisma.IntFieldUpdateOperationsInput | number
+  renterId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  merchantId?: Prisma.StringFieldUpdateOperationsInput | string
   offlineCustomerName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   offlineCustomerEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2128,11 +2117,11 @@ export type $BookingPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     review: Prisma.$ReviewPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
+    id: string
     source: $Enums.BookingSource
-    renterId: number | null
-    merchantId: number
-    vehicleId: number
+    renterId: string | null
+    merchantId: string
+    vehicleId: string
     offlineCustomerName: string | null
     offlineCustomerPhone: string | null
     offlineCustomerEmail: string | null
@@ -2582,11 +2571,11 @@ export interface Prisma__BookingClient<T, Null = never, ExtArgs extends runtime.
  * Fields of the Booking model
  */
 export interface BookingFieldRefs {
-  readonly id: Prisma.FieldRef<"Booking", 'Int'>
+  readonly id: Prisma.FieldRef<"Booking", 'String'>
   readonly source: Prisma.FieldRef<"Booking", 'BookingSource'>
-  readonly renterId: Prisma.FieldRef<"Booking", 'Int'>
-  readonly merchantId: Prisma.FieldRef<"Booking", 'Int'>
-  readonly vehicleId: Prisma.FieldRef<"Booking", 'Int'>
+  readonly renterId: Prisma.FieldRef<"Booking", 'String'>
+  readonly merchantId: Prisma.FieldRef<"Booking", 'String'>
+  readonly vehicleId: Prisma.FieldRef<"Booking", 'String'>
   readonly offlineCustomerName: Prisma.FieldRef<"Booking", 'String'>
   readonly offlineCustomerPhone: Prisma.FieldRef<"Booking", 'String'>
   readonly offlineCustomerEmail: Prisma.FieldRef<"Booking", 'String'>

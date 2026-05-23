@@ -20,25 +20,13 @@ export type KYCModel = runtime.Types.Result.DefaultSelection<Prisma.$KYCPayload>
 
 export type AggregateKYC = {
   _count: KYCCountAggregateOutputType | null
-  _avg: KYCAvgAggregateOutputType | null
-  _sum: KYCSumAggregateOutputType | null
   _min: KYCMinAggregateOutputType | null
   _max: KYCMaxAggregateOutputType | null
 }
 
-export type KYCAvgAggregateOutputType = {
-  id: number | null
-  userId: number | null
-}
-
-export type KYCSumAggregateOutputType = {
-  id: number | null
-  userId: number | null
-}
-
 export type KYCMinAggregateOutputType = {
-  id: number | null
-  userId: number | null
+  id: string | null
+  userId: string | null
   licenseNumber: string | null
   licenseImageUrl: string | null
   holderPhotoUrl: string | null
@@ -51,8 +39,8 @@ export type KYCMinAggregateOutputType = {
 }
 
 export type KYCMaxAggregateOutputType = {
-  id: number | null
-  userId: number | null
+  id: string | null
+  userId: string | null
   licenseNumber: string | null
   licenseImageUrl: string | null
   holderPhotoUrl: string | null
@@ -79,16 +67,6 @@ export type KYCCountAggregateOutputType = {
   _all: number
 }
 
-
-export type KYCAvgAggregateInputType = {
-  id?: true
-  userId?: true
-}
-
-export type KYCSumAggregateInputType = {
-  id?: true
-  userId?: true
-}
 
 export type KYCMinAggregateInputType = {
   id?: true
@@ -171,18 +149,6 @@ export type KYCAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
-   * Select which fields to average
-  **/
-  _avg?: KYCAvgAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
-   * Select which fields to sum
-  **/
-  _sum?: KYCSumAggregateInputType
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-   * 
    * Select which fields to find the minimum value
   **/
   _min?: KYCMinAggregateInputType
@@ -213,15 +179,13 @@ export type KYCGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
   take?: number
   skip?: number
   _count?: KYCCountAggregateInputType | true
-  _avg?: KYCAvgAggregateInputType
-  _sum?: KYCSumAggregateInputType
   _min?: KYCMinAggregateInputType
   _max?: KYCMaxAggregateInputType
 }
 
 export type KYCGroupByOutputType = {
-  id: number
-  userId: number
+  id: string
+  userId: string
   licenseNumber: string
   licenseImageUrl: string
   holderPhotoUrl: string | null
@@ -232,8 +196,6 @@ export type KYCGroupByOutputType = {
   createdAt: Date
   updatedAt: Date
   _count: KYCCountAggregateOutputType | null
-  _avg: KYCAvgAggregateOutputType | null
-  _sum: KYCSumAggregateOutputType | null
   _min: KYCMinAggregateOutputType | null
   _max: KYCMaxAggregateOutputType | null
 }
@@ -257,8 +219,8 @@ export type KYCWhereInput = {
   AND?: Prisma.KYCWhereInput | Prisma.KYCWhereInput[]
   OR?: Prisma.KYCWhereInput[]
   NOT?: Prisma.KYCWhereInput | Prisma.KYCWhereInput[]
-  id?: Prisma.IntFilter<"KYC"> | number
-  userId?: Prisma.IntFilter<"KYC"> | number
+  id?: Prisma.UuidFilter<"KYC"> | string
+  userId?: Prisma.UuidFilter<"KYC"> | string
   licenseNumber?: Prisma.StringFilter<"KYC"> | string
   licenseImageUrl?: Prisma.StringFilter<"KYC"> | string
   holderPhotoUrl?: Prisma.StringNullableFilter<"KYC"> | string | null
@@ -287,8 +249,8 @@ export type KYCOrderByWithRelationInput = {
 }
 
 export type KYCWhereUniqueInput = Prisma.AtLeast<{
-  id?: number
-  userId?: number
+  id?: string
+  userId?: string
   AND?: Prisma.KYCWhereInput | Prisma.KYCWhereInput[]
   OR?: Prisma.KYCWhereInput[]
   NOT?: Prisma.KYCWhereInput | Prisma.KYCWhereInput[]
@@ -317,18 +279,16 @@ export type KYCOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.KYCCountOrderByAggregateInput
-  _avg?: Prisma.KYCAvgOrderByAggregateInput
   _max?: Prisma.KYCMaxOrderByAggregateInput
   _min?: Prisma.KYCMinOrderByAggregateInput
-  _sum?: Prisma.KYCSumOrderByAggregateInput
 }
 
 export type KYCScalarWhereWithAggregatesInput = {
   AND?: Prisma.KYCScalarWhereWithAggregatesInput | Prisma.KYCScalarWhereWithAggregatesInput[]
   OR?: Prisma.KYCScalarWhereWithAggregatesInput[]
   NOT?: Prisma.KYCScalarWhereWithAggregatesInput | Prisma.KYCScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"KYC"> | number
-  userId?: Prisma.IntWithAggregatesFilter<"KYC"> | number
+  id?: Prisma.UuidWithAggregatesFilter<"KYC"> | string
+  userId?: Prisma.UuidWithAggregatesFilter<"KYC"> | string
   licenseNumber?: Prisma.StringWithAggregatesFilter<"KYC"> | string
   licenseImageUrl?: Prisma.StringWithAggregatesFilter<"KYC"> | string
   holderPhotoUrl?: Prisma.StringNullableWithAggregatesFilter<"KYC"> | string | null
@@ -341,6 +301,7 @@ export type KYCScalarWhereWithAggregatesInput = {
 }
 
 export type KYCCreateInput = {
+  id?: string
   licenseNumber: string
   licenseImageUrl: string
   holderPhotoUrl?: string | null
@@ -354,8 +315,8 @@ export type KYCCreateInput = {
 }
 
 export type KYCUncheckedCreateInput = {
-  id?: number
-  userId: number
+  id?: string
+  userId: string
   licenseNumber: string
   licenseImageUrl: string
   holderPhotoUrl?: string | null
@@ -368,6 +329,7 @@ export type KYCUncheckedCreateInput = {
 }
 
 export type KYCUpdateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   licenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   licenseImageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   holderPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -381,8 +343,8 @@ export type KYCUpdateInput = {
 }
 
 export type KYCUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   licenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   licenseImageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   holderPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -395,8 +357,8 @@ export type KYCUncheckedUpdateInput = {
 }
 
 export type KYCCreateManyInput = {
-  id?: number
-  userId: number
+  id?: string
+  userId: string
   licenseNumber: string
   licenseImageUrl: string
   holderPhotoUrl?: string | null
@@ -409,6 +371,7 @@ export type KYCCreateManyInput = {
 }
 
 export type KYCUpdateManyMutationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   licenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   licenseImageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   holderPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -421,8 +384,8 @@ export type KYCUpdateManyMutationInput = {
 }
 
 export type KYCUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  userId?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   licenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   licenseImageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   holderPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -453,11 +416,6 @@ export type KYCCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type KYCAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
-}
-
 export type KYCMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   userId?: Prisma.SortOrder
@@ -484,11 +442,6 @@ export type KYCMinOrderByAggregateInput = {
   verifiedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type KYCSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  userId?: Prisma.SortOrder
 }
 
 export type KYCCreateNestedOneWithoutUserInput = {
@@ -528,6 +481,7 @@ export type EnumKYCStatusFieldUpdateOperationsInput = {
 }
 
 export type KYCCreateWithoutUserInput = {
+  id?: string
   licenseNumber: string
   licenseImageUrl: string
   holderPhotoUrl?: string | null
@@ -540,7 +494,7 @@ export type KYCCreateWithoutUserInput = {
 }
 
 export type KYCUncheckedCreateWithoutUserInput = {
-  id?: number
+  id?: string
   licenseNumber: string
   licenseImageUrl: string
   holderPhotoUrl?: string | null
@@ -569,6 +523,7 @@ export type KYCUpdateToOneWithWhereWithoutUserInput = {
 }
 
 export type KYCUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   licenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   licenseImageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   holderPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -581,7 +536,7 @@ export type KYCUpdateWithoutUserInput = {
 }
 
 export type KYCUncheckedUpdateWithoutUserInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   licenseNumber?: Prisma.StringFieldUpdateOperationsInput | string
   licenseImageUrl?: Prisma.StringFieldUpdateOperationsInput | string
   holderPhotoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -671,8 +626,8 @@ export type $KYCPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     user: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
-    userId: number
+    id: string
+    userId: string
     licenseNumber: string
     licenseImageUrl: string
     holderPhotoUrl: string | null
@@ -1106,8 +1061,8 @@ export interface Prisma__KYCClient<T, Null = never, ExtArgs extends runtime.Type
  * Fields of the KYC model
  */
 export interface KYCFieldRefs {
-  readonly id: Prisma.FieldRef<"KYC", 'Int'>
-  readonly userId: Prisma.FieldRef<"KYC", 'Int'>
+  readonly id: Prisma.FieldRef<"KYC", 'String'>
+  readonly userId: Prisma.FieldRef<"KYC", 'String'>
   readonly licenseNumber: Prisma.FieldRef<"KYC", 'String'>
   readonly licenseImageUrl: Prisma.FieldRef<"KYC", 'String'>
   readonly holderPhotoUrl: Prisma.FieldRef<"KYC", 'String'>

@@ -1,4 +1,4 @@
-import { Controller, Post, Patch, Get, Body, Param, UseGuards, ParseIntPipe } from '@nestjs/common';
+import { Controller, Post, Patch, Get, Body, Param, UseGuards, ParseUUIDPipe } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { UploadLicenseDto, ApproveLicenseDto, UpdateProfileDto } from './dto/users.dto';
@@ -19,7 +19,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Upload driving license (Renter only)' })
   @ApiResponse({ status: 200, description: 'License uploaded successfully' })
   @ApiResponse({ status: 403, description: 'Only renters can upload licenses' })
-  async uploadLicense(@GetUser('id') userId: number, @Body() dto: UploadLicenseDto) {
+  async uploadLicense(@GetUser('id') userId: string, @Body() dto: UploadLicenseDto) {
     return this.usersService.uploadLicense(userId, dto);
   }
 
@@ -30,8 +30,8 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'License status updated' })
   @ApiResponse({ status: 403, description: 'Admin access required' })
   async approveLicense(
-    @GetUser('id') adminId: number,
-    @Param('userId', ParseIntPipe) userId: number,
+    @GetUser('id') adminId: string,
+    @Param('userId', ParseUUIDPipe) userId: string,
     @Body() dto: ApproveLicenseDto,
   ) {
     return this.usersService.approveLicense(adminId, userId, dto);
@@ -40,14 +40,14 @@ export class UsersController {
   @Get('me')
   @ApiOperation({ summary: 'Get current user profile' })
   @ApiResponse({ status: 200, description: 'Profile retrieved successfully' })
-  async getProfile(@GetUser('id') userId: number) {
+  async getProfile(@GetUser('id') userId: string) {
     return this.usersService.getProfile(userId);
   }
 
   @Patch('me')
   @ApiOperation({ summary: 'Update current user profile' })
   @ApiResponse({ status: 200, description: 'Profile updated successfully' })
-  async updateProfile(@GetUser('id') userId: number, @Body() dto: UpdateProfileDto) {
+  async updateProfile(@GetUser('id') userId: string, @Body() dto: UpdateProfileDto) {
     return this.usersService.updateProfile(userId, dto);
   }
 

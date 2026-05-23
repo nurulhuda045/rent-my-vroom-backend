@@ -10,7 +10,7 @@ import { Role, RegistrationStep } from "../../generated/prisma/client";
  * Matches the payload structure used in auth.service.ts generateTokens method
  */
 export interface JwtPayload {
-  sub: number;
+  sub: string;
   phone: string;
   role: Role;
   isVerified: boolean;

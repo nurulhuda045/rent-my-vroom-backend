@@ -27,8 +27,6 @@ export type AggregateVehicle = {
 }
 
 export type VehicleAvgAggregateOutputType = {
-  id: number | null
-  merchantId: number | null
   year: number | null
   pricePerHour: runtime.Decimal | null
   pricePerDay: runtime.Decimal | null
@@ -37,8 +35,6 @@ export type VehicleAvgAggregateOutputType = {
 }
 
 export type VehicleSumAggregateOutputType = {
-  id: number | null
-  merchantId: number | null
   year: number | null
   pricePerHour: runtime.Decimal | null
   pricePerDay: runtime.Decimal | null
@@ -47,8 +43,8 @@ export type VehicleSumAggregateOutputType = {
 }
 
 export type VehicleMinAggregateOutputType = {
-  id: number | null
-  merchantId: number | null
+  id: string | null
+  merchantId: string | null
   make: string | null
   model: string | null
   year: number | null
@@ -67,8 +63,8 @@ export type VehicleMinAggregateOutputType = {
 }
 
 export type VehicleMaxAggregateOutputType = {
-  id: number | null
-  merchantId: number | null
+  id: string | null
+  merchantId: string | null
   make: string | null
   model: string | null
   year: number | null
@@ -111,8 +107,6 @@ export type VehicleCountAggregateOutputType = {
 
 
 export type VehicleAvgAggregateInputType = {
-  id?: true
-  merchantId?: true
   year?: true
   pricePerHour?: true
   pricePerDay?: true
@@ -121,8 +115,6 @@ export type VehicleAvgAggregateInputType = {
 }
 
 export type VehicleSumAggregateInputType = {
-  id?: true
-  merchantId?: true
   year?: true
   pricePerHour?: true
   pricePerDay?: true
@@ -280,8 +272,8 @@ export type VehicleGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 export type VehicleGroupByOutputType = {
-  id: number
-  merchantId: number
+  id: string
+  merchantId: string
   make: string
   model: string
   year: number
@@ -325,8 +317,8 @@ export type VehicleWhereInput = {
   AND?: Prisma.VehicleWhereInput | Prisma.VehicleWhereInput[]
   OR?: Prisma.VehicleWhereInput[]
   NOT?: Prisma.VehicleWhereInput | Prisma.VehicleWhereInput[]
-  id?: Prisma.IntFilter<"Vehicle"> | number
-  merchantId?: Prisma.IntFilter<"Vehicle"> | number
+  id?: Prisma.UuidFilter<"Vehicle"> | string
+  merchantId?: Prisma.UuidFilter<"Vehicle"> | string
   make?: Prisma.StringFilter<"Vehicle"> | string
   model?: Prisma.StringFilter<"Vehicle"> | string
   year?: Prisma.IntFilter<"Vehicle"> | number
@@ -373,12 +365,12 @@ export type VehicleOrderByWithRelationInput = {
 }
 
 export type VehicleWhereUniqueInput = Prisma.AtLeast<{
-  id?: number
+  id?: string
   licensePlate?: string
   AND?: Prisma.VehicleWhereInput | Prisma.VehicleWhereInput[]
   OR?: Prisma.VehicleWhereInput[]
   NOT?: Prisma.VehicleWhereInput | Prisma.VehicleWhereInput[]
-  merchantId?: Prisma.IntFilter<"Vehicle"> | number
+  merchantId?: Prisma.UuidFilter<"Vehicle"> | string
   make?: Prisma.StringFilter<"Vehicle"> | string
   model?: Prisma.StringFilter<"Vehicle"> | string
   year?: Prisma.IntFilter<"Vehicle"> | number
@@ -430,8 +422,8 @@ export type VehicleScalarWhereWithAggregatesInput = {
   AND?: Prisma.VehicleScalarWhereWithAggregatesInput | Prisma.VehicleScalarWhereWithAggregatesInput[]
   OR?: Prisma.VehicleScalarWhereWithAggregatesInput[]
   NOT?: Prisma.VehicleScalarWhereWithAggregatesInput | Prisma.VehicleScalarWhereWithAggregatesInput[]
-  id?: Prisma.IntWithAggregatesFilter<"Vehicle"> | number
-  merchantId?: Prisma.IntWithAggregatesFilter<"Vehicle"> | number
+  id?: Prisma.UuidWithAggregatesFilter<"Vehicle"> | string
+  merchantId?: Prisma.UuidWithAggregatesFilter<"Vehicle"> | string
   make?: Prisma.StringWithAggregatesFilter<"Vehicle"> | string
   model?: Prisma.StringWithAggregatesFilter<"Vehicle"> | string
   year?: Prisma.IntWithAggregatesFilter<"Vehicle"> | number
@@ -452,6 +444,7 @@ export type VehicleScalarWhereWithAggregatesInput = {
 }
 
 export type VehicleCreateInput = {
+  id?: string
   make: string
   model: string
   year: number
@@ -474,8 +467,8 @@ export type VehicleCreateInput = {
 }
 
 export type VehicleUncheckedCreateInput = {
-  id?: number
-  merchantId: number
+  id?: string
+  merchantId: string
   make: string
   model: string
   year: number
@@ -497,6 +490,7 @@ export type VehicleUncheckedCreateInput = {
 }
 
 export type VehicleUpdateInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   make?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
@@ -519,8 +513,8 @@ export type VehicleUpdateInput = {
 }
 
 export type VehicleUncheckedUpdateInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  merchantId?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  merchantId?: Prisma.StringFieldUpdateOperationsInput | string
   make?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
@@ -542,8 +536,8 @@ export type VehicleUncheckedUpdateInput = {
 }
 
 export type VehicleCreateManyInput = {
-  id?: number
-  merchantId: number
+  id?: string
+  merchantId: string
   make: string
   model: string
   year: number
@@ -564,6 +558,7 @@ export type VehicleCreateManyInput = {
 }
 
 export type VehicleUpdateManyMutationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   make?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
@@ -584,8 +579,8 @@ export type VehicleUpdateManyMutationInput = {
 }
 
 export type VehicleUncheckedUpdateManyInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  merchantId?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  merchantId?: Prisma.StringFieldUpdateOperationsInput | string
   make?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
@@ -646,8 +641,6 @@ export type VehicleCountOrderByAggregateInput = {
 }
 
 export type VehicleAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  merchantId?: Prisma.SortOrder
   year?: Prisma.SortOrder
   pricePerHour?: Prisma.SortOrder
   pricePerDay?: Prisma.SortOrder
@@ -696,8 +689,6 @@ export type VehicleMinOrderByAggregateInput = {
 }
 
 export type VehicleSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  merchantId?: Prisma.SortOrder
   year?: Prisma.SortOrder
   pricePerHour?: Prisma.SortOrder
   pricePerDay?: Prisma.SortOrder
@@ -760,6 +751,14 @@ export type VehicleCreateimagesInput = {
   set: string[]
 }
 
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type DecimalFieldUpdateOperationsInput = {
   set?: runtime.Decimal | runtime.DecimalJsLike | number | string
   increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -801,6 +800,7 @@ export type VehicleUpdateOneRequiredWithoutBookingsNestedInput = {
 }
 
 export type VehicleCreateWithoutMerchantInput = {
+  id?: string
   make: string
   model: string
   year: number
@@ -822,7 +822,7 @@ export type VehicleCreateWithoutMerchantInput = {
 }
 
 export type VehicleUncheckedCreateWithoutMerchantInput = {
-  id?: number
+  id?: string
   make: string
   model: string
   year: number
@@ -873,8 +873,8 @@ export type VehicleScalarWhereInput = {
   AND?: Prisma.VehicleScalarWhereInput | Prisma.VehicleScalarWhereInput[]
   OR?: Prisma.VehicleScalarWhereInput[]
   NOT?: Prisma.VehicleScalarWhereInput | Prisma.VehicleScalarWhereInput[]
-  id?: Prisma.IntFilter<"Vehicle"> | number
-  merchantId?: Prisma.IntFilter<"Vehicle"> | number
+  id?: Prisma.UuidFilter<"Vehicle"> | string
+  merchantId?: Prisma.UuidFilter<"Vehicle"> | string
   make?: Prisma.StringFilter<"Vehicle"> | string
   model?: Prisma.StringFilter<"Vehicle"> | string
   year?: Prisma.IntFilter<"Vehicle"> | number
@@ -895,6 +895,7 @@ export type VehicleScalarWhereInput = {
 }
 
 export type VehicleCreateWithoutBookingsInput = {
+  id?: string
   make: string
   model: string
   year: number
@@ -916,8 +917,8 @@ export type VehicleCreateWithoutBookingsInput = {
 }
 
 export type VehicleUncheckedCreateWithoutBookingsInput = {
-  id?: number
-  merchantId: number
+  id?: string
+  merchantId: string
   make: string
   model: string
   year: number
@@ -954,6 +955,7 @@ export type VehicleUpdateToOneWithWhereWithoutBookingsInput = {
 }
 
 export type VehicleUpdateWithoutBookingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   make?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
@@ -975,8 +977,8 @@ export type VehicleUpdateWithoutBookingsInput = {
 }
 
 export type VehicleUncheckedUpdateWithoutBookingsInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
-  merchantId?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  merchantId?: Prisma.StringFieldUpdateOperationsInput | string
   make?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
@@ -997,7 +999,7 @@ export type VehicleUncheckedUpdateWithoutBookingsInput = {
 }
 
 export type VehicleCreateManyMerchantInput = {
-  id?: number
+  id?: string
   make: string
   model: string
   year: number
@@ -1018,6 +1020,7 @@ export type VehicleCreateManyMerchantInput = {
 }
 
 export type VehicleUpdateWithoutMerchantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   make?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1039,7 +1042,7 @@ export type VehicleUpdateWithoutMerchantInput = {
 }
 
 export type VehicleUncheckedUpdateWithoutMerchantInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   make?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1061,7 +1064,7 @@ export type VehicleUncheckedUpdateWithoutMerchantInput = {
 }
 
 export type VehicleUncheckedUpdateManyWithoutMerchantInput = {
-  id?: Prisma.IntFieldUpdateOperationsInput | number
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   make?: Prisma.StringFieldUpdateOperationsInput | string
   model?: Prisma.StringFieldUpdateOperationsInput | string
   year?: Prisma.IntFieldUpdateOperationsInput | number
@@ -1225,8 +1228,8 @@ export type $VehiclePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     bookings: Prisma.$BookingPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: number
-    merchantId: number
+    id: string
+    merchantId: string
     make: string
     model: string
     year: number
@@ -1669,8 +1672,8 @@ export interface Prisma__VehicleClient<T, Null = never, ExtArgs extends runtime.
  * Fields of the Vehicle model
  */
 export interface VehicleFieldRefs {
-  readonly id: Prisma.FieldRef<"Vehicle", 'Int'>
-  readonly merchantId: Prisma.FieldRef<"Vehicle", 'Int'>
+  readonly id: Prisma.FieldRef<"Vehicle", 'String'>
+  readonly merchantId: Prisma.FieldRef<"Vehicle", 'String'>
   readonly make: Prisma.FieldRef<"Vehicle", 'String'>
   readonly model: Prisma.FieldRef<"Vehicle", 'String'>
   readonly year: Prisma.FieldRef<"Vehicle", 'Int'>

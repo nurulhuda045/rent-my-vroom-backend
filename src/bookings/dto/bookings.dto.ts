@@ -1,5 +1,5 @@
 import {
-  IsInt,
+  IsUUID,
   IsDateString,
   IsString,
   IsOptional,
@@ -13,9 +13,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { BookingSource, PaymentMethod } from '../../generated/prisma/client';
 
 export class CreateBookingDto {
-  @ApiProperty({ example: 1 })
-  @IsInt()
-  vehicleId: number;
+  @ApiProperty({ example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', format: 'uuid' })
+  @IsUUID('4')
+  vehicleId: string;
 
   @ApiProperty({ example: '2024-02-01T10:00:00Z' })
   @IsDateString()
@@ -39,9 +39,9 @@ export class UpdateBookingStatusDto {
 }
 
 export class CreateOfflineBookingDto {
-  @ApiProperty({ example: 1 })
-  @IsInt()
-  vehicleId: number;
+  @ApiProperty({ example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', format: 'uuid' })
+  @IsUUID('4')
+  vehicleId: string;
 
   @ApiProperty({ example: '2026-04-10T10:00:00Z' })
   @IsDateString()

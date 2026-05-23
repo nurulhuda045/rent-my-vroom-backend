@@ -24,7 +24,7 @@ export class UploadsController {
     description: "Presigned URL generated successfully",
   })
   async getPresignedUrl(
-    @GetUser("id") userId: number,
+    @GetUser("id") userId: string,
     @Body() dto: GetPresignedUrlDto,
   ) {
     return this.uploadsService.getPresignedUrl(userId, dto);
